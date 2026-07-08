@@ -13,7 +13,7 @@ import {loadRuntime} from '@wonderlandengine/api';
 
 /* wle:auto-constants:start */
 const Constants = {
-    ProjectName: 'ManiFestVRJam2-2026',
+    ProjectName: 'Elemental-Echoes',
     RuntimeBaseName: 'WonderlandRuntime',
     WebXRRequiredFeatures: ['local',],
     WebXROptionalFeatures: ['local','local-floor','hand-tracking','hit-test',],
@@ -21,7 +21,7 @@ const Constants = {
 const RuntimeOptions = {
     webgl2: true,
     webgpu: false,
-    physx: false,
+    physx: true,
     loader: false,
     xrFramebufferScaleFactor: 1,
     loadUncompressedImagesAsBitmap: false,

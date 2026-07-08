@@ -1,0 +1,470 @@
+{
+    "settings": {
+        "project": {
+            "kind": "prefab",
+            "name": "Tiles",
+            "version": [
+                1,
+                6,
+                1
+            ],
+            "prefab": true
+        },
+        "workspace": {
+            "main": "ManiFestVRJam2-2026.wlp"
+        },
+        "runtime": {
+            "visualizePhysX": false,
+            "visualizeOverdraw": false
+        }
+    },
+    "files": {
+        "1": {
+            "fileName": "assets/models/grass.fbx",
+            "importerName": ""
+        },
+        "2": {
+            "fileName": "assets/textures/colormap.png",
+            "importerName": ""
+        }
+    },
+    "meshes": {
+        "1": {
+            "link": {
+                "name": "mesh_0",
+                "file": "assets\\models\\grass.fbx"
+            },
+            "importScaling": 1.0
+        }
+    },
+    "images": {
+        "1": {
+            "link": {
+                "name": "colormap.png",
+                "file": "assets\\textures\\colormap.png"
+            }
+        }
+    },
+    "textures": {
+        "1": {
+            "link": {
+                "name": "DiffuseColor_Texture",
+                "file": "assets\\models\\grass.fbx"
+            }
+        },
+        "2": {
+            "link": {
+                "name": "colormap.png",
+                "file": "assets\\textures\\colormap.png"
+            }
+        },
+        "3": {
+            "link": {
+                "name": "base_color_texture",
+                "file": "assets\\models\\grass.fbx"
+            }
+        }
+    },
+    "fonts": {},
+    "audioClips": {},
+    "shaderChunks": {
+        "1": {
+            "link": {
+                "name": "lib\\Color.glsl",
+                "file": "default"
+            }
+        },
+        "2": {
+            "link": {
+                "name": "lib\\Compatibility.glsl",
+                "file": "default"
+            }
+        },
+        "3": {
+            "link": {
+                "name": "lib\\CoordinateSystems.glsl",
+                "file": "default"
+            }
+        },
+        "4": {
+            "link": {
+                "name": "lib\\GI.glsl",
+                "file": "default"
+            }
+        },
+        "5": {
+            "link": {
+                "name": "lib\\Inputs.glsl",
+                "file": "default"
+            }
+        },
+        "6": {
+            "link": {
+                "name": "lib\\Lights.glsl",
+                "file": "default"
+            }
+        },
+        "7": {
+            "link": {
+                "name": "lib\\Materials.glsl",
+                "file": "default"
+            }
+        },
+        "8": {
+            "link": {
+                "name": "lib\\Math.glsl",
+                "file": "default"
+            }
+        },
+        "9": {
+            "link": {
+                "name": "lib\\MorphTargets.glsl",
+                "file": "default"
+            }
+        },
+        "10": {
+            "link": {
+                "name": "lib\\Packing.glsl",
+                "file": "default"
+            }
+        },
+        "11": {
+            "link": {
+                "name": "lib\\PhysicalBSDF.glsl",
+                "file": "default"
+            }
+        },
+        "12": {
+            "link": {
+                "name": "lib\\Quaternion.glsl",
+                "file": "default"
+            }
+        },
+        "13": {
+            "link": {
+                "name": "lib\\SkyProcedural.glsl",
+                "file": "default"
+            }
+        },
+        "14": {
+            "link": {
+                "name": "lib\\Slug.frag.glsl",
+                "file": "default"
+            }
+        },
+        "15": {
+            "link": {
+                "name": "lib\\Slug.vert.glsl",
+                "file": "default"
+            }
+        },
+        "16": {
+            "link": {
+                "name": "lib\\Surface.glsl",
+                "file": "default"
+            }
+        },
+        "17": {
+            "link": {
+                "name": "lib\\Textures.glsl",
+                "file": "default"
+            }
+        },
+        "18": {
+            "link": {
+                "name": "lib\\Uniforms.glsl",
+                "file": "default"
+            }
+        },
+        "19": {
+            "link": {
+                "name": "lib\\VertexAttributes.glsl",
+                "file": "default"
+            }
+        }
+    },
+    "shaders": {
+        "1": {
+            "link": {
+                "name": "AtmosphericSky.frag",
+                "file": "default"
+            }
+        },
+        "2": {
+            "link": {
+                "name": "Background.frag",
+                "file": "default"
+            }
+        },
+        "3": {
+            "link": {
+                "name": "Color.frag",
+                "file": "default"
+            }
+        },
+        "4": {
+            "link": {
+                "name": "Depth.frag",
+                "file": "default"
+            }
+        },
+        "5": {
+            "link": {
+                "name": "DistanceFieldVector.frag",
+                "file": "default"
+            }
+        },
+        "6": {
+            "link": {
+                "name": "Dynamic.vert",
+                "file": "default"
+            }
+        },
+        "7": {
+            "link": {
+                "name": "Flat.frag",
+                "file": "default"
+            }
+        },
+        "8": {
+            "link": {
+                "name": "FullScreenTriangle.vert",
+                "file": "default"
+            }
+        },
+        "9": {
+            "link": {
+                "name": "MeshVisualizer.frag",
+                "file": "default"
+            }
+        },
+        "10": {
+            "link": {
+                "name": "Phong.frag",
+                "file": "default"
+            }
+        },
+        "11": {
+            "link": {
+                "name": "Physical.frag",
+                "file": "default"
+            }
+        },
+        "12": {
+            "link": {
+                "name": "Skinning.vert",
+                "file": "default"
+            }
+        },
+        "13": {
+            "link": {
+                "name": "Sky.frag",
+                "file": "default"
+            }
+        },
+        "14": {
+            "link": {
+                "name": "Text.frag",
+                "file": "default"
+            }
+        },
+        "15": {
+            "link": {
+                "name": "Text.vert",
+                "file": "default"
+            }
+        },
+        "16": {
+            "link": {
+                "name": "TileFeedback.frag",
+                "file": "default"
+            }
+        },
+        "17": {
+            "link": {
+                "name": "Particle.frag",
+                "file": "default"
+            }
+        }
+    },
+    "pipelines": {
+        "1": {
+            "link": {
+                "name": "Color",
+                "file": "default"
+            }
+        },
+        "2": {
+            "link": {
+                "name": "VertexColor",
+                "file": "default"
+            }
+        },
+        "3": {
+            "link": {
+                "name": "Depth",
+                "file": "default"
+            }
+        },
+        "4": {
+            "link": {
+                "name": "DistanceFieldVector",
+                "file": "default"
+            }
+        },
+        "5": {
+            "link": {
+                "name": "Flat Opaque",
+                "file": "default"
+            }
+        },
+        "6": {
+            "link": {
+                "name": "Flat Opaque Textured",
+                "file": "default"
+            }
+        },
+        "7": {
+            "link": {
+                "name": "MeshVisualizer",
+                "file": "default"
+            }
+        },
+        "8": {
+            "link": {
+                "name": "Phong Opaque",
+                "file": "default"
+            }
+        },
+        "9": {
+            "link": {
+                "name": "Phong Opaque Textured",
+                "file": "default"
+            }
+        },
+        "10": {
+            "link": {
+                "name": "Phong Normalmapped",
+                "file": "default"
+            }
+        },
+        "11": {
+            "link": {
+                "name": "Phong Lightmapped",
+                "file": "default"
+            }
+        },
+        "12": {
+            "link": {
+                "name": "Physical Opaque",
+                "file": "default"
+            }
+        },
+        "13": {
+            "link": {
+                "name": "Physical Opaque Textured",
+                "file": "default"
+            }
+        },
+        "14": {
+            "link": {
+                "name": "Text",
+                "file": "default"
+            }
+        },
+        "15": {
+            "link": {
+                "name": "TileFeedback",
+                "file": "default"
+            }
+        },
+        "16": {
+            "link": {
+                "name": "Foliage",
+                "file": "default"
+            }
+        },
+        "17": {
+            "link": {
+                "name": "Particle",
+                "file": "default"
+            }
+        },
+        "18": {
+            "link": {
+                "name": "Sky",
+                "file": "default"
+            }
+        },
+        "19": {
+            "link": {
+                "name": "AtmosphericSky",
+                "file": "default"
+            }
+        }
+    },
+    "materials": {
+        "1": {
+            "link": {
+                "name": "colormap",
+                "file": "assets\\models\\grass.fbx"
+            },
+            "Phong": {
+                "diffuseTexture": "2",
+                "ambientColor": [
+                    0.2,
+                    0.2,
+                    0.2,
+                    1.0
+                ]
+            }
+        }
+    },
+    "objects": {
+        "1": {
+            "name": "GrassTile",
+            "components": [
+                {
+                    "type": "physx",
+                    "physx": {
+                        "shape": "convexMesh",
+                        "convexMesh": {
+                            "mesh": "1",
+                            "scaling": [
+                                0.15,
+                                0.15,
+                                0.15
+                            ]
+                        },
+                        "trigger": true,
+                        "allowSimulation": false,
+                        "gravity": false,
+                        "kinematic": true
+                    }
+                },
+                {
+                    "type": "cursor-target"
+                }
+            ]
+        },
+        "2": {
+            "link": {
+                "name": "grass",
+                "file": "assets\\models\\grass.fbx"
+            },
+            "parent": "1",
+            "scaling": [
+                1.0,
+                1.0,
+                1.0
+            ]
+        }
+    },
+    "animations": {},
+    "skins": {},
+    "languages": {},
+    "morphTargets": {},
+    "particleEffects": {},
+    "probeVolumeScenarios": {},
+    "plugins": {}
+}

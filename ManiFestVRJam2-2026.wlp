@@ -3,9 +3,9 @@
         "14": {
             "name": "Player",
             "translation": [
-                -2.5,
                 0.0,
-                1.1575535
+                0.0,
+                1.0
             ],
             "rotation": [
                 0.0,
@@ -17,77 +17,14 @@
                 0.9999998,
                 1.0,
                 0.9999998
-            ]
-        },
-        "15": {
-            "name": "FloorPlane",
+            ],
             "components": [
                 {
-                    "type": "mesh",
-                    "mesh": {
-                        "mesh": "7",
-                        "material": "20"
-                    },
-                    "active": true
-                },
-                {
-                    "type": "collision",
-                    "collision": {
-                        "collider": "aabb",
-                        "aabb": {
-                            "extents": [
-                                4.0,
-                                0.05,
-                                4.0
-                            ]
-                        },
-                        "groups": 4
+                    "type": "wasd-controls",
+                    "wasd-controls": {
+                        "headObject": "17"
                     }
                 }
-            ],
-            "translation": [
-                0.0,
-                0.0,
-                1.1920928955078125e-7
-            ],
-            "rotation": [
-                -0.7072496,
-                0.0,
-                0.0,
-                0.7069638
-            ],
-            "scaling": [
-                4.0,
-                4.0,
-                4.0
-            ]
-        },
-        "16": {
-            "name": "Cube",
-            "components": [
-                {
-                    "type": "mesh",
-                    "mesh": {
-                        "mesh": "8",
-                        "material": "22"
-                    }
-                }
-            ],
-            "translation": [
-                2.9802322387695313e-8,
-                0.4999999,
-                5.960464477539065e-8
-            ],
-            "rotation": [
-                0.0,
-                0.0,
-                0.0,
-                1.0
-            ],
-            "scaling": [
-                0.5,
-                0.5,
-                0.5
             ]
         },
         "17": {
@@ -98,13 +35,17 @@
                     "type": "view"
                 },
                 {
-                    "type": "mouse-look"
+                    "type": "mouse-look",
+                    "mouse-look": {
+                        "mouseButtonIndex": 2
+                    }
                 },
                 {
                     "type": "cursor",
                     "cursor": {
                         "collisionGroup": 0,
-                        "handedness": "none"
+                        "handedness": "none",
+                        "rayCastMode": "physx"
                     }
                 },
                 {
@@ -119,19 +60,13 @@
             ],
             "translation": [
                 0.0,
-                0.0,
-                0.0
-            ],
-            "rotation": [
-                0.0,
-                0.0,
-                0.0,
-                1.0
+                3.744028447272285e-7,
+                5.8811110648093745e-8
             ],
             "scaling": [
                 1.0,
-                1.0,
-                1.0
+                0.9999997,
+                0.9999997
             ]
         },
         "18": {
@@ -197,30 +132,34 @@
             ]
         },
         "21": {
-            "name": "Light",
+            "name": "MainLight",
             "components": [
                 {
                     "type": "light",
                     "light": {
-                        "intensity": 3.3329999
+                        "intensity": 1.0,
+                        "type": "sun",
+                        "shadows": true,
+                        "shadowRange": 2.0,
+                        "shadowTexelSize": 2.0
                     }
                 }
             ],
             "translation": [
-                0.0,
-                3.0,
-                2.0
+                -0.9089387,
+                3.0000042,
+                -1.0471721
             ],
             "rotation": [
-                0.0,
-                0.0,
-                0.0,
-                1.0
+                -0.1567734,
+                -0.4046434,
+                0.3254822,
+                0.8400875
             ],
             "scaling": [
-                1.0,
-                1.0,
-                1.0
+                0.9999998,
+                0.9999994,
+                0.9999998
             ]
         },
         "23": {
@@ -229,14 +168,19 @@
                 {
                     "type": "light",
                     "light": {
-                        "intensity": 3.3329999
+                        "intensity": 1.0,
+                        "color": [
+                            0.5789684,
+                            0.5759717,
+                            1.0
+                        ]
                     }
                 }
             ],
             "translation": [
-                -1.0,
+                0.8178723,
                 3.0,
-                -1.0
+                0.9594272
             ],
             "rotation": [
                 0.0,
@@ -248,62 +192,6 @@
                 1.0,
                 1.0,
                 1.0
-            ]
-        },
-        "24": {
-            "name": "Cone",
-            "components": [
-                {
-                    "type": "mesh",
-                    "mesh": {
-                        "mesh": "10",
-                        "material": "25"
-                    }
-                }
-            ],
-            "translation": [
-                1.5,
-                1.0,
-                -1.4901161193847656e-8
-            ],
-            "rotation": [
-                0.0,
-                0.0,
-                0.0,
-                1.0
-            ],
-            "scaling": [
-                1.0,
-                1.0,
-                1.0
-            ]
-        },
-        "27": {
-            "name": "Sphere",
-            "components": [
-                {
-                    "type": "mesh",
-                    "mesh": {
-                        "mesh": "9",
-                        "material": "26"
-                    }
-                }
-            ],
-            "translation": [
-                0.4999999,
-                0.75,
-                -1.25
-            ],
-            "rotation": [
-                0.0,
-                0.0,
-                0.0,
-                1.0
-            ],
-            "scaling": [
-                0.75,
-                0.75,
-                0.75
             ]
         },
         "53": {
@@ -320,13 +208,13 @@
             ],
             "rotation": [
                 -0.0,
-                0.7316615,
+                0.7316613,
                 0.6816681,
                 3.196286257889369e-8
             ],
             "scaling": [
                 0.9999998,
-                0.9999999,
+                0.9999998,
                 0.9999997
             ]
         },
@@ -560,7 +448,7 @@
             "rotation": [
                 -0.0,
                 0.999921,
-                -0.0125658,
+                -0.0125657,
                 -4.174509058429976e-7
             ],
             "scaling": [
@@ -794,25 +682,14 @@
                         "cursorObject": "127",
                         "collisionGroup": 0,
                         "cursorRayObject": "209",
-                        "cursorRayScalingAxis": "y"
+                        "cursorRayScalingAxis": "y",
+                        "rayCastMode": "physx"
                     }
                 },
                 {
                     "type": "input",
                     "input": {
                         "type": "ray left"
-                    }
-                },
-                {
-                    "type": "teleport",
-                    "teleport": {
-                        "floorGroup": 2,
-                        "camRoot": "14",
-                        "cam": "17",
-                        "teleportIndicatorMeshObject": "208",
-                        "indicatorYOffset": 0.0099999,
-                        "eyeLeft": "18",
-                        "eyeRight": "19"
                     }
                 },
                 {
@@ -850,8 +727,8 @@
             "parent": null,
             "translation": [
                 0.0,
-                0.0388117,
-                1.5585094
+                0.0388116,
+                1.5585093
             ],
             "rotation": [
                 0.0,
@@ -1223,7 +1100,7 @@
                 "name": "Armature",
                 "file": "models\\hand-right.glb"
             },
-            "parent": "205",
+            "parent": "212",
             "name": "HandRight",
             "components": [
                 {
@@ -1243,7 +1120,7 @@
             "translation": [
                 0.1003172,
                 0.0,
-                -2.384185791015625e-7
+                0.0
             ],
             "rotation": [
                 0.0,
@@ -1485,170 +1362,6 @@
             "parent": "167",
             "skin": "166"
         },
-        "194": {
-            "name": "Panel",
-            "components": [
-                {
-                    "type": "mesh",
-                    "mesh": {
-                        "mesh": "195",
-                        "material": "202"
-                    }
-                }
-            ],
-            "translation": [
-                -2.5,
-                1.2,
-                0.0
-            ],
-            "rotation": [
-                0.5002117,
-                0.0,
-                0.0,
-                0.8659031
-            ],
-            "scaling": [
-                0.25,
-                0.1249998,
-                0.2499998
-            ]
-        },
-        "196": {
-            "link": {
-                "name": "Cube",
-                "file": "models\\button.glb"
-            },
-            "parent": "197",
-            "components": [
-                {
-                    "mesh": {
-                        "material": "26"
-                    }
-                }
-            ],
-            "name": "ButtonMesh",
-            "translation": [
-                -0.0000094,
-                0.3244419,
-                -0.0000676
-            ],
-            "rotation": [
-                6.000006465001206e-7,
-                0.0,
-                0.0,
-                1.0
-            ],
-            "scaling": [
-                1.0,
-                0.9999989,
-                0.9999989
-            ]
-        },
-        "197": {
-            "name": "Button",
-            "parent": "194",
-            "components": [
-                {
-                    "type": "collision",
-                    "collision": {
-                        "collider": "box",
-                        "box": {
-                            "extents": [
-                                0.0974999,
-                                0.025,
-                                0.045
-                            ]
-                        },
-                        "groups": 251
-                    }
-                },
-                {
-                    "type": "cursor-target"
-                },
-                {
-                    "type": "button",
-                    "button": {
-                        "buttonMeshObject": "196",
-                        "hoverMaterial": "203",
-                        "clickAudio": "1",
-                        "unClickAudio": "2"
-                    }
-                }
-            ],
-            "translation": [
-                0.0,
-                0.057682,
-                0.175434
-            ],
-            "rotation": [
-                -0.0,
-                0.0,
-                0.0,
-                1.0
-            ],
-            "scaling": [
-                0.4,
-                0.4999999,
-                0.3
-            ]
-        },
-        "198": {
-            "name": "ButtonLabel",
-            "parent": "196",
-            "components": [
-                {
-                    "type": "text",
-                    "text": {
-                        "text": "Thanks!"
-                    }
-                }
-            ],
-            "translation": [
-                -0.0001563,
-                0.1084579,
-                0.0000046
-            ],
-            "rotation": [
-                -0.7068095,
-                0.0,
-                0.0,
-                0.7074038
-            ],
-            "scaling": [
-                2.5,
-                3.7999999,
-                4.8000063
-            ]
-        },
-        "200": {
-            "name": "Title",
-            "parent": "194",
-            "components": [
-                {
-                    "type": "text",
-                    "text": {
-                        "text": "Welcome to\nWonderland",
-                        "material": "201"
-                    }
-                }
-            ],
-            "translation": [
-                -0.0000023,
-                0.1554993,
-                -0.303415
-            ],
-            "rotation": [
-                -0.7068591,
-                0.0,
-                0.0,
-                0.7073543
-            ],
-            "scaling": [
-                1.5,
-                3.0000002,
-                1.5000001
-            ]
-        },
         "205": {
             "name": "TrackedSpace",
             "parent": "14",
@@ -1661,28 +1374,6 @@
                 0.0,
                 1.75,
                 0.0
-            ],
-            "rotation": [
-                0.0,
-                0.0,
-                0.0,
-                1.0
-            ],
-            "scaling": [
-                1.0,
-                1.0,
-                1.0
-            ]
-        },
-        "208": {
-            "link": {
-                "name": "TeleportIndicator",
-                "file": "models\\teleport-indicator.glb"
-            },
-            "translation": [
-                0.0,
-                0.0099999,
-                1.3311299
             ],
             "rotation": [
                 0.0,
@@ -1742,7 +1433,7 @@
             "scaling": [
                 0.0049998,
                 0.3500002,
-                0.0049999
+                0.0049998
             ]
         },
         "212": {
@@ -1755,25 +1446,14 @@
                         "cursorObject": "215",
                         "collisionGroup": 0,
                         "cursorRayObject": "213",
-                        "cursorRayScalingAxis": "y"
+                        "cursorRayScalingAxis": "y",
+                        "rayCastMode": "physx"
                     }
                 },
                 {
                     "type": "input",
                     "input": {
                         "type": "ray right"
-                    }
-                },
-                {
-                    "type": "teleport",
-                    "teleport": {
-                        "floorGroup": 2,
-                        "camRoot": "14",
-                        "cam": "17",
-                        "teleportIndicatorMeshObject": "208",
-                        "indicatorYOffset": 0.0099999,
-                        "eyeLeft": "18",
-                        "eyeRight": "19"
                     }
                 },
                 {
@@ -1799,11 +1479,11 @@
         },
         "213": {
             "name": "CursorRayRight",
-            "parent": "212",
+            "parent": "205",
             "translation": [
                 0.0,
                 0.0,
-                2.384185791015625e-7
+                0.0
             ],
             "rotation": [
                 0.0,
@@ -1843,7 +1523,7 @@
             "scaling": [
                 0.0049998,
                 0.3499999,
-                0.0049999
+                0.0049998
             ]
         },
         "215": {
@@ -1890,6 +1570,68 @@
                 {
                     "type": "input"
                 }
+            ]
+        },
+        "194": {
+            "name": "Grid",
+            "components": [
+                {
+                    "type": "hex-grid-layout",
+                    "hex-grid-layout": {
+                        "cursorObject": "127",
+                        "highlight": "215",
+                        "tilePrefabsObject": "235"
+                    }
+                }
+            ],
+            "scaling": [
+                0.15,
+                0.15,
+                0.15
+            ],
+            "translation": [
+                0.0,
+                1.0,
+                0.0
+            ]
+        },
+        "234": {
+            "name": "Prefabs",
+            "translation": [
+                0.0,
+                -10000.0,
+                0.0
+            ]
+        },
+        "235": {
+            "name": "Tile Prefabs",
+            "parent": "234",
+            "components": [
+                {
+                    "type": "tile-prefabs"
+                }
+            ]
+        },
+        "208": {
+            "name": "Mesh",
+            "components": [
+                {
+                    "type": "mesh",
+                    "mesh": {
+                        "material": "25",
+                        "mesh": "8"
+                    }
+                }
+            ],
+            "scaling": [
+                0.5,
+                0.5,
+                0.5
+            ],
+            "translation": [
+                0.0,
+                0.5,
+                0.0
             ]
         }
     },
@@ -2028,6 +1770,13 @@
                 "name": "TeleportIndicator",
                 "file": "models\\teleport-indicator.glb"
             }
+        },
+        "208": {
+            "link": {
+                "name": "mesh_0",
+                "file": "assets\\models\\grass.fbx"
+            },
+            "importScaling": 1.0
         }
     },
     "textures": {
@@ -2053,6 +1802,18 @@
             "link": {
                 "name": "texture_1",
                 "file": "models\\oculus-touch-v2-right.glb"
+            }
+        },
+        "88": {
+            "link": {
+                "name": "DiffuseColor_Texture",
+                "file": "assets\\models\\grass.fbx"
+            }
+        },
+        "89": {
+            "link": {
+                "name": "colormap.png",
+                "file": "assets\\textures\\colormap.png"
             }
         }
     },
@@ -2096,6 +1857,12 @@
                 256,
                 256
             ]
+        },
+        "86": {
+            "link": {
+                "name": "colormap.png",
+                "file": "assets\\textures\\colormap.png"
+            }
         }
     },
     "materials": {
@@ -2125,7 +1892,8 @@
                     1.0
                 ],
                 "shininess": 1
-            }
+            },
+            "pipeline": "37"
         },
         "22": {
             "name": "Pink",
@@ -2133,7 +1901,7 @@
                 "diffuseColor": [
                     0.9098039,
                     0.0,
-                    0.5411764,
+                    0.5411763,
                     1.0
                 ],
                 "specularColor": [
@@ -2146,18 +1914,19 @@
                 "ambientColor": [
                     0.317647,
                     0.0,
-                    0.2165777,
+                    0.2165776,
                     1.0
                 ]
-            }
+            },
+            "pipeline": "37"
         },
         "25": {
-            "name": "Yellow",
+            "name": "Gray",
             "Phong": {
                 "diffuseColor": [
-                    1.0,
-                    0.8039215,
-                    0.0,
+                    0.5,
+                    0.5,
+                    0.5,
                     1.0
                 ],
                 "specularColor": [
@@ -2167,20 +1936,21 @@
                     1.0
                 ],
                 "ambientColor": [
-                    0.3843137,
-                    0.3089579,
-                    0.0,
+                    0.2,
+                    0.2,
+                    0.2,
                     1.0
                 ]
-            }
+            },
+            "pipeline": "37"
         },
         "26": {
             "name": "Green",
             "Phong": {
                 "diffuseColor": [
-                    0.1529411,
+                    0.152941,
                     0.7882353,
-                    0.5411764,
+                    0.5411763,
                     1.0
                 ],
                 "specularColor": [
@@ -2192,10 +1962,11 @@
                 "ambientColor": [
                     0.0,
                     0.2352941,
-                    0.1437908,
+                    0.1437907,
                     1.0
                 ]
-            }
+            },
+            "pipeline": "37"
         },
         "46": {
             "link": {
@@ -2249,7 +2020,7 @@
                 "color": [
                     0.9098039,
                     0.0,
-                    0.5411764,
+                    0.5411763,
                     1.0
                 ],
                 "font": "230"
@@ -2267,18 +2038,19 @@
                 ],
                 "shininess": 1,
                 "diffuseColor": [
-                    0.1686274,
-                    0.1686257,
-                    0.1686257,
+                    0.1686273,
+                    0.1686255,
+                    0.1686255,
                     1.0
                 ],
                 "ambientColor": [
                     0.0274509,
-                    0.0274507,
-                    0.0274507,
+                    0.0274506,
+                    0.0274506,
                     1.0
                 ]
-            }
+            },
+            "pipeline": "37"
         },
         "203": {
             "name": "GreenHover",
@@ -2286,7 +2058,7 @@
                 "diffuseColor": [
                     0.4894117,
                     0.917647,
-                    0.7511102,
+                    0.75111,
                     1.0
                 ],
                 "specularColor": [
@@ -2297,11 +2069,12 @@
                 ],
                 "ambientColor": [
                     0.0,
-                    0.3294117,
+                    0.3294115,
                     0.2013071,
                     1.0
                 ]
-            }
+            },
+            "pipeline": "37"
         },
         "206": {
             "link": {
@@ -2319,30 +2092,33 @@
             "pipeline": "34",
             "Flat": {
                 "color": [
-                    0.8392156,
-                    0.8392072,
-                    0.8392072,
+                    0.8392155,
+                    0.8392071,
+                    0.8392071,
+                    1.0
+                ]
+            }
+        },
+        "207": {
+            "link": {
+                "name": "colormap",
+                "file": "assets\\models\\grass.fbx"
+            },
+            "Phong": {
+                "diffuseTexture": "89",
+                "ambientColor": [
+                    0.1372548,
+                    0.1372548,
+                    0.1372548,
                     1.0
                 ]
             }
         }
     },
     "shaders": {
-        "1": {
-            "link": {
-                "name": "DistanceFieldVector Textured.frag",
-                "file": "default"
-            }
-        },
         "2": {
             "link": {
                 "name": "Flat.frag",
-                "file": "default"
-            }
-        },
-        "3": {
-            "link": {
-                "name": "Flat Textured.frag",
                 "file": "default"
             }
         },
@@ -2358,33 +2134,15 @@
                 "file": "default"
             }
         },
-        "6": {
-            "link": {
-                "name": "Phong Textured.frag",
-                "file": "default"
-            }
-        },
         "28": {
             "link": {
                 "name": "Dynamic.vert",
                 "file": "default"
             }
         },
-        "29": {
-            "link": {
-                "name": "Particle Textured.frag",
-                "file": "default"
-            }
-        },
         "30": {
             "link": {
                 "name": "Skinning.vert",
-                "file": "default"
-            }
-        },
-        "31": {
-            "link": {
-                "name": "Static.frag",
                 "file": "default"
             }
         },
@@ -2448,122 +2206,68 @@
                 "file": "default"
             }
         },
-        "234": {
+        "250": {
             "link": {
-                "name": "lib\\Color.glsl",
+                "name": "AtmosphericSky.frag",
                 "file": "default"
             }
         },
-        "235": {
+        "251": {
             "link": {
-                "name": "lib\\Compatibility.glsl",
-                "file": "default"
-            }
-        },
-        "236": {
-            "link": {
-                "name": "lib\\CoordinateSystems.glsl",
-                "file": "default"
-            }
-        },
-        "237": {
-            "link": {
-                "name": "lib\\GI.glsl",
-                "file": "default"
-            }
-        },
-        "238": {
-            "link": {
-                "name": "lib\\Inputs.glsl",
-                "file": "default"
-            }
-        },
-        "239": {
-            "link": {
-                "name": "lib\\Lights.glsl",
-                "file": "default"
-            }
-        },
-        "240": {
-            "link": {
-                "name": "lib\\Materials.glsl",
-                "file": "default"
-            }
-        },
-        "241": {
-            "link": {
-                "name": "lib\\Math.glsl",
-                "file": "default"
-            }
-        },
-        "242": {
-            "link": {
-                "name": "lib\\Packing.glsl",
-                "file": "default"
-            }
-        },
-        "243": {
-            "link": {
-                "name": "lib\\Quaternion.glsl",
-                "file": "default"
-            }
-        },
-        "244": {
-            "link": {
-                "name": "lib\\Slug.frag.glsl",
-                "file": "default"
-            }
-        },
-        "245": {
-            "link": {
-                "name": "lib\\Slug.vert.glsl",
-                "file": "default"
-            }
-        },
-        "246": {
-            "link": {
-                "name": "lib\\Surface.glsl",
-                "file": "default"
-            }
-        },
-        "247": {
-            "link": {
-                "name": "lib\\Textures.glsl",
-                "file": "default"
-            }
-        },
-        "249": {
-            "link": {
-                "name": "lib\\Uniforms.glsl",
+                "name": "Color.frag",
                 "file": "default"
             }
         }
     },
     "settings": {
         "project": {
-            "name": "VRTemplateTest",
+            "name": "Elemental-Echoes",
             "version": [
                 1,
-                1,
-                5,
+                6,
                 1
-            ]
-        },
-        "vr": {
-            "leftEyeObject": "18",
-            "rightEyeObject": "19"
+            ],
+            "type": "game"
         },
         "scripting": {
-            "bundlingType": "esbuild",
-            "components": {}
+            "components": {
+                "output": "Elemental-Echoes.bundle.js",
+                "sourcePaths": [
+                    "js/",
+                    "js/components"
+                ]
+            },
+            "application": {
+                "output": "Elemental-Echoes.app.js",
+                "bundling": "esbuild"
+            }
         },
         "runtime": {
             "visualizeColliders": false,
+            "loadUncompressedImagesAsBitmap": false
+        },
+        "rendering": {
+            "environment": {
+                "bakingMode": "sky",
+                "material": null
+            }
+        },
+        "xr": {
+            "leftEyeObject": "18",
+            "rightEyeObject": "19",
             "webxr": {
                 "optionalFeatures": {
                     "local-floor": true
                 }
             }
+        },
+        "physx": {
+            "enable": true
+        },
+        "workspace": {
+            "files": [
+                "Tiles.wlp"
+            ]
         }
     },
     "animations": {},
@@ -2668,7 +2372,8 @@
                 "file": "default"
             },
             "features": {
-                "DEPRECATED_LIGHT_ATTENUATION": true
+                "DEPRECATED_LIGHT_ATTENUATION": true,
+                "WITH_EMISSIVE": true
             }
         },
         "38": {
@@ -2677,7 +2382,9 @@
                 "file": "default"
             },
             "features": {
-                "DEPRECATED_LIGHT_ATTENUATION": true
+                "DEPRECATED_LIGHT_ATTENUATION": false,
+                "WITH_EMISSIVE": false,
+                "SHADOW_NORMAL_OFFSET_UV_ONLY": true
             }
         },
         "39": {
@@ -2705,12 +2412,18 @@
             "link": {
                 "name": "Physical Opaque",
                 "file": "default"
+            },
+            "features": {
+                "SEPARATE_OCCLUSION_TEXTURE": true
             }
         },
         "223": {
             "link": {
                 "name": "Physical Opaque Textured",
                 "file": "default"
+            },
+            "features": {
+                "SEPARATE_OCCLUSION_TEXTURE": true
             }
         },
         "226": {
@@ -2731,7 +2444,8 @@
                 "file": "default"
             },
             "features": {
-                "DEPRECATED_LIGHT_ATTENUATION": true
+                "DEPRECATED_LIGHT_ATTENUATION": true,
+                "WITH_EMISSIVE": true
             }
         },
         "232": {
@@ -2740,7 +2454,8 @@
                 "file": "default"
             },
             "features": {
-                "DEPRECATED_LIGHT_ATTENUATION": true
+                "DEPRECATED_LIGHT_ATTENUATION": true,
+                "WITH_EMISSIVE": true
             }
         },
         "248": {
@@ -2748,40 +2463,74 @@
                 "name": "TileFeedback",
                 "file": "default"
             }
+        },
+        "249": {
+            "link": {
+                "name": "Color",
+                "file": "default"
+            }
+        },
+        "250": {
+            "link": {
+                "name": "VertexColor",
+                "file": "default"
+            }
+        },
+        "251": {
+            "link": {
+                "name": "AtmosphericSky",
+                "file": "default"
+            }
         }
     },
     "files": {
         "250": {
             "fileName": "models/oculus-touch-v2-left.glb",
-            "importerName": ""
+            "importerName": "",
+            "colorSpace": "srgb",
+            "importSecondaryUVLegacy": true
         },
         "251": {
             "fileName": "models/oculus-touch-v2-right.glb",
-            "importerName": ""
+            "importerName": "",
+            "colorSpace": "srgb",
+            "importSecondaryUVLegacy": true
         },
         "252": {
             "fileName": "models/hand-left.glb",
-            "importerName": ""
+            "importerName": "",
+            "colorSpace": "srgb",
+            "importSecondaryUVLegacy": true
         },
         "253": {
             "fileName": "models/hand-right.glb",
-            "importerName": ""
+            "importerName": "",
+            "colorSpace": "srgb",
+            "importSecondaryUVLegacy": true
         },
         "254": {
             "fileName": "models/button.glb",
-            "importerName": ""
+            "importerName": "",
+            "colorSpace": "srgb",
+            "importSecondaryUVLegacy": true
         },
         "255": {
             "fileName": "models/teleport-indicator.glb",
-            "importerName": ""
+            "importerName": "",
+            "colorSpace": "srgb",
+            "importSecondaryUVLegacy": true
         },
         "256": {
             "fileName": "sfx/click.wav",
-            "importerName": ""
+            "importerName": "",
+            "colorSpace": "srgb",
+            "importSecondaryUVLegacy": true
         },
         "257": {
             "fileName": "sfx/unclick.wav",
-            "importerName": ""
+            "importerName": "",
+            "colorSpace": "srgb",
+            "importSecondaryUVLegacy": true
         }
     },
     "fonts": {
@@ -2807,4 +2556,124 @@
             }
         }
     },
+    "shaderChunks": {
+        "1": {
+            "link": {
+                "name": "lib\\Color.glsl",
+                "file": "default"
+            }
+        },
+        "2": {
+            "link": {
+                "name": "lib\\Compatibility.glsl",
+                "file": "default"
+            }
+        },
+        "3": {
+            "link": {
+                "name": "lib\\CoordinateSystems.glsl",
+                "file": "default"
+            }
+        },
+        "4": {
+            "link": {
+                "name": "lib\\GI.glsl",
+                "file": "default"
+            }
+        },
+        "5": {
+            "link": {
+                "name": "lib\\Inputs.glsl",
+                "file": "default"
+            }
+        },
+        "6": {
+            "link": {
+                "name": "lib\\Lights.glsl",
+                "file": "default"
+            }
+        },
+        "7": {
+            "link": {
+                "name": "lib\\Materials.glsl",
+                "file": "default"
+            }
+        },
+        "8": {
+            "link": {
+                "name": "lib\\Math.glsl",
+                "file": "default"
+            }
+        },
+        "9": {
+            "link": {
+                "name": "lib\\MorphTargets.glsl",
+                "file": "default"
+            }
+        },
+        "10": {
+            "link": {
+                "name": "lib\\Packing.glsl",
+                "file": "default"
+            }
+        },
+        "11": {
+            "link": {
+                "name": "lib\\PhysicalBSDF.glsl",
+                "file": "default"
+            }
+        },
+        "12": {
+            "link": {
+                "name": "lib\\Quaternion.glsl",
+                "file": "default"
+            }
+        },
+        "13": {
+            "link": {
+                "name": "lib\\SkyProcedural.glsl",
+                "file": "default"
+            }
+        },
+        "14": {
+            "link": {
+                "name": "lib\\Slug.frag.glsl",
+                "file": "default"
+            }
+        },
+        "15": {
+            "link": {
+                "name": "lib\\Slug.vert.glsl",
+                "file": "default"
+            }
+        },
+        "16": {
+            "link": {
+                "name": "lib\\Surface.glsl",
+                "file": "default"
+            }
+        },
+        "17": {
+            "link": {
+                "name": "lib\\Textures.glsl",
+                "file": "default"
+            }
+        },
+        "18": {
+            "link": {
+                "name": "lib\\Uniforms.glsl",
+                "file": "default"
+            }
+        },
+        "19": {
+            "link": {
+                "name": "lib\\VertexAttributes.glsl",
+                "file": "default"
+            }
+        }
+    },
+    "morphTargets": {},
+    "particleEffects": {},
+    "probeVolumeScenarios": {},
+    "plugins": {}
 }
