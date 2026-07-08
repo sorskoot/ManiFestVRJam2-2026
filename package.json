@@ -1,0 +1,41 @@
+{
+    "name": "elemental-echoes",
+    "version": "1.0.0",
+    "description": "Entry for ManiFest VR Jam #2 - Elemental Echoes",
+    "main": "js/index.js",
+    "type": "module",
+    "module": "js/index.js",
+    "scripts": {
+        "start": "wonderland-editor --package --windowless -w -s --project ManiFestVRJam2-2026.wlp"
+    },
+    "keywords": [
+        "wonderland-engine"
+    ],
+    "dependencies": {
+        "@preact/signals-core": "^1.14.2",
+        "@sorskoot/wonderland-components": "^1.6.2",
+        "@tweenjs/tween.js": "^25.0.0",
+        "@wonderlandengine/api": "^1.6.1",
+        "@wonderlandengine/components": "^1.2.6",
+        "@wonderlandengine/react-ui": "^0.2.4",
+        "@wonderlandengine/spatial-audio": "^1.2.5",
+        "@wonderlandengine/upsdk": "^0.2.4",
+        "@wonderlandengine/upsdk-provider-cookie": "^0.1.1",
+        "gl-matrix": "^3.4.3"
+    },
+    "devDependencies": {
+        "@assetpack/core": "^1.7.0",
+        "@types/node": "^25.9.2",
+        "@types/webxr": "^0.5.24",
+        "@wonderlandengine/cli": "^0.1.5",
+        "@wonderlandengine/editor-api": "^1.6.1",
+        "@wonderlandengine/mcp-plugin": "^1.1.1",
+        "@wonderlandengine/prettier-config": "^1.0.0",
+        "esbuild": "^0.28.0",
+        "sharp": "^0.34.5",
+        "typescript": "^7.0.1-rc"
+    },
+    "overrides": {
+        "@wonderlandengine/api": "$@wonderlandengine/api"
+    }
+}
