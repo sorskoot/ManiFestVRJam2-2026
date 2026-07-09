@@ -26,6 +26,10 @@
         "2": {
             "fileName": "assets/textures/colormap.png",
             "importerName": ""
+        },
+        "3": {
+            "fileName": "assets/models/models.fbx",
+            "importerName": ""
         }
     },
     "meshes": {
@@ -35,6 +39,49 @@
                 "file": "assets\\models\\grass.fbx"
             },
             "importScaling": 1.0
+        },
+        "2": {
+            "link": {
+                "name": "mesh_0",
+                "file": "assets\\models\\models.fbx"
+            }
+        },
+        "3": {
+            "link": {
+                "name": "mesh_1",
+                "file": "assets\\models\\models.fbx"
+            },
+            "name": "grass_mesh"
+        },
+        "4": {
+            "link": {
+                "name": "mesh_2",
+                "file": "assets\\models\\models.fbx"
+            }
+        },
+        "5": {
+            "link": {
+                "name": "mesh_3",
+                "file": "assets\\models\\models.fbx"
+            }
+        },
+        "6": {
+            "link": {
+                "name": "mesh_4",
+                "file": "assets\\models\\models.fbx"
+            }
+        },
+        "7": {
+            "link": {
+                "name": "mesh_5",
+                "file": "assets\\models\\models.fbx"
+            }
+        },
+        "8": {
+            "link": {
+                "name": "mesh_6",
+                "file": "assets\\models\\models.fbx"
+            }
         }
     },
     "images": {
@@ -42,7 +89,8 @@
             "link": {
                 "name": "colormap.png",
                 "file": "assets\\textures\\colormap.png"
-            }
+            },
+            "compression": "uastc"
         }
     },
     "textures": {
@@ -62,6 +110,12 @@
             "link": {
                 "name": "base_color_texture",
                 "file": "assets\\models\\grass.fbx"
+            }
+        },
+        "4": {
+            "link": {
+                "name": "base_color_texture",
+                "file": "assets\\models\\models.fbx"
             }
         }
     },
@@ -418,6 +472,21 @@
                     1.0
                 ]
             }
+        },
+        "2": {
+            "link": {
+                "name": "colormap",
+                "file": "assets\\models\\models.fbx"
+            },
+            "Phong": {
+                "ambientColor": [
+                    0.2,
+                    0.2,
+                    0.2,
+                    1.0
+                ],
+                "diffuseTexture": "2"
+            }
         }
     },
     "objects": {
@@ -429,7 +498,7 @@
                     "physx": {
                         "shape": "convexMesh",
                         "convexMesh": {
-                            "mesh": "1",
+                            "mesh": "3",
                             "scaling": [
                                 0.15,
                                 0.15,
@@ -447,16 +516,474 @@
                 }
             ]
         },
-        "2": {
+        "3": {
             "link": {
-                "name": "grass",
-                "file": "assets\\models\\grass.fbx"
+                "name": "forest",
+                "file": "assets\\models\\models.fbx"
             },
-            "parent": "1",
+            "components": [
+                {
+                    "originalIndex": 0,
+                    "mesh": {
+                        "material": "2"
+                    }
+                }
+            ],
             "scaling": [
                 1.0,
                 1.0,
                 1.0
+            ],
+            "parent": "2",
+            "rotation": [
+                3.774895063202166e-8,
+                0.0,
+                0.0,
+                1.0
+            ],
+            "translation": [
+                0.0,
+                0.0,
+                0.0
+            ]
+        },
+        "4": {
+            "link": {
+                "name": "grass",
+                "file": "assets\\models\\models.fbx"
+            },
+            "scaling": [
+                1.0,
+                1.0,
+                1.0
+            ],
+            "components": [
+                {
+                    "originalIndex": 0,
+                    "mesh": {
+                        "material": "2"
+                    }
+                }
+            ],
+            "parent": "1",
+            "translation": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "rotation": [
+                0.0,
+                0.0,
+                0.0,
+                1.0
+            ]
+        },
+        "7": {
+            "link": {
+                "name": "hill",
+                "file": "assets\\models\\models.fbx"
+            },
+            "components": [
+                {
+                    "originalIndex": 0,
+                    "mesh": {
+                        "material": "2"
+                    }
+                }
+            ],
+            "scaling": [
+                1.0,
+                1.0,
+                1.0
+            ],
+            "parent": "15",
+            "translation": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "rotation": [
+                0.0,
+                0.0,
+                0.0,
+                1.0
+            ]
+        },
+        "8": {
+            "link": {
+                "name": "mountain",
+                "file": "assets\\models\\models.fbx"
+            },
+            "components": [
+                {
+                    "originalIndex": 0,
+                    "mesh": {
+                        "material": "2"
+                    }
+                }
+            ],
+            "scaling": [
+                1.0,
+                1.0,
+                1.0
+            ],
+            "parent": "13",
+            "translation": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "rotation": [
+                0.0,
+                0.0,
+                0.0,
+                1.0
+            ]
+        },
+        "9": {
+            "link": {
+                "name": "sand",
+                "file": "assets\\models\\models.fbx"
+            },
+            "components": [
+                {
+                    "originalIndex": 0,
+                    "mesh": {
+                        "material": "2"
+                    }
+                }
+            ],
+            "parent": "21",
+            "translation": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "rotation": [
+                0.0,
+                0.0,
+                0.0,
+                1.0
+            ],
+            "scaling": [
+                1.0,
+                1.0,
+                1.0
+            ]
+        },
+        "10": {
+            "link": {
+                "name": "volcano",
+                "file": "assets\\models\\models.fbx"
+            },
+            "components": [
+                {
+                    "originalIndex": 0,
+                    "mesh": {
+                        "material": "2"
+                    }
+                }
+            ],
+            "parent": "19",
+            "translation": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "rotation": [
+                0.0,
+                0.0,
+                0.0,
+                1.0
+            ],
+            "scaling": [
+                1.0,
+                1.0,
+                1.0
+            ]
+        },
+        "11": {
+            "link": {
+                "name": "water",
+                "file": "assets\\models\\models.fbx"
+            },
+            "components": [
+                {
+                    "originalIndex": 0,
+                    "mesh": {
+                        "material": "2"
+                    }
+                }
+            ],
+            "translation": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "rotation": [
+                0.0,
+                0.0,
+                0.0,
+                1.0
+            ],
+            "scaling": [
+                1.0,
+                1.0,
+                1.0
+            ],
+            "parent": "17"
+        },
+        "2": {
+            "name": "ForestTile",
+            "components": [
+                {
+                    "originalIndex": 0,
+                    "type": "physx",
+                    "physx": {
+                        "kinematic": true,
+                        "allowSimulation": false,
+                        "shape": "convexMesh",
+                        "convexMesh": {
+                            "mesh": "3",
+                            "scaling": [
+                                0.15,
+                                0.15,
+                                0.15
+                            ]
+                        },
+                        "gravity": false,
+                        "trigger": true
+                    }
+                },
+                {
+                    "type": "cursor-target"
+                }
+            ],
+            "translation": [
+                1.5,
+                0.0,
+                0.0
+            ]
+        },
+        "15": {
+            "name": "HillTile",
+            "translation": [
+                3.0,
+                0.0,
+                0.0
+            ],
+            "components": [
+                {
+                    "type": "physx",
+                    "physx": {
+                        "kinematic": true,
+                        "allowSimulation": false,
+                        "shape": "convexMesh",
+                        "convexMesh": {
+                            "mesh": "3",
+                            "scaling": [
+                                0.15,
+                                0.15,
+                                0.15
+                            ]
+                        },
+                        "gravity": false,
+                        "trigger": true
+                    }
+                },
+                {
+                    "type": "cursor-target"
+                }
+            ]
+        },
+        "13": {
+            "name": "MountainTile",
+            "components": [
+                {
+                    "originalIndex": 0,
+                    "type": "physx",
+                    "physx": {
+                        "kinematic": true,
+                        "allowSimulation": false,
+                        "shape": "convexMesh",
+                        "convexMesh": {
+                            "mesh": "3",
+                            "scaling": [
+                                0.15,
+                                0.15,
+                                0.15
+                            ]
+                        },
+                        "gravity": false,
+                        "trigger": true
+                    }
+                },
+                {
+                    "type": "cursor-target"
+                }
+            ],
+            "translation": [
+                4.5,
+                0.0,
+                0.0
+            ]
+        },
+        "17": {
+            "name": "WaterTile",
+            "components": [
+                {
+                    "originalIndex": 0,
+                    "type": "physx",
+                    "physx": {
+                        "kinematic": true,
+                        "allowSimulation": false,
+                        "shape": "convexMesh",
+                        "convexMesh": {
+                            "mesh": "3",
+                            "scaling": [
+                                0.15,
+                                0.15,
+                                0.15
+                            ]
+                        },
+                        "gravity": false,
+                        "trigger": true
+                    }
+                },
+                {
+                    "type": "cursor-target"
+                }
+            ],
+            "translation": [
+                6.0,
+                0.0,
+                0.0
+            ]
+        },
+        "19": {
+            "name": "VolcanoTile",
+            "components": [
+                {
+                    "originalIndex": 0,
+                    "type": "physx",
+                    "physx": {
+                        "kinematic": true,
+                        "allowSimulation": false,
+                        "shape": "convexMesh",
+                        "convexMesh": {
+                            "mesh": "3",
+                            "scaling": [
+                                0.15,
+                                0.15,
+                                0.15
+                            ]
+                        },
+                        "gravity": false,
+                        "trigger": true
+                    }
+                },
+                {
+                    "type": "cursor-target"
+                }
+            ],
+            "translation": [
+                7.5,
+                0.0,
+                0.0
+            ]
+        },
+        "21": {
+            "name": "SandTile",
+            "components": [
+                {
+                    "originalIndex": 0,
+                    "type": "physx",
+                    "physx": {
+                        "kinematic": true,
+                        "allowSimulation": false,
+                        "shape": "convexMesh",
+                        "convexMesh": {
+                            "mesh": "3",
+                            "scaling": [
+                                0.15,
+                                0.15,
+                                0.15
+                            ]
+                        },
+                        "gravity": false,
+                        "trigger": true
+                    }
+                },
+                {
+                    "type": "cursor-target"
+                }
+            ],
+            "translation": [
+                9.0,
+                0.0,
+                0.0
+            ]
+        },
+        "23": {
+            "link": {
+                "name": "grass",
+                "file": "assets\\models\\models.fbx"
+            },
+            "translation": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "rotation": [
+                0.0,
+                0.0,
+                0.0,
+                1.0
+            ],
+            "scaling": [
+                1.0,
+                1.0,
+                1.0
+            ],
+            "parent": "2",
+            "components": [
+                {
+                    "originalIndex": 0,
+                    "mesh": {
+                        "material": "2"
+                    }
+                }
+            ]
+        },
+        "24": {
+            "link": {
+                "name": "grass",
+                "file": "assets\\models\\models.fbx"
+            },
+            "translation": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "rotation": [
+                0.0,
+                0.0,
+                0.0,
+                1.0
+            ],
+            "scaling": [
+                1.0,
+                1.0,
+                1.0
+            ],
+            "parent": "15",
+            "components": [
+                {
+                    "originalIndex": 0,
+                    "mesh": {
+                        "material": "2"
+                    }
+                }
             ]
         }
     },

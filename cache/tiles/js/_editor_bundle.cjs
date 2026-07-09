@@ -13766,8 +13766,10 @@
   var Tags2 = _Tags2;
   __publicField(Tags2, "_instance");
 
-  // js/hexagonmap/HexagonTile.ts
+  // js/hexagonmap/tile-geometry.ts
   var TILE_SIZE = 1 / Math.sqrt(3);
+
+  // js/hexagonmap/HexagonTile.ts
   var HexagonTile = class {
     /**
      * Creates a new HexagonTile instance.
@@ -13788,6 +13790,23 @@
     get id() {
       return this._id;
     }
+    cellValues = {
+      moisture: 0,
+      temperature: 0,
+      fertility: 0,
+      elevation: 0
+    };
+    influence = {
+      moisture: 0,
+      temperature: 0,
+      fertility: 0,
+      elevation: 0
+    };
+    harvestElement = 2 /* Earth */;
+    harvestTurns = 1;
+    // Threshold for manhatten distance
+    stability = 2;
+    age = 0;
     /**
      * Calculates the neighboring tiles in cube coordinates.
      * @returns An array of neighboring tiles' cube coordinates.
@@ -13897,9 +13916,6 @@
       Noise.seed(Date.now());
       this._myCursor = this.cursorObject.getComponent(Cursor);
       this.highlight.setScalingLocal([0, 0, 0]);
-      setTimeout(() => {
-        this._onGameLoaded();
-      }, 500);
     }
     /**
      * Activates the component and adds event listeners.
@@ -13914,6 +13930,11 @@
     _onGameLoaded = () => {
       this._createGrid();
     };
+    update(dt) {
+      if (this._grid == null && this.tilePrefabs.isLoaded) {
+        this._createGrid();
+      }
+    }
     /**
      * Creates the hexagonal grid and populates it with tiles.
      */
@@ -13926,13 +13947,17 @@
       const tiles = this._grid.getAllTiles();
       for (const tile of tiles) {
         const pos = tile.to2D();
+        let hex = null;
         switch (tile.type) {
           case 1 /* Grass */:
-            const hex = this.tilePrefabs.spawn("GrassTile", this.object);
-            hex.setPositionLocal([pos.x, tile.elevation, pos.y]);
-            wlUtils.setActive(hex, true);
+            hex = this.tilePrefabs.spawn("SandTile", this.object);
             break;
         }
+        if (!hex) {
+          throw new Error(`No prefab found for tile type: ${tile.type}`);
+        }
+        hex.setPositionLocal([pos.x, tile.elevation, pos.y]);
+        wlUtils.setActive(hex, true);
       }
     }
     /**

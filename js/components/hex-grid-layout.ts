@@ -4,11 +4,12 @@ import {HexagonGrid} from '../hexagonmap/HexGrid.ts';
 import {HexagonTile} from '../hexagonmap/HexagonTile.ts';
 // import { MyCursor } from '../generic/my-cursor.js';
 import {vec3} from 'gl-matrix';
-import {Noise, wlUtils} from '@sorskoot/wonderland-components';
+import {Noise, rng, wlUtils} from '@sorskoot/wonderland-components';
 import {Cursor} from '@wonderlandengine/components';
 import {TileType} from '../hexagonmap/TileType.ts';
 import {TilePrefabs} from './tile-prefabs.ts';
 
+const TileAssets = ['GrassTile', 'ForestTile', 'HillTile', 'MountainTile', 'WaterTile', 'VolcanoTile', 'SandTile'];
 // import {GameCore} from '@/classes/core/GameCore.js';
 // import {StepsPipeline} from '@/classes/generator/core/StepsPipeline.ts';
 // import {BaseStepExec, StepContext} from '@/classes/generator/core/Steps.ts';
@@ -54,9 +55,6 @@ export class HexGridLayout extends Component {
         this._myCursor = this.cursorObject.getComponent(Cursor)!;
         this.highlight.setScalingLocal([0, 0, 0]);
         //ServiceLocator.get(GameCore).onLoaded.add(this._onGameLoaded);
-        setTimeout(() => {
-            this._onGameLoaded();
-        }, 500);
     }
 
     /**
@@ -78,7 +76,11 @@ export class HexGridLayout extends Component {
     private _onGameLoaded = () => {
         this._createGrid();
     };
-
+    update(dt: number): void {
+        if (this._grid == null && this.tilePrefabs.isLoaded) {
+            this._createGrid();
+        }
+    }
     /**
      * Creates the hexagonal grid and populates it with tiles.
      */
@@ -103,13 +105,18 @@ export class HexGridLayout extends Component {
         const tiles = this._grid.getAllTiles();
         for (const tile of tiles) {
             const pos = tile.to2D();
+            let hex: Object3D | null = null;
             switch (tile.type) {
                 case TileType.Grass:
-                    const hex = this.tilePrefabs.spawn('GrassTile', this.object)!;
-                    hex.setPositionLocal([pos.x, tile.elevation, pos.y]);
-                    wlUtils.setActive(hex, true);
+                    hex = this.tilePrefabs.spawn(rng.getItem(TileAssets))!;
+                    hex.parent = this.object;
                     break;
             }
+            if (!hex) {
+                throw new Error(`No prefab found for tile type: ${tile.type}`);
+            }
+            hex.setPositionLocal([pos.x, tile.elevation, pos.y]);
+            wlUtils.setActive(hex, true);
         }
     }
 

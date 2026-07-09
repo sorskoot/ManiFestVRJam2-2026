@@ -148,13 +148,13 @@
             "translation": [
                 -0.9089387,
                 3.0000042,
-                -1.0471721
+                -1.047172
             ],
             "rotation": [
                 -0.1567734,
-                -0.4046434,
-                0.3254822,
-                0.8400875
+                -0.4046433,
+                0.3254821,
+                0.8400874
             ],
             "scaling": [
                 0.9999998,
@@ -178,9 +178,9 @@
                 }
             ],
             "translation": [
-                0.8178723,
+                0.8178722,
                 3.0,
-                0.9594272
+                0.9594271
             ],
             "rotation": [
                 0.0,
@@ -1777,6 +1777,48 @@
                 "file": "assets\\models\\grass.fbx"
             },
             "importScaling": 1.0
+        },
+        "209": {
+            "link": {
+                "name": "mesh_0",
+                "file": "assets\\models\\models.fbx"
+            }
+        },
+        "210": {
+            "link": {
+                "name": "mesh_1",
+                "file": "assets\\models\\models.fbx"
+            }
+        },
+        "211": {
+            "link": {
+                "name": "mesh_2",
+                "file": "assets\\models\\models.fbx"
+            }
+        },
+        "212": {
+            "link": {
+                "name": "mesh_3",
+                "file": "assets\\models\\models.fbx"
+            }
+        },
+        "213": {
+            "link": {
+                "name": "mesh_4",
+                "file": "assets\\models\\models.fbx"
+            }
+        },
+        "214": {
+            "link": {
+                "name": "mesh_5",
+                "file": "assets\\models\\models.fbx"
+            }
+        },
+        "215": {
+            "link": {
+                "name": "mesh_6",
+                "file": "assets\\models\\models.fbx"
+            }
         }
     },
     "textures": {
@@ -1814,6 +1856,12 @@
             "link": {
                 "name": "colormap.png",
                 "file": "assets\\textures\\colormap.png"
+            }
+        },
+        "90": {
+            "link": {
+                "name": "base_color_texture",
+                "file": "assets\\models\\models.fbx"
             }
         }
     },
@@ -2112,6 +2160,12 @@
                     0.1372548,
                     1.0
                 ]
+            }
+        },
+        "208": {
+            "link": {
+                "name": "colormap",
+                "file": "assets\\models\\models.fbx"
             }
         }
     },
@@ -2531,6 +2585,10 @@
             "importerName": "",
             "colorSpace": "srgb",
             "importSecondaryUVLegacy": true
+        },
+        "258": {
+            "fileName": "assets/models/models.fbx",
+            "importerName": ""
         }
     },
     "fonts": {

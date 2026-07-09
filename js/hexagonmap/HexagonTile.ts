@@ -1,27 +1,10 @@
+import {Element} from './Element.ts';
+import {TerrainDefinition} from './TerrainDefinition.ts';
+import {TerrainType} from './TerrainType.ts';
 import {TileType} from './TileType.ts';
 import {Tags} from './Tags.ts';
-
-/**
- * The size of a hexagon tile, calculated based on the hexagon geometry.
- */
-export const TILE_SIZE = 1 / Math.sqrt(3);
-
-export interface CellValues {
-    moisture: number;
-    temperature: number;
-    fertility: number;
-    elevation: number;
-}
-
-interface TerrainDefinition {
-    id: TerrainType;
-    influences: CellValues;
-    producedElement: Element;
-    harvestAmount: number;
-    score(cell: HexagonTile): number;
-}
-
-export interface TerrainType {}
+import {TILE_SIZE} from './tile-geometry.ts';
+import {type CellValues} from './CellValues.ts';
 /**
  * Represents a hexagonal tile in a 3D space using cube coordinates.
  */
@@ -38,6 +21,19 @@ export class HexagonTile {
         fertility: 0,
         elevation: 0,
     };
+    public readonly influence: CellValues = {
+        moisture: 0,
+        temperature: 0,
+        fertility: 0,
+        elevation: 0,
+    };
+
+    public readonly harvestElement: Element = Element.Earth;
+
+    public readonly harvestTurns: number = 1;
+
+    // Threshold for manhatten distance
+    public readonly stability: number = 2;
 
     public age: number = 0;
 
