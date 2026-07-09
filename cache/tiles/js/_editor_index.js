@@ -4,8 +4,6 @@ import * as __wonderlandengine_components from '@wonderlandengine/components';
 _registerEditor(__wonderlandengine_components);
 import * as __wonderlandengine_spatial_audio from '@wonderlandengine/spatial-audio';
 _registerEditor(__wonderlandengine_spatial_audio);
-import * as _e__Dev_ManiFestVRJam2_2026_js_button_js from 'e:/Dev/ManiFestVRJam2-2026/js/button.js';
-_registerEditor(_e__Dev_ManiFestVRJam2_2026_js_button_js);
 import * as _e__Dev_ManiFestVRJam2_2026_js_components_billboard_ts from 'e:/Dev/ManiFestVRJam2-2026/js/components/billboard.ts';
 _registerEditor(_e__Dev_ManiFestVRJam2_2026_js_components_billboard_ts);
 import * as _e__Dev_ManiFestVRJam2_2026_js_components_hex_grid_layout_ts from 'e:/Dev/ManiFestVRJam2-2026/js/components/hex-grid-layout.ts';

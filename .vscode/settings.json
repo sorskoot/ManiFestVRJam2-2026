@@ -3,6 +3,5 @@
         {
             "text": "Use conventional, but short commit message. Keep it light. No Emoji. Ignore ALL `_editor_**` files."
         }
-    ],
-    "js/ts.experimental.useTsgo": true
+    ]
 }

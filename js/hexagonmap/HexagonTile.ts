@@ -6,6 +6,22 @@ import {Tags} from './Tags.ts';
  */
 export const TILE_SIZE = 1 / Math.sqrt(3);
 
+export interface CellValues {
+    moisture: number;
+    temperature: number;
+    fertility: number;
+    elevation: number;
+}
+
+interface TerrainDefinition {
+    id: TerrainType;
+    influences: CellValues;
+    producedElement: Element;
+    harvestAmount: number;
+    score(cell: HexagonTile): number;
+}
+
+export interface TerrainType {}
 /**
  * Represents a hexagonal tile in a 3D space using cube coordinates.
  */
@@ -15,6 +31,15 @@ export class HexagonTile {
     public get id(): string {
         return this._id;
     }
+
+    public cellValues: CellValues = {
+        moisture: 0,
+        temperature: 0,
+        fertility: 0,
+        elevation: 0,
+    };
+
+    public age: number = 0;
 
     /**
      * Creates a new HexagonTile instance.

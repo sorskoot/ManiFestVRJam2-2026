@@ -13605,96 +13605,6 @@
     property.object()
   ], OrbitalCamera.prototype, "target", void 0);
 
-  // js/button.js
-  var button_exports = {};
-  __export(button_exports, {
-    ButtonComponent: () => ButtonComponent,
-    hapticFeedback: () => hapticFeedback2
-  });
-  function hapticFeedback2(object, strength, duration) {
-    const input = object.getComponent(InputComponent);
-    if (input && input.xrInputSource) {
-      const gamepad = input.xrInputSource.gamepad;
-      if (gamepad && gamepad.hapticActuators)
-        gamepad.hapticActuators[0].pulse(strength, duration);
-    }
-  }
-  var ButtonComponent = class extends Component3 {
-    static onRegister(engine) {
-      engine.registerComponent(AudioSource);
-      engine.registerComponent(CursorTarget);
-    }
-    /* Position to return to when "unpressing" the button */
-    returnPos = new Float32Array(3);
-    start() {
-      this.mesh = this.buttonMeshObject.getComponent(MeshComponent);
-      this.defaultMaterial = this.mesh.material;
-      this.buttonMeshObject.getTranslationLocal(this.returnPos);
-      this.target = this.object.getComponent(CursorTarget) || this.object.addComponent(CursorTarget);
-      if (this.clickAudio) {
-        this.soundClick = this.object.addComponent(AudioSource, {
-          src: this.clickAudio.source,
-          hrtf: true
-        });
-      }
-      if (this.unClickAudio) {
-        this.soundUnClick = this.object.addComponent(AudioSource, {
-          src: this.unClickAudio.source,
-          hrtf: true
-        });
-      }
-    }
-    onActivate() {
-      this.target.onHover.add(this.onHover);
-      this.target.onUnhover.add(this.onUnhover);
-      this.target.onDown.add(this.onDown);
-      this.target.onUp.add(this.onUp);
-    }
-    onDeactivate() {
-      this.target.onHover.remove(this.onHover);
-      this.target.onUnhover.remove(this.onUnhover);
-      this.target.onDown.remove(this.onDown);
-      this.target.onUp.remove(this.onUp);
-    }
-    /* Called by 'cursor-target' */
-    onHover = (_, cursor) => {
-      this.mesh.material = this.hoverMaterial;
-      if (cursor.type === "finger-cursor") {
-        this.onDown(_, cursor);
-      }
-      hapticFeedback2(cursor.object, 0.5, 50);
-    };
-    /* Called by 'cursor-target' */
-    onDown = (_, cursor) => {
-      this.soundClick.play();
-      this.buttonMeshObject.translate([0, -0.1, 0]);
-      hapticFeedback2(cursor.object, 1, 20);
-    };
-    /* Called by 'cursor-target' */
-    onUp = (_, cursor) => {
-      this.soundUnClick.play();
-      this.buttonMeshObject.setTranslationLocal(this.returnPos);
-      hapticFeedback2(cursor.object, 0.7, 20);
-    };
-    /* Called by 'cursor-target' */
-    onUnhover = (_, cursor) => {
-      this.mesh.material = this.defaultMaterial;
-      if (cursor.type === "finger-cursor") {
-        this.onUp(_, cursor);
-      }
-      hapticFeedback2(cursor.object, 0.3, 50);
-    };
-  };
-  __publicField(ButtonComponent, "TypeName", "button");
-  __publicField(ButtonComponent, "Properties", {
-    /** Object that has the button's mesh attached */
-    buttonMeshObject: Property.object(),
-    /** Material to apply when the user hovers the button */
-    hoverMaterial: Property.material(),
-    clickAudio: Property.audioClip(),
-    unClickAudio: Property.audioClip()
-  });
-
   // js/components/billboard.ts
   var billboard_exports = {};
   __export(billboard_exports, {
@@ -14095,7 +14005,6 @@
   _registerEditor(dist_exports);
   _registerEditor(dist_exports3);
   _registerEditor(dist_exports2);
-  _registerEditor(button_exports);
   _registerEditor(billboard_exports);
   _registerEditor(hex_grid_layout_exports);
   _registerEditor(tile_prefabs_exports);
