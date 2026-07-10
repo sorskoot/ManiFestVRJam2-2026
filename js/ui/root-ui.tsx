@@ -5,9 +5,11 @@ import {MenuThemeContext, MenuThemeContextValue} from './utils/menu-theme-contex
 import {colorSwatch} from './utils/colorSwatch.js';
 import {useSignalValue} from './hooks/useSignalValue.ts';
 import {GameServicesProvider, useGameFlowService} from './GameServicesProvider.tsx';
-import {gameFlowService, uiStateService} from '../bootstrap-services.ts';
+import {gameFlowService, uiStateService, gamePlayService} from '../bootstrap-services.ts';
 import {GameState} from '../services/GameFlowService.ts';
 import {Card} from './components/card/card.tsx';
+import { serviceLocator } from '../utils/ServiceLocator.ts';
+import { Hand } from './components/hand/hand.tsx';
 
 const App = (props: {comp: RootUI}) => {
     const gameFlowService = useGameFlowService();
@@ -37,9 +39,7 @@ const App = (props: {comp: RootUI}) => {
         <MaterialContext.Provider value={comp}>
             <MenuThemeContext.Provider value={DefaultTheme}>
                 <Row gap={10} width={1000} height={200} justifyContent={Justify.Center} alignItems={Align.Center}>
-                    <Card title="Rain"></Card>
-                    <Card title="Burn"></Card>
-                    <Card title="Water"></Card>
+                    <Hand />
 
                     <Panel
                         marginLeft={90}
@@ -73,8 +73,7 @@ export class RootUI extends ReactUiBase {
         return (
             <GameServicesProvider
                 services={{
-                    gameFlowService,
-                    uiStateService,
+                  gameFlowService, uiStateService, gamePlayService
                 }}
             >
                 <App comp={this} />

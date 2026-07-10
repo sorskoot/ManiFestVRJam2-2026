@@ -37,4 +37,4 @@ export function registerServices(): void {
     serviceLocator.registerSingleton(Services.gameEvents, gameEvents);
 }
 
-export {gameFlowService, uiStateService};
+export {gameFlowService, uiStateService, gamePlayService};

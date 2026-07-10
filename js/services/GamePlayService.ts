@@ -37,7 +37,7 @@ export class GamePlayService implements IGamePlayService {
             this.gamePlayModel.addCardToDeck(card);
         }
 
-        this.hand.value = this.gamePlayModel.deck.slice(0, this.configService.getDeckSize());
+        this.hand.value = this.gamePlayModel.deck.slice(0, this.configService.getHandSize());
     }
 
     playCard(card: Card): void {

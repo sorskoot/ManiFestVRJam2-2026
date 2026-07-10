@@ -2886,9 +2886,9 @@
         module.exports = function $$$reconciler($$$hostConfig) {
           var exports2 = {};
           "use strict";
-          var React10 = require_react();
+          var React11 = require_react();
           var Scheduler = require_scheduler();
-          var ReactSharedInternals = React10.__SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED;
+          var ReactSharedInternals = React11.__SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED;
           var suppressWarning = false;
           function setSuppressWarning(newSuppressWarning) {
             {
@@ -6686,7 +6686,7 @@
             }
           }
           var fakeInternalInstance = {};
-          var emptyRefsObject = new React10.Component().refs;
+          var emptyRefsObject = new React11.Component().refs;
           var didWarnAboutStateAssignmentForComponent;
           var didWarnAboutUninitializedState;
           var didWarnAboutGetSnapshotBeforeUpdateWithoutDidUpdate;
@@ -17997,7 +17997,7 @@
       if (true) {
         (function() {
           "use strict";
-          var React10 = require_react();
+          var React11 = require_react();
           var REACT_ELEMENT_TYPE = Symbol.for("react.element");
           var REACT_PORTAL_TYPE = Symbol.for("react.portal");
           var REACT_FRAGMENT_TYPE = Symbol.for("react.fragment");
@@ -18023,7 +18023,7 @@
             }
             return null;
           }
-          var ReactSharedInternals = React10.__SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED;
+          var ReactSharedInternals = React11.__SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED;
           function error(format) {
             {
               {
@@ -31974,6 +31974,7 @@
   __export(bootstrap_services_exports, {
     Services: () => Services,
     gameFlowService: () => gameFlowService,
+    gamePlayService: () => gamePlayService,
     registerServices: () => registerServices,
     uiStateService: () => uiStateService
   });
@@ -32675,7 +32676,7 @@
         const card = rng.getItem(CardDefinitions);
         this.gamePlayModel.addCardToDeck(card);
       }
-      this.hand.value = this.gamePlayModel.deck.slice(0, this.configService.getDeckSize());
+      this.hand.value = this.gamePlayModel.deck.slice(0, this.configService.getHandSize());
     }
     playCard(card) {
       this.gamePlayModel.removeCardFromDeck(card);
@@ -32706,12 +32707,19 @@
   };
 
   // js/services/ConfigService.ts
+  var ConfigService_exports = {};
+  __export(ConfigService_exports, {
+    ConfigService: () => ConfigService
+  });
   var ConfigService = class {
     constructor(configModel2) {
       this.configModel = configModel2;
     }
     getDeckSize() {
       return this.configModel.deckSize;
+    }
+    getHandSize() {
+      return this.configModel.handSize;
     }
   };
 
@@ -33300,7 +33308,7 @@
   };
   __publicField(SwitchCursor, "TypeName", "switch-cursor");
 
-  // js/index.js
+  // js/index.ts
   var js_exports = {};
   __export(js_exports, {
     default: () => js_default
@@ -34664,17 +34672,17 @@
   var yoga_wasm_base64_esm_default = loadYoga;
 
   // node_modules/yoga-layout/dist/src/generated/YGEnums.js
-  var Align = /* @__PURE__ */ function(Align2) {
-    Align2[Align2["Auto"] = 0] = "Auto";
-    Align2[Align2["FlexStart"] = 1] = "FlexStart";
-    Align2[Align2["Center"] = 2] = "Center";
-    Align2[Align2["FlexEnd"] = 3] = "FlexEnd";
-    Align2[Align2["Stretch"] = 4] = "Stretch";
-    Align2[Align2["Baseline"] = 5] = "Baseline";
-    Align2[Align2["SpaceBetween"] = 6] = "SpaceBetween";
-    Align2[Align2["SpaceAround"] = 7] = "SpaceAround";
-    Align2[Align2["SpaceEvenly"] = 8] = "SpaceEvenly";
-    return Align2;
+  var Align = /* @__PURE__ */ function(Align3) {
+    Align3[Align3["Auto"] = 0] = "Auto";
+    Align3[Align3["FlexStart"] = 1] = "FlexStart";
+    Align3[Align3["Center"] = 2] = "Center";
+    Align3[Align3["FlexEnd"] = 3] = "FlexEnd";
+    Align3[Align3["Stretch"] = 4] = "Stretch";
+    Align3[Align3["Baseline"] = 5] = "Baseline";
+    Align3[Align3["SpaceBetween"] = 6] = "SpaceBetween";
+    Align3[Align3["SpaceAround"] = 7] = "SpaceAround";
+    Align3[Align3["SpaceEvenly"] = 8] = "SpaceEvenly";
+    return Align3;
   }({});
   var BoxSizing = /* @__PURE__ */ function(BoxSizing2) {
     BoxSizing2[BoxSizing2["BorderBox"] = 0] = "BorderBox";
@@ -36625,7 +36633,7 @@
   }
 
   // js/ui/root-ui.tsx
-  var import_react18 = __toESM(require_react(), 1);
+  var import_react19 = __toESM(require_react(), 1);
 
   // node_modules/@wonderlandengine/react-ui/dist/components/Button.js
   var import_jsx_runtime = __toESM(require_jsx_runtime(), 1);
@@ -36821,6 +36829,13 @@
     return useGameServices().gamePlayService;
   }
 
+  // js/ui/components/hand/hand.tsx
+  var hand_exports = {};
+  __export(hand_exports, {
+    Hand: () => Hand
+  });
+  var import_react18 = __toESM(require_react(), 1);
+
   // js/ui/components/card/card.tsx
   var import_react17 = __toESM(require_react(), 1);
 
@@ -36937,6 +36952,24 @@
     ));
   };
 
+  // js/ui/components/hand/useHandViewModel.ts
+  var useHandViewModel_exports = {};
+  __export(useHandViewModel_exports, {
+    useCardViewModel: () => useCardViewModel2
+  });
+  function useCardViewModel2() {
+    const gamePlayService2 = useGamePlayService();
+    return {
+      cards: useSignalValue(gamePlayService2.hand)
+    };
+  }
+
+  // js/ui/components/hand/hand.tsx
+  var Hand = () => {
+    const vm = useCardViewModel2();
+    return /* @__PURE__ */ import_react18.default.createElement(Row, { gap: 10, height: 100, justifyContent: Justify.Center }, vm.cards.map((card, index) => /* @__PURE__ */ import_react18.default.createElement(Card2, { key: index, title: card.title })));
+  };
+
   // js/ui/root-ui.tsx
   var App = (props) => {
     const gameFlowService2 = useGameFlowService();
@@ -36958,7 +36991,7 @@
       }
     };
     const comp = props.comp;
-    return /* @__PURE__ */ import_react18.default.createElement(MaterialContext.Provider, { value: comp }, /* @__PURE__ */ import_react18.default.createElement(MenuThemeContext.Provider, { value: DefaultTheme }, /* @__PURE__ */ import_react18.default.createElement(Row, { gap: 10, width: 1e3, height: 200, justifyContent: Justify.Center, alignItems: Align.Center }, /* @__PURE__ */ import_react18.default.createElement(Card2, { title: "Rain" }), /* @__PURE__ */ import_react18.default.createElement(Card2, { title: "Burn" }), /* @__PURE__ */ import_react18.default.createElement(Card2, { title: "Water" }), /* @__PURE__ */ import_react18.default.createElement(
+    return /* @__PURE__ */ import_react19.default.createElement(MaterialContext.Provider, { value: comp }, /* @__PURE__ */ import_react19.default.createElement(MenuThemeContext.Provider, { value: DefaultTheme }, /* @__PURE__ */ import_react19.default.createElement(Row, { gap: 10, width: 1e3, height: 200, justifyContent: Justify.Center, alignItems: Align.Center }, /* @__PURE__ */ import_react19.default.createElement(Hand, null), /* @__PURE__ */ import_react19.default.createElement(
       Panel,
       {
         marginLeft: 90,
@@ -36967,7 +37000,7 @@
         rounding: 1,
         backgroundColor: colorSwatch.MainButton
       },
-      /* @__PURE__ */ import_react18.default.createElement(Text, { fontSize: 16 }, "Next Turn")
+      /* @__PURE__ */ import_react19.default.createElement(Text, { fontSize: 16 }, "Next Turn")
     ))));
   };
   var RootUI = class extends ReactUiBase {
@@ -36975,23 +37008,25 @@
       super.update();
     }
     render() {
-      return /* @__PURE__ */ import_react18.default.createElement(
+      return /* @__PURE__ */ import_react19.default.createElement(
         GameServicesProvider,
         {
           services: {
             gameFlowService,
-            uiStateService
+            uiStateService,
+            gamePlayService
           }
         },
-        /* @__PURE__ */ import_react18.default.createElement(App, { comp: this })
+        /* @__PURE__ */ import_react19.default.createElement(App, { comp: this })
       );
     }
   };
   __publicField(RootUI, "TypeName", "root-ui");
   __publicField(RootUI, "InheritProperties", true);
 
-  // js/index.js
+  // js/index.ts
   function js_default(engine) {
+    registerServices();
     engine.registerComponent(AudioListener);
     engine.registerComponent(Cursor);
     engine.registerComponent(CursorTarget);
@@ -37016,8 +37051,11 @@
   _registerEditor(switch_cursor_exports);
   _registerEditor(tile_prefabs_exports);
   _registerEditor(js_exports);
+  _registerEditor(ConfigService_exports);
   _registerEditor(GamePlayService_exports);
   _registerEditor(GameServicesProvider_exports);
+  _registerEditor(hand_exports);
+  _registerEditor(useHandViewModel_exports);
   _registerEditor(root_ui_exports);
 })();
 /*! Bundled license information:
