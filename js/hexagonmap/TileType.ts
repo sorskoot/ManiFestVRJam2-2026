@@ -1,4 +1,9 @@
 export enum TileType {
-    Empty,
-    Grass,
+    Grass = 'Grass',
+    Forest = 'Forest',
+    Hill = 'Hill',
+    Mountain = 'Mountain',
+    Lake = 'Lake',
+    Volcano = 'Volcano',
+    Desert = 'Desert',
 }

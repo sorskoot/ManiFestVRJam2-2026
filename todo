@@ -3,15 +3,34 @@
     ✓ Very first version of creating a hex grid @done(26-07-08 12:46)
 
 2. Hidden simulation values (Moisture, Temperature, Fertility, Elevation):
+    ☐ When tiles are created, give them a set of starter values.
 
 3. Terrain evolution rules:
+    ☐ Service to run through the tiles and apply the influences to its neighbors. Each tile is influenced equally.
 
 4. Element harvesting:
 
 5. Card system:
+     ☐ Click the card
+     ☐ select the tile to apply it to
+     ☐ add the values to the cell values of the tile.
+     ☐ If the change causes the tile to become a different type, this should happen now.
 
 6. Objectives:
 
 7. Expansion cards:
 
 8. Visual polish and additional content:
+
+---
+UI:
+    ☐ Add the root UI element. For now, it will be a 3D UI panel floating in front of the table.
+    ☐ Add a button to end the turn, so an update of the world can be triggered.
+    ☐ Add a few POC cards to the UI
+    ☐ Make the card work. See 5.
+
+---
+
+# Short Thoughts
+
+- When a tile is created, it has a set of starter values. Based on these the Manhatten distance is calculated to the nearest tile type. If the distance is less then a threshold, the tile becomes that type. If it is a specific type, it will start to influence its neighbors and might generate resources. By playing cards, the player can nudge tile values and cause them to evolve.

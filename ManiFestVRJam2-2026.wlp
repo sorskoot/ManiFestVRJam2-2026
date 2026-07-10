@@ -45,7 +45,8 @@
                     "cursor": {
                         "collisionGroup": 0,
                         "handedness": "none",
-                        "rayCastMode": "physx"
+                        "rayCastMode": "physx",
+                        "styleCursor": true
                     }
                 },
                 {
@@ -60,13 +61,19 @@
             ],
             "translation": [
                 0.0,
-                3.744028447272285e-7,
-                5.8811110648093745e-8
+                3.630339620031009e-7,
+                -0.0
             ],
             "scaling": [
                 1.0,
-                0.9999997,
-                0.9999997
+                0.9999994,
+                0.9999994
+            ],
+            "rotation": [
+                -0.3826834,
+                0.0,
+                0.0,
+                0.9238795
             ]
         },
         "18": {
@@ -148,11 +155,11 @@
             "translation": [
                 -0.9089387,
                 3.0000042,
-                -1.047172
+                -1.0471719
             ],
             "rotation": [
                 -0.1567734,
-                -0.4046433,
+                -0.4046432,
                 0.3254821,
                 0.8400874
             ],
@@ -1633,6 +1640,41 @@
                 0.5,
                 0.0
             ]
+        },
+        "236": {
+            "name": "UI"
+        },
+        "237": {
+            "name": "Main UI",
+            "parent": "236",
+            "components": [
+                {
+                    "type": "root-ui",
+                    "root-ui": {
+                        "textMaterial": "DefaultFontMaterial",
+                        "panelMaterial": "209",
+                        "panelMaterialTextured": "210",
+                        "width": 1000,
+                        "height": 1000
+                    }
+                }
+            ],
+            "translation": [
+                -0.5000001,
+                1.0999999,
+                0.4499998
+            ],
+            "rotation": [
+                -0.3826833,
+                0.0,
+                0.0,
+                0.9238795
+            ],
+            "scaling": [
+                0.1,
+                0.1,
+                0.1
+            ]
         }
     },
     "meshes": {
@@ -2167,6 +2209,14 @@
                 "name": "colormap",
                 "file": "assets\\models\\models.fbx"
             }
+        },
+        "209": {
+            "name": "UI Panel Material",
+            "pipeline": "34"
+        },
+        "210": {
+            "name": "UI Panel Texture Material",
+            "pipeline": "35"
         }
     },
     "shaders": {
@@ -2288,7 +2338,8 @@
                 "output": "Elemental-Echoes.bundle.js",
                 "sourcePaths": [
                     "js/",
-                    "js/components"
+                    "js/components",
+                    "js/ui"
                 ]
             },
             "application": {
@@ -2298,7 +2349,8 @@
         },
         "runtime": {
             "visualizeColliders": false,
-            "loadUncompressedImagesAsBitmap": false
+            "loadUncompressedImagesAsBitmap": false,
+            "visualizePhysX": false
         },
         "rendering": {
             "environment": {

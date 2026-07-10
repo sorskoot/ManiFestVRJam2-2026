@@ -18,9 +18,9 @@ import {MouseLookComponent} from '@wonderlandengine/components';
 import {PlayerHeight} from '@wonderlandengine/components';
 import {VrModeActiveSwitch} from '@wonderlandengine/components';
 import {WasdControlsComponent} from '@wonderlandengine/components';
-import {HexGridLayout} from './components/hex-grid-layout.js';
-import {TilePrefabs} from './components/tile-prefabs.js';
-import {RootUI} from './ui/root-ui.tsx';
+import {HexGridLayout} from './js/components/hex-grid-layout.js';
+import {TilePrefabs} from './js/components/tile-prefabs.js';
+import {RootUI} from './js/ui/root-ui.tsx';
 /* wle:auto-imports:end */
 
 export default function(engine) {

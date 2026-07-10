@@ -1,6 +1,4 @@
 import {Element} from './Element.ts';
-import {TerrainDefinition} from './TerrainDefinition.ts';
-import {TerrainType} from './TerrainType.ts';
 import {TileType} from './TileType.ts';
 import {Tags} from './Tags.ts';
 import {TILE_SIZE} from './tile-geometry.ts';
@@ -15,7 +13,7 @@ export class HexagonTile {
         return this._id;
     }
 
-    public cellValues: CellValues = {
+    public readonly cellValues: CellValues = {
         moisture: 0,
         temperature: 0,
         fertility: 0,
@@ -42,16 +40,15 @@ export class HexagonTile {
      * @param x - The x-coordinate in cube coordinates.
      * @param y - The y-coordinate in cube coordinates.
      * @param z - The z-coordinate in cube coordinates.
-     * @param type - The type of the tile (default is `TileType.Grass`).
      */
     constructor(
         public x: number,
         public y: number,
         public z: number,
-        public type: TileType = TileType.Grass,
-        public elevation: number = 0
+        startValues: CellValues
     ) {
         this._id = `${x},${y},${z}`;
+        this.cellValues = startValues;
     }
 
     /**

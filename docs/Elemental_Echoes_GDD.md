@@ -291,14 +291,21 @@ The game is fully turn-based. Every action advances the world by exactly one sim
 
 Each turn consists of the following steps:
 
-1. Play one card.
-2. The card applies its effects to one or more tiles.
-3. The world advances by **one simulation tick**.
-4. Terrain and features evolve according to the simulation.
-5. Existing terrain generates elemental essence.
-6. The player harvests any available elemental essence.
-7. Objectives are checked.
-8. The next turn begins.
+1. Player is shown 4 random cards from their deck.
+2. Collect generated elements.
+3. Player selects a card to play.
+4. Player selects a tile to apply the card's effects to.
+5. Changes are applied to the tile.
+6. When the player is done, they end their turn
+7. The world advances by applying the new simulation values to the terrain.
+8. Played cards are removed from the deck.
+9. Non-played cards are placed aside.
+10. If there are more cards in the deck, the player starts again at step 1.
+11. When all cards are played and there cards not played yet, the played cards return to the deck and are dealt again.
+12. When the deck is empty or if the player is not about to play any more cards, the player is shown 2 special cards to choose from.
+13. The chosen card is added to the deck and the rest of the deck is randomized and dealt again.
+14. If the player has not completed the objective, the run ends.
+
 
 This slow pace encourages experimentation and creates a relaxing, "gardening" style of gameplay.
 

@@ -8,8 +8,18 @@ import {Noise, rng, wlUtils} from '@sorskoot/wonderland-components';
 import {Cursor} from '@wonderlandengine/components';
 import {TileType} from '../hexagonmap/TileType.ts';
 import {TilePrefabs} from './tile-prefabs.ts';
+import {CellValues} from '../hexagonmap/CellValues.ts';
+import {TerrainDefinitions} from '../hexagonmap/TerrainDefinition.ts';
 
-const TileAssets = ['GrassTile', 'ForestTile', 'HillTile', 'MountainTile', 'WaterTile', 'VolcanoTile', 'SandTile'];
+const TileAssets: Record<TileType, string> = {
+    [TileType.Grass]: 'GrassTile',
+    [TileType.Forest]: 'ForestTile',
+    [TileType.Hill]: 'HillTile',
+    [TileType.Mountain]: 'MountainTile',
+    [TileType.Lake]: 'WaterTile',
+    [TileType.Volcano]: 'VolcanoTile',
+    [TileType.Desert]: 'SandTile',
+};
 // import {GameCore} from '@/classes/core/GameCore.js';
 // import {StepsPipeline} from '@/classes/generator/core/StepsPipeline.ts';
 // import {BaseStepExec, StepContext} from '@/classes/generator/core/Steps.ts';
@@ -35,12 +45,11 @@ export class HexGridLayout extends Component {
     declare public tilePrefabsObject: Object3D;
     declare private tilePrefabs: TilePrefabs;
 
-    private _grid!: HexagonGrid;
-    public get grid(): HexagonGrid {
-        return this._grid;
-    }
-    private _myCursor!: Cursor;
-    private _hoveringTile: HexagonTile | null = null;
+    public grid?: HexagonGrid;
+
+    private tileModels: Map<string, Object3D> = new Map();
+
+    declare private cursor: Cursor;
 
     init() {
         this.tilePrefabs = this.tilePrefabsObject.getComponent(TilePrefabs)!;
@@ -52,7 +61,7 @@ export class HexGridLayout extends Component {
     public start(): void {
         Noise.seed(Date.now());
 
-        this._myCursor = this.cursorObject.getComponent(Cursor)!;
+        this.cursor = this.cursorObject.getComponent(Cursor)!;
         this.highlight.setScalingLocal([0, 0, 0]);
         //ServiceLocator.get(GameCore).onLoaded.add(this._onGameLoaded);
     }
@@ -77,7 +86,7 @@ export class HexGridLayout extends Component {
         this._createGrid();
     };
     update(dt: number): void {
-        if (this._grid == null && this.tilePrefabs.isLoaded) {
+        if (this.grid == null && this.tilePrefabs.isLoaded) {
             this._createGrid();
         }
     }
@@ -85,11 +94,16 @@ export class HexGridLayout extends Component {
      * Creates the hexagonal grid and populates it with tiles.
      */
     private _createGrid(): void {
-        this._grid = new HexagonGrid();
-        const center = new HexagonTile(0, 0, 0, TileType.Grass, 0.1);
-        this._grid.addTile(center);
-        const newtiles = this._expand(this._grid, [center]);
-        this._expand(this._grid, newtiles);
+        this.grid = new HexagonGrid();
+        const center = new HexagonTile(0, 0, 0, {
+            moisture: 5,
+            temperature: 5,
+            fertility: 5,
+            elevation: 5,
+        });
+        this.grid.addTile(center);
+        const newtiles = this._expand(this.grid, [center]);
+        this._expand(this.grid, newtiles);
         // const pipeline = new StepsPipeline<BaseStepExec>();
         // pipeline.addStep(new CreateHexagonGridExec(), new CreateHexagonGridParameters());
         // const flattenParams = new FlattenAroundCastleParameters();
@@ -102,20 +116,22 @@ export class HexGridLayout extends Component {
         // });
         // const result = pipeline.execute(context);
 
-        const tiles = this._grid.getAllTiles();
+        const tiles = this.grid.getAllTiles();
         for (const tile of tiles) {
             const pos = tile.to2D();
             let hex: Object3D | null = null;
-            switch (tile.type) {
-                case TileType.Grass:
-                    hex = this.tilePrefabs.spawn(rng.getItem(TileAssets))!;
-                    hex.parent = this.object;
-                    break;
-            }
-            if (!hex) {
-                throw new Error(`No prefab found for tile type: ${tile.type}`);
-            }
-            hex.setPositionLocal([pos.x, tile.elevation, pos.y]);
+            // switch (tile.type) {
+            //     case TileType.Grass:
+            const type = this.determineTileType(tile.cellValues);
+            hex = this.tilePrefabs.spawn(TileAssets[type])!;
+            hex.parent = this.object;
+            this.tileModels.set(tile.id, hex);
+            //    break;
+            //}
+            // if (!hex) {
+            //     throw new Error(`No prefab found for tile type: ${tile.type}`);
+            // }
+            hex.setPositionLocal([pos.x, 0, pos.y]);
             wlUtils.setActive(hex, true);
         }
     }
@@ -130,22 +146,12 @@ export class HexGridLayout extends Component {
         tiles.forEach((tile) => {
             for (const neighborCoords of tile.neighbors()) {
                 if (!grid.getTile(neighborCoords.x, neighborCoords.y, neighborCoords.z)) {
-                    const pos = tile.to2D();
-                    // let value = Noise.simplex2(
-                    //     pos.x / this._context.config.noiseScale + this._context.config.noiseOffset,
-                    //     pos.y / this._context.config.noiseScale + this._context.config.noiseOffset
-                    // );
-                    // value = (value + 1) / 2; // Normalize to [0, 1]
-                    const newTile = new HexagonTile(
-                        neighborCoords.x,
-                        neighborCoords.y,
-                        neighborCoords.z,
-                        TileType.Grass,
-                        0.1
-                        // value > this._context.config.waterLevel ? TileType.Grass : TileType.Water,
-                        // Mathf.clamp(value, this._context.config.waterLevel, 1) -
-                        // this._context.config.waterLevel
-                    );
+                    const newTile = new HexagonTile(neighborCoords.x, neighborCoords.y, neighborCoords.z, {
+                        moisture: 5 + rng.getUniformInt(-5, 5),
+                        temperature: 5 + rng.getUniformInt(-5, 5),
+                        fertility: 5 + rng.getUniformInt(-5, 5),
+                        elevation: 5 + rng.getUniformInt(-5, 5),
+                    });
 
                     grid.addTile(newTile);
                     newTiles.push(newTile);
@@ -159,23 +165,23 @@ export class HexGridLayout extends Component {
      * Handles tile click events.
      */
     private _onTileClick = (tilePos: {x: number; y: number; z: number}): void => {
-        if (!this._grid) {
+        if (!this.grid) {
             return;
         }
-        const tile = this._grid.getTile(tilePos.x, tilePos.y, tilePos.z);
+        const tile = this.grid.getTile(tilePos.x, tilePos.y, tilePos.z);
     };
 
     /**
      * Handles tile hover events.
      */
     private _onTileHover = (tilePos: {x: number; y: number; z: number}): void => {
-        if (!this._grid) {
+        if (!this.grid) {
             return;
         }
-        const tile = this._grid.getTile(tilePos.x, tilePos.y, tilePos.z);
+        const tile = this.grid.getTile(tilePos.x, tilePos.y, tilePos.z);
         if (tile) {
             //this.engine.canvas.style.cursor = 'none';
-            this._hoveringTile = tile;
+            //this.hoveringTile = tile;
             const pos = vec3.create();
             //tile.object.getPositionWorld(pos);
             this.highlight.setScalingLocal([1, 1, 1]);
@@ -185,4 +191,29 @@ export class HexGridLayout extends Component {
             //    this.engine.canvas.style.cursor = 'auto';
         }
     };
+
+    private determineTileType(cellValues: CellValues): TileType {
+        // Run through terrain definitions
+        // keep track of the closest match based on manhattan distance
+        let closestType: TileType = TileType.Grass;
+        let closestDistance = Infinity;
+        for (const [type, definition] of Object.entries(TerrainDefinitions)) {
+            const distance = this.calculateManhattanDistance(cellValues, definition.cellValues);
+            if (distance < closestDistance) {
+                closestDistance = distance;
+                closestType = type as TileType;
+            }
+        }
+
+        return closestType;
+    }
+
+    private calculateManhattanDistance(values1: CellValues, values2: CellValues): number {
+        return (
+            Math.abs(values1.moisture - values2.moisture) +
+            Math.abs(values1.temperature - values2.temperature) +
+            Math.abs(values1.fertility - values2.fertility) +
+            Math.abs(values1.elevation - values2.elevation)
+        );
+    }
 }

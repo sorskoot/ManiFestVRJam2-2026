@@ -22,9 +22,12 @@ import {HexGridLayout} from './components/hex-grid-layout.js';
 import {TilePrefabs} from './components/tile-prefabs.js';
 import {RootUI} from './ui/root-ui.tsx';
 /* wle:auto-imports:end */
+import {registerServices} from './bootstrap-services.ts';
+import {WonderlandEngine} from '@wonderlandengine/api';
 
-export default function(engine) {
-/* wle:auto-register:start */
+export default function (engine: WonderlandEngine) {
+    registerServices();
+    /* wle:auto-register:start */
 engine.registerComponent(AudioListener);
 engine.registerComponent(Cursor);
 engine.registerComponent(CursorTarget);
