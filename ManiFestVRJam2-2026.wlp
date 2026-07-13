@@ -1660,7 +1660,7 @@
                 }
             ],
             "translation": [
-                -0.4999998,
+                -0.4999997,
                 1.1000001,
                 0.5
             ],
@@ -2408,7 +2408,7 @@
         "runtime": {
             "visualizeColliders": false,
             "loadUncompressedImagesAsBitmap": false,
-            "visualizePhysX": true
+            "visualizePhysX": false
         },
         "rendering": {
             "environment": {

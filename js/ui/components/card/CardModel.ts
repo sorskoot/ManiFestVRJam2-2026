@@ -21,13 +21,13 @@ export interface CardState {
 }
 
 export const CardModel = createModel<CardState, [number, string, boolean | undefined, ((label: string) => void)?]>(
-    (cardId:number, label: string = 'Button', isDisabled: boolean = false, onActivate?: (label: string) => void) => {
+    (cardId: number, label: string = 'Button', isDisabled: boolean = false, onActivate?: (label: string) => void) => {
         const hovered = signal(false);
         const pressed = signal(false);
         const disabled = signal(isDisabled);
         const labelSignal = signal(label);
         const selected = signal(false);
-        const id = signal(-1);
+        const id = signal(cardId);
         const backgroundColor = computed(() => {
             const isDisabled = disabled.value;
             return isDisabled

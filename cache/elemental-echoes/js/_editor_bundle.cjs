@@ -1590,7 +1590,7 @@
             }
             return dispatcher.useContext(Context2);
           }
-          function useState5(initialState) {
+          function useState6(initialState) {
             var dispatcher = resolveDispatcher();
             return dispatcher.useState(initialState);
           }
@@ -1602,7 +1602,7 @@
             var dispatcher = resolveDispatcher();
             return dispatcher.useRef(initialValue);
           }
-          function useEffect3(create8, deps) {
+          function useEffect4(create8, deps) {
             var dispatcher = resolveDispatcher();
             return dispatcher.useEffect(create8, deps);
           }
@@ -2384,7 +2384,7 @@
           exports.useContext = useContext7;
           exports.useDebugValue = useDebugValue;
           exports.useDeferredValue = useDeferredValue;
-          exports.useEffect = useEffect3;
+          exports.useEffect = useEffect4;
           exports.useId = useId;
           exports.useImperativeHandle = useImperativeHandle;
           exports.useInsertionEffect = useInsertionEffect;
@@ -2392,7 +2392,7 @@
           exports.useMemo = useMemo5;
           exports.useReducer = useReducer;
           exports.useRef = useRef;
-          exports.useState = useState5;
+          exports.useState = useState6;
           exports.useSyncExternalStore = useSyncExternalStore;
           exports.useTransition = useTransition;
           exports.version = ReactVersion;
@@ -31975,6 +31975,7 @@
     Services: () => Services,
     gameFlowService: () => gameFlowService,
     gamePlayService: () => gamePlayService,
+    playCardService: () => playCardService,
     registerServices: () => registerServices,
     tileInteractionService: () => tileInteractionService,
     uiStateService: () => uiStateService
@@ -32621,17 +32622,6 @@
   });
 
   // js/types/Card.ts
-  var Card_exports = {};
-  __export(Card_exports, {
-    CardDefinitions: () => CardDefinitions,
-    CardType: () => CardType
-  });
-  var CardType = /* @__PURE__ */ ((CardType2) => {
-    CardType2["manipulation"] = "manipulation";
-    CardType2["expansion"] = "expansion";
-    CardType2["event"] = "event";
-    return CardType2;
-  })(CardType || {});
   var CardDefinitions = [
     {
       type: "manipulation" /* manipulation */,
@@ -32727,12 +32717,6 @@
       return Array.from(this._tiles.values());
     }
   };
-
-  // js/hexagonmap/HexagonTile.ts
-  var HexagonTile_exports = {};
-  __export(HexagonTile_exports, {
-    HexagonTile: () => HexagonTile
-  });
 
   // js/hexagonmap/Tags.ts
   var _Tags2 = class {
@@ -33014,6 +32998,22 @@
     }
   };
 
+  // js/utils/EeUtils.ts
+  var EeUtils_exports = {};
+  __export(EeUtils_exports, {
+    EeUtils: () => EeUtils
+  });
+  function addCellValues(cellValuesA, cellValuesB) {
+    cellValuesA.moisture += cellValuesB.moisture;
+    cellValuesA.temperature += cellValuesB.temperature;
+    cellValuesA.fertility += cellValuesB.fertility;
+    cellValuesA.elevation += cellValuesB.elevation;
+    return cellValuesA;
+  }
+  var EeUtils = {
+    addCellValues
+  };
+
   // js/services/GamePlayService.ts
   var GamePlayService = class {
     constructor(configService2, gamePlayModel2) {
@@ -33022,6 +33022,7 @@
     }
     hand = y([]);
     currentSelectedCard = y(null);
+    onEndTurn = new EventEmitter();
     unplayedCards = [];
     grid;
     /**
@@ -33033,6 +33034,27 @@
      * the player can choose a special card and the deck is discarded and a new deck is created.
      */
     cardPlayedFromDeck = false;
+    playSelectedCardOnTile(cardIndex, tileId) {
+      const card = this.hand.value[cardIndex];
+      if (!card) {
+        console.warn(`No card found at index ${cardIndex}`);
+        return;
+      }
+      const tile = this.getTileById(tileId);
+      if (!tile) {
+        console.warn(`No tile found with id ${tileId}`);
+        return;
+      }
+      switch (card.type) {
+        case "manipulation" /* manipulation */:
+          EeUtils.addCellValues(tile.cellValues, card.stat);
+          break;
+      }
+      console.log(tile.cellValues);
+      this.cardPlayedFromDeck = true;
+      this.gamePlayModel.removeCardFromDeck(card);
+      this.currentSelectedCard.value = null;
+    }
     getTileById(tileId) {
       if (!this.grid) {
         return void 0;
@@ -33070,6 +33092,11 @@
     }
     playCard(card) {
       this.gamePlayModel.removeCardFromDeck(card);
+    }
+    endTurn() {
+      this.hand.value = this.gamePlayModel.deck.slice(0, this.configService.getHandSize());
+      this.currentSelectedCard.value = null;
+      this.onEndTurn.emit();
     }
     /**
      * Expands the grid by adding new tiles around the given tiles.
@@ -33133,10 +33160,6 @@
   };
 
   // js/services/TileInteractionService.ts
-  var TileInteractionService_exports = {};
-  __export(TileInteractionService_exports, {
-    TileInteractionService: () => TileInteractionService
-  });
   var TileInteractionService = class {
     constructor(gamePlayService2) {
       this.gamePlayService = gamePlayService2;
@@ -33163,6 +33186,28 @@
     }
   };
 
+  // js/services/PlayCardService.ts
+  var PlayCardService_exports = {};
+  __export(PlayCardService_exports, {
+    PlayCardService: () => PlayCardService
+  });
+  var PlayCardService = class {
+    constructor(gamePlayService2, tileInteractionService2) {
+      this.gamePlayService = gamePlayService2;
+      this.tileInteractionService = tileInteractionService2;
+      this.tileInteractionService.onTileClick.add(this.onTileClick);
+    }
+    cardPlayed = new EventEmitter();
+    onTileClick = (tileId) => {
+      const selectedCardIndex = this.gamePlayService.currentSelectedCard.value;
+      if (selectedCardIndex === null || selectedCardIndex < 0) {
+        return;
+      }
+      this.gamePlayService.playSelectedCardOnTile(selectedCardIndex, tileId);
+      this.cardPlayed.emit(selectedCardIndex);
+    };
+  };
+
   // js/bootstrap-services.ts
   var Services = {
     gameFlowService: Symbol("GameFlowService"),
@@ -33170,6 +33215,7 @@
     gamePlayService: Symbol("GamePlayService"),
     configService: Symbol("ConfigService"),
     tileInteractionService: Symbol("TileInteractionService"),
+    playCardService: Symbol("PlayCardService"),
     gamePlayModel: Symbol("GamePlayModel"),
     configModel: Symbol("ConfigModel"),
     gameEvents: Symbol("GameEvents")
@@ -33182,6 +33228,7 @@
   var gamePlayService = new GamePlayService(configService, gamePlayModel);
   var gameFlowService = new GameFlowService(uiStateService, gamePlayService, gameEvents);
   var tileInteractionService = new TileInteractionService(gamePlayService);
+  var playCardService = new PlayCardService(gamePlayService, tileInteractionService);
   function registerServices() {
     serviceLocator.registerSingleton(Services.gameFlowService, gameFlowService);
     serviceLocator.registerSingleton(Services.uiStateService, uiStateService);
@@ -33190,6 +33237,7 @@
     serviceLocator.registerSingleton(Services.configModel, configModel);
     serviceLocator.registerSingleton(Services.configService, configService);
     serviceLocator.registerSingleton(Services.tileInteractionService, tileInteractionService);
+    serviceLocator.registerSingleton(Services.playCardService, playCardService);
     serviceLocator.registerSingleton(Services.gameEvents, gameEvents);
   }
 
@@ -33473,6 +33521,7 @@
     useGameFlowService: () => useGameFlowService,
     useGamePlayService: () => useGamePlayService,
     useGameServices: () => useGameServices,
+    usePlayCardService: () => usePlayCardService,
     useUiStateService: () => useUiStateService
   });
   var import_react = __toESM(require_react(), 1);
@@ -33495,6 +33544,9 @@
   }
   function useGamePlayService() {
     return useGameServices().gamePlayService;
+  }
+  function usePlayCardService() {
+    return useGameServices().playCardService;
   }
 
   // js/ui/components/card/CardModel.ts
@@ -33523,7 +33575,7 @@
       const disabled = y(isDisabled);
       const labelSignal = y(label);
       const selected = y(false);
-      const id = y(-1);
+      const id = y(cardId);
       const backgroundColor = g(() => {
         const isDisabled2 = disabled.value;
         return isDisabled2 ? colorSwatch.DisabledButton : hovered.value ? colorSwatch.MainButtonHover : colorSwatch.MainButton;
@@ -37033,12 +37085,6 @@
   });
   ProgressBar.displayName = "ProgressBar";
 
-  // js/ui/components/card/useCardViewModel.ts
-  var useCardViewModel_exports = {};
-  __export(useCardViewModel_exports, {
-    useCardViewModel: () => useCardViewModel
-  });
-
   // js/ui/hooks/useSignalValue.ts
   var import_react13 = __toESM(require_react(), 1);
   function useSignalValue(signal) {
@@ -37112,28 +37158,68 @@
   __export(hand_exports, {
     Hand: () => Hand
   });
-  var import_react16 = __toESM(require_react(), 1);
+  var import_react17 = __toESM(require_react(), 1);
 
   // js/ui/components/hand/useHandViewModel.ts
   var useHandViewModel_exports = {};
   __export(useHandViewModel_exports, {
     useHandViewModel: () => useHandViewModel
   });
+  var import_react16 = __toESM(require_react(), 1);
   function useHandViewModel() {
     const gamePlayService2 = useGamePlayService();
+    const playCardService2 = usePlayCardService();
     const selectCard = (cardIndex) => {
       gamePlayService2.selectCard(cardIndex);
     };
+    const [playedCards, setPlayedCards] = (0, import_react16.useState)([]);
+    (0, import_react16.useEffect)(() => {
+      const onCardPlayed = (cardIndex) => setPlayedCards((prev) => [...prev, cardIndex]);
+      playCardService2.cardPlayed.add(onCardPlayed);
+      return () => playCardService2.cardPlayed.remove(onCardPlayed);
+    }, [playCardService2]);
+    (0, import_react16.useEffect)(() => {
+      const onEndTurn = () => {
+        setPlayedCards([]);
+      };
+      gamePlayService2.onEndTurn.add(onEndTurn);
+      return () => gamePlayService2.onEndTurn.remove(onEndTurn);
+    }, [gamePlayService2]);
     return {
       cards: useSignalValue(gamePlayService2.hand),
-      selectCard
+      selectCard,
+      playedCards
     };
   }
 
   // js/ui/components/hand/hand.tsx
   var Hand = () => {
     const vm = useHandViewModel();
-    return /* @__PURE__ */ import_react16.default.createElement(Row, { gap: 10, height: 100, justifyContent: Justify.Center }, vm.cards.map((card, index) => /* @__PURE__ */ import_react16.default.createElement(Card2, { onAction: () => vm.selectCard(index), id: index, key: index, title: card.title })));
+    return /* @__PURE__ */ import_react17.default.createElement(Row, { gap: 10, height: 100, justifyContent: Justify.Center }, vm.cards.map(
+      (card, index) => vm.playedCards.includes(index) ? null : /* @__PURE__ */ import_react17.default.createElement(Card2, { onAction: () => vm.selectCard(index), id: index, key: index, title: card.title })
+    ));
+  };
+
+  // js/ui/components/ingame/ingame.tsx
+  var ingame_exports = {};
+  __export(ingame_exports, {
+    Ingame: () => Ingame
+  });
+  var import_react18 = __toESM(require_react(), 1);
+  var Ingame = () => {
+    const gamePlayService2 = useGamePlayService();
+    return /* @__PURE__ */ import_react18.default.createElement(Row, { gap: 10, width: 1e3, height: 200, justifyContent: Justify.Center, alignItems: Align.Center }, /* @__PURE__ */ import_react18.default.createElement(Hand, null), /* @__PURE__ */ import_react18.default.createElement(
+      Panel,
+      {
+        onClick: () => gamePlayService2.endTurn(),
+        marginLeft: 90,
+        height: 100,
+        width: 100,
+        rounding: 1,
+        backgroundColor: colorSwatch.MainButton
+      },
+      /* @__PURE__ */ import_react18.default.createElement(Text, { fontSize: 16 }, "Next Turn")
+    ));
   };
 
   // js/ui/root-ui.tsx
@@ -37141,29 +37227,23 @@
   __export(root_ui_exports, {
     RootUI: () => RootUI
   });
-  var import_react22 = __toESM(require_react(), 1);
+  var import_react23 = __toESM(require_react(), 1);
 
   // js/ui/utils/menu-theme-context.ts
-  var import_react17 = __toESM(require_react(), 1);
-  var import_react18 = __toESM(require_react(), 1);
-  var MenuThemeContext = (0, import_react18.createContext)(
+  var import_react19 = __toESM(require_react(), 1);
+  var import_react20 = __toESM(require_react(), 1);
+  var MenuThemeContext = (0, import_react20.createContext)(
     null
   );
 
-  // js/ui/components/ingame/ingame.tsx
-  var import_react19 = __toESM(require_react(), 1);
-  var Ingame = () => {
-    return /* @__PURE__ */ import_react19.default.createElement(Row, { gap: 10, width: 1e3, height: 200, justifyContent: Justify.Center, alignItems: Align.Center }, /* @__PURE__ */ import_react19.default.createElement(Hand, null), /* @__PURE__ */ import_react19.default.createElement(Panel, { marginLeft: 90, height: 100, width: 100, rounding: 1, backgroundColor: colorSwatch.MainButton }, /* @__PURE__ */ import_react19.default.createElement(Text, { fontSize: 16 }, "Next Turn")));
-  };
-
   // js/ui/components/menu/menu.tsx
-  var import_react21 = __toESM(require_react(), 1);
+  var import_react22 = __toESM(require_react(), 1);
 
   // js/ui/components/menu/useMenuViewModel.ts
-  var import_react20 = __toESM(require_react(), 1);
+  var import_react21 = __toESM(require_react(), 1);
   function useMenuViewModel() {
     const gameFlowService2 = useGameFlowService();
-    const startGame = (0, import_react20.useCallback)(() => {
+    const startGame = (0, import_react21.useCallback)(() => {
       gameFlowService2.startGame();
     }, [gameFlowService2]);
     return {
@@ -37174,7 +37254,7 @@
   // js/ui/components/menu/menu.tsx
   var Menu = () => {
     const vm = useMenuViewModel();
-    return /* @__PURE__ */ import_react21.default.createElement(Row, { gap: 10, width: 1e3, height: 200, justifyContent: Justify.Center, alignItems: Align.Center }, /* @__PURE__ */ import_react21.default.createElement(Panel, { onClick: vm.play, marginLeft: 90, height: 100, width: 100, rounding: 1, backgroundColor: colorSwatch.MainButton }, /* @__PURE__ */ import_react21.default.createElement(Text, { fontSize: 16 }, "Play")));
+    return /* @__PURE__ */ import_react22.default.createElement(Row, { gap: 10, width: 1e3, height: 200, justifyContent: Justify.Center, alignItems: Align.Center }, /* @__PURE__ */ import_react22.default.createElement(Panel, { onClick: vm.play, marginLeft: 90, height: 100, width: 100, rounding: 1, backgroundColor: colorSwatch.MainButton }, /* @__PURE__ */ import_react22.default.createElement(Text, { fontSize: 16 }, "Play")));
   };
 
   // js/ui/root-ui.tsx
@@ -37198,23 +37278,24 @@
       }
     };
     const comp = props.comp;
-    return /* @__PURE__ */ import_react22.default.createElement(MaterialContext.Provider, { value: comp }, /* @__PURE__ */ import_react22.default.createElement(MenuThemeContext.Provider, { value: DefaultTheme }, /* @__PURE__ */ import_react22.default.createElement(Container, { width: 1e3, height: 200, justifyContent: Justify.Center, alignItems: Align.Center }, gameState === "menu" /* Menu */ && /* @__PURE__ */ import_react22.default.createElement(Menu, null), gameState === "playing" /* Playing */ && /* @__PURE__ */ import_react22.default.createElement(Ingame, null))));
+    return /* @__PURE__ */ import_react23.default.createElement(MaterialContext.Provider, { value: comp }, /* @__PURE__ */ import_react23.default.createElement(MenuThemeContext.Provider, { value: DefaultTheme }, /* @__PURE__ */ import_react23.default.createElement(Container, { width: 1e3, height: 200, justifyContent: Justify.Center, alignItems: Align.Center }, gameState === "menu" /* Menu */ && /* @__PURE__ */ import_react23.default.createElement(Menu, null), gameState === "playing" /* Playing */ && /* @__PURE__ */ import_react23.default.createElement(Ingame, null))));
   };
   var RootUI = class extends ReactUiBase {
     update(dt) {
       super.update();
     }
     render() {
-      return /* @__PURE__ */ import_react22.default.createElement(
+      return /* @__PURE__ */ import_react23.default.createElement(
         GameServicesProvider,
         {
           services: {
             gameFlowService,
             uiStateService,
-            gamePlayService
+            gamePlayService,
+            playCardService
           }
         },
-        /* @__PURE__ */ import_react22.default.createElement(App, { comp: this })
+        /* @__PURE__ */ import_react23.default.createElement(App, { comp: this })
       );
     }
   };
@@ -37233,17 +37314,16 @@
   _registerEditor(tile_highlight_exports);
   _registerEditor(tile_interaction_exports);
   _registerEditor(tile_prefabs_exports);
-  _registerEditor(HexagonTile_exports);
   _registerEditor(GamePlayService_exports);
-  _registerEditor(TileInteractionService_exports);
-  _registerEditor(Card_exports);
+  _registerEditor(PlayCardService_exports);
   _registerEditor(GameServicesProvider_exports);
   _registerEditor(CardModel_exports);
   _registerEditor(card_exports);
-  _registerEditor(useCardViewModel_exports);
   _registerEditor(hand_exports);
   _registerEditor(useHandViewModel_exports);
+  _registerEditor(ingame_exports);
   _registerEditor(root_ui_exports);
+  _registerEditor(EeUtils_exports);
 })();
 /*! Bundled license information:
 

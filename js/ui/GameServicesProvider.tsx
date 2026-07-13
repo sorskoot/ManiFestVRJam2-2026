@@ -3,10 +3,12 @@ import React, {createContext, useContext} from 'react';
 import type {IGameFlowService} from '../services/GameFlowService.ts';
 import type {IUiStateService} from '../services/UiStateService.ts';
 import {IGamePlayService} from '../services/GamePlayService.ts';
+import {IPlayCardService} from '../services/PlayCardService.ts';
 
 export interface GameServices {
     gameFlowService: IGameFlowService;
     gamePlayService: IGamePlayService;
+    playCardService: IPlayCardService;
     uiStateService: IUiStateService;
 }
 
@@ -42,4 +44,8 @@ export function useUiStateService() {
 
 export function useGamePlayService() {
     return useGameServices().gamePlayService;
+}
+
+export function usePlayCardService() {
+    return useGameServices().playCardService;
 }

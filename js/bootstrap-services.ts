@@ -7,6 +7,7 @@ import {GamePlayModel} from './models/GamePlayModel.ts';
 import {ConfigModel} from './models/ConfigModel.ts';
 import {ConfigService} from './services/ConfigService.ts';
 import {TileInteractionService} from './services/TileInteractionService.ts';
+import {PlayCardService} from './services/PlayCardService.ts';
 
 export const Services = {
     gameFlowService: Symbol('GameFlowService'),
@@ -14,6 +15,7 @@ export const Services = {
     gamePlayService: Symbol('GamePlayService'),
     configService: Symbol('ConfigService'),
     tileInteractionService: Symbol('TileInteractionService'),
+    playCardService: Symbol('PlayCardService'),
     gamePlayModel: Symbol('GamePlayModel'),
     configModel: Symbol('ConfigModel'),
     gameEvents: Symbol('GameEvents'),
@@ -28,6 +30,7 @@ const gameEvents = new GameEvents();
 const gamePlayService = new GamePlayService(configService, gamePlayModel);
 const gameFlowService = new GameFlowService(uiStateService, gamePlayService, gameEvents);
 const tileInteractionService = new TileInteractionService(gamePlayService);
+const playCardService = new PlayCardService(gamePlayService, tileInteractionService);
 
 export function registerServices(): void {
     serviceLocator.registerSingleton(Services.gameFlowService, gameFlowService);
@@ -37,7 +40,8 @@ export function registerServices(): void {
     serviceLocator.registerSingleton(Services.configModel, configModel);
     serviceLocator.registerSingleton(Services.configService, configService);
     serviceLocator.registerSingleton(Services.tileInteractionService, tileInteractionService);
+    serviceLocator.registerSingleton(Services.playCardService, playCardService);
     serviceLocator.registerSingleton(Services.gameEvents, gameEvents);
 }
 
-export {gameFlowService, uiStateService, gamePlayService, tileInteractionService};
+export {gameFlowService, uiStateService, gamePlayService, tileInteractionService, playCardService};

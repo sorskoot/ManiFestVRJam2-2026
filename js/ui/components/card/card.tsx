@@ -4,7 +4,7 @@ import {Align, Justify} from '@wonderlandengine/react-ui';
 import {CardModel} from './CardModel.ts';
 import {useCardViewModel} from './useCardViewModel.ts';
 
-export const Card = (props: {title: string;id:number, onAction?: (label: string) => void}) => {
+export const Card = (props: {title: string; id: number; onAction?: (label: string) => void}) => {
     const [model] = useState(() => new CardModel(props.id, props.title, false, props.onAction));
     const vm = useCardViewModel(model);
 
