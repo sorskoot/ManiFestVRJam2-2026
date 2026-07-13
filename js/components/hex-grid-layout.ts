@@ -1,10 +1,7 @@
 import {Component, Object3D, WonderlandEngine} from '@wonderlandengine/api';
 import {property} from '@wonderlandengine/api/decorators.js';
-import {HexagonGrid} from '../hexagonmap/HexGrid.ts';
 import {HexagonTile} from '../hexagonmap/HexagonTile.ts';
-// import { MyCursor } from '../generic/my-cursor.js';
-import {vec3} from 'gl-matrix';
-import {Noise, rng, wlUtils} from '@sorskoot/wonderland-components';
+import {Noise, wlUtils} from '@sorskoot/wonderland-components';
 import {Cursor} from '@wonderlandengine/components';
 import {TileType} from '../hexagonmap/TileType.ts';
 import {TilePrefabs} from './tile-prefabs.ts';
@@ -25,14 +22,6 @@ const TileAssets: Record<TileType, string> = {
     [TileType.Volcano]: 'VolcanoTile',
     [TileType.Desert]: 'SandTile',
 };
-// import {GameCore} from '@/classes/core/GameCore.js';
-// import {StepsPipeline} from '@/classes/generator/core/StepsPipeline.ts';
-// import {BaseStepExec, StepContext} from '@/classes/generator/core/Steps.ts';
-// import {CreateHexagonGridExec, CreateHexagonGridParameters} from '@/classes/generator/steps/CreateHexagonGrid.ts';
-// import {RenderHexagonGridExec} from '@/classes/generator/steps/RenderHexagonGrid.ts';
-// import {FlattenAroundCastleExec, FlattenAroundCastleParameters} from '@/classes/generator/steps/FlattenAroundCastle.ts';
-// import {AddResourcesExec} from '@/classes/generator/steps/AddResources.ts';
-// import {ServiceLocator} from '@sorskoot/wonderland-components';
 
 /**
  * Component responsible for managing the hexagonal grid layout.
@@ -94,78 +83,26 @@ export class HexGridLayout extends Component {
     private _onGameLoaded = () => {
         this._createGrid();
     };
-    update(dt: number): void {
-        // if (this.grid == null && this.tilePrefabs.isLoaded) {
-        //     this._createGrid();
-        // }
-    }
+
     /**
      * Creates the hexagonal grid and populates it with tiles.
      */
     private _createGrid(): void {
-        // const pipeline = new StepsPipeline<BaseStepExec>();
-        // pipeline.addStep(new CreateHexagonGridExec(), new CreateHexagonGridParameters());
-        // const flattenParams = new FlattenAroundCastleParameters();
-        // flattenParams.startElevation = 0.75;
-        // pipeline.addStep(new FlattenAroundCastleExec(), flattenParams);
-        // pipeline.addStep(new AddResourcesExec());
-        // pipeline.addStep(new RenderHexagonGridExec());
-        // const context = new StepContext({
-        //     rockThreshold: 0.3,
-        // });
-        // const result = pipeline.execute(context);
-
         const tiles = this.gamePlayService.getAllTiles();
         for (const tile of tiles) {
             const pos = tile.to2D();
             let hex: Object3D | null = null;
-            // switch (tile.type) {
-            //     case TileType.Grass:
+
             const type = this.determineTileType(tile.cellValues);
             hex = this.tilePrefabs.spawn(TileAssets[type])!;
             hex.addComponent(TileData, {tileId: tile.id});
             hex.parent = this.object;
             this.tileModels.set(tile.id, hex);
-            //    break;
-            //}
-            // if (!hex) {
-            //       throw new Error(`No prefab found for tile type: ${tile.type}`);
-            // }
+
             hex.setPositionLocal([pos.x, 0, pos.y]);
             wlUtils.setActive(hex, true);
         }
     }
-
-    // /**
-    //  * Handles tile click events.
-    //  */
-    // private _onTileClick = (tilePos: {x: number; y: number; z: number}): void => {
-    //     if (!this.grid) {
-    //         return;
-    //     }
-    //     const tile = this.grid.getTile(tilePos.x, tilePos.y, tilePos.z);
-    // };
-
-    // /**
-    //  * Handles tile hover events.
-    //  */
-    // private _onTileHover = (tilePos: {x: number; y: number; z: number}): void => {
-    //     if (!this.grid) {
-    //         return;
-    //     }
-    //     const tile = this.grid.getTile(tilePos.x, tilePos.y, tilePos.z);
-    //     if (tile) {
-    //         //this.engine.canvas.style.cursor = 'none';
-    //         this.hoveringTile = tile;
-    //         const pos = vec3.create();
-    //         this.tileModels.get(tile.id)?.getPositionWorld(pos);
-    //         this.highlight.setScalingLocal([1, 1, 1]);
-    //         this.highlight.setPositionWorld(pos);
-    //     } else {
-    //         this.highlight.setScalingLocal([0, 0, 0]);
-    //         //    this.engine.canvas.style.cursor = 'auto';
-    //     }
-    // };
 
     private determineTileType(cellValues: CellValues): TileType {
         // Run through terrain definitions

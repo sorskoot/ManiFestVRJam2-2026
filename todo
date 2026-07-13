@@ -28,6 +28,8 @@ UI:
     ☐ Add a button to end the turn, so an update of the world can be triggered.
     ✔ Add a few POC cards to the UI @done(26-07-11 10:32)
     ☐ Make the card work. See 5.
+    ☐ Add default menu button
+    ☐ Add actual title screen -> Title screen could be in non-XR. Entering XR starts the game.
 
 General:
     ☐ Refactor tile data away from render component and let that only deal with the rendering
@@ -35,12 +37,12 @@ General:
     ✔ Somehow make the hover on tiles work AND make the menu work... Maybe 2 cursor components? Each with a different mask? @done(26-07-13 14:51)
     
 System to show hovering over a tile:
-    ☐ Component that handles interaction with a tile, should be on the tile
-    ☐ Component that handles placing an indicator when hovering over a tile, is in root.
+    ✔ Component that handles interaction with a tile, should be on the tile @done(26-07-13 14:57)
+    ✔ Component that handles placing an indicator when hovering over a tile, is in root. @done(26-07-13 14:57)
     Tile interaction service:
          that is called from these components that manages interaction
-        ☐ methods for hovering, unhovering and clicking a tile
-        ☐ events that are fired when hovering, unhovering and clicking a tile
+        ✔ methods for hovering, unhovering and clicking a tile @done(26-07-13 14:57)
+        ✔ events that are fired when hovering, unhovering and clicking a tile @done(26-07-13 14:57)
             Events contain needed information, tile and position of the tile in world space.
         
 ---
@@ -50,3 +52,5 @@ System to show hovering over a tile:
 - When a tile is created, it has a set of starter values. Based on these the Manhatten distance is calculated to the nearest tile type. If the distance is less then a threshold, the tile becomes that type. If it is a specific type, it will start to influence its neighbors and might generate resources. By playing cards, the player can nudge tile values and cause them to evolve.
 
 - Maybe the UI should move to the side of the table you're closest. So that if you move around the table, it's always somewhat in front of you.
+
+- Maybe use an UV animator to animate a texture on the highlight to make it a bit more interesting.

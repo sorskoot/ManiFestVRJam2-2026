@@ -33298,8 +33298,6 @@
     _onGameLoaded = () => {
       this._createGrid();
     };
-    update(dt) {
-    }
     /**
      * Creates the hexagonal grid and populates it with tiles.
      */
@@ -33317,35 +33315,6 @@
         wlUtils.setActive(hex, true);
       }
     }
-    // /**
-    //  * Handles tile click events.
-    //  */
-    // private _onTileClick = (tilePos: {x: number; y: number; z: number}): void => {
-    //     if (!this.grid) {
-    //         return;
-    //     }
-    //     const tile = this.grid.getTile(tilePos.x, tilePos.y, tilePos.z);
-    // };
-    // /**
-    //  * Handles tile hover events.
-    //  */
-    // private _onTileHover = (tilePos: {x: number; y: number; z: number}): void => {
-    //     if (!this.grid) {
-    //         return;
-    //     }
-    //     const tile = this.grid.getTile(tilePos.x, tilePos.y, tilePos.z);
-    //     if (tile) {
-    //         //this.engine.canvas.style.cursor = 'none';
-    //         this.hoveringTile = tile;
-    //         const pos = vec3.create();
-    //         this.tileModels.get(tile.id)?.getPositionWorld(pos);
-    //         this.highlight.setScalingLocal([1, 1, 1]);
-    //         this.highlight.setPositionWorld(pos);
-    //     } else {
-    //         this.highlight.setScalingLocal([0, 0, 0]);
-    //         //    this.engine.canvas.style.cursor = 'auto';
-    //     }
-    // };
     determineTileType(cellValues) {
       let closestType = "Grass" /* Grass */;
       let closestDistance = Infinity;
