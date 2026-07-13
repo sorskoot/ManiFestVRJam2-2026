@@ -29,7 +29,7 @@ export const Card = (props: {title: string; onAction?: (label: string) => void})
                 alignItems={Align.Center}
                 justifyContent={Justify.Center}
             >
-                <Text width="100%" textAlign="center" fontSize={20}>
+                <Text width="100%" textAlign="center" fontSize={12}>
                     {props.title}
                 </Text>
             </Panel>

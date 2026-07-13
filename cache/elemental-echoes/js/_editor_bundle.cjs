@@ -1614,7 +1614,7 @@
             var dispatcher = resolveDispatcher();
             return dispatcher.useLayoutEffect(create8, deps);
           }
-          function useCallback2(callback, deps) {
+          function useCallback3(callback, deps) {
             var dispatcher = resolveDispatcher();
             return dispatcher.useCallback(callback, deps);
           }
@@ -2380,7 +2380,7 @@
           exports.memo = memo;
           exports.startTransition = startTransition;
           exports.unstable_act = act;
-          exports.useCallback = useCallback2;
+          exports.useCallback = useCallback3;
           exports.useContext = useContext7;
           exports.useDebugValue = useDebugValue;
           exports.useDeferredValue = useDeferredValue;
@@ -2886,9 +2886,9 @@
         module.exports = function $$$reconciler($$$hostConfig) {
           var exports2 = {};
           "use strict";
-          var React11 = require_react();
+          var React13 = require_react();
           var Scheduler = require_scheduler();
-          var ReactSharedInternals = React11.__SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED;
+          var ReactSharedInternals = React13.__SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED;
           var suppressWarning = false;
           function setSuppressWarning(newSuppressWarning) {
             {
@@ -6686,7 +6686,7 @@
             }
           }
           var fakeInternalInstance = {};
-          var emptyRefsObject = new React11.Component().refs;
+          var emptyRefsObject = new React13.Component().refs;
           var didWarnAboutStateAssignmentForComponent;
           var didWarnAboutUninitializedState;
           var didWarnAboutGetSnapshotBeforeUpdateWithoutDidUpdate;
@@ -17997,7 +17997,7 @@
       if (true) {
         (function() {
           "use strict";
-          var React11 = require_react();
+          var React13 = require_react();
           var REACT_ELEMENT_TYPE = Symbol.for("react.element");
           var REACT_PORTAL_TYPE = Symbol.for("react.portal");
           var REACT_FRAGMENT_TYPE = Symbol.for("react.fragment");
@@ -18023,7 +18023,7 @@
             }
             return null;
           }
-          var ReactSharedInternals = React11.__SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED;
+          var ReactSharedInternals = React13.__SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED;
           function error(format) {
             {
               {
@@ -31976,6 +31976,7 @@
     gameFlowService: () => gameFlowService,
     gamePlayService: () => gamePlayService,
     registerServices: () => registerServices,
+    tileInteractionService: () => tileInteractionService,
     uiStateService: () => uiStateService
   });
 
@@ -32462,13 +32463,19 @@
 
   // js/services/GameFlowService.ts
   var GameFlowService = class {
-    constructor(uiStateService2, gameEvents2) {
+    constructor(uiStateService2, gamePlayService2, gameEvents2) {
       this.uiStateService = uiStateService2;
+      this.gamePlayService = gamePlayService2;
       this.gameEvents = gameEvents2;
     }
     _gameState = y("menu" /* Menu */);
     get gameState() {
       return this._gameState;
+    }
+    startGame() {
+      this._gameState.value = "playing" /* Playing */;
+      this.gamePlayService.startGame();
+      this.gameEvents.gameStarted.emit();
     }
     toMenu() {
       console.log("Returning to main menu...");
@@ -32607,12 +32614,6 @@
   };
   var serviceLocator = new ServiceLocator2();
 
-  // js/services/GamePlayService.ts
-  var GamePlayService_exports = {};
-  __export(GamePlayService_exports, {
-    GamePlayService: () => GamePlayService
-  });
-
   // js/types/Card.ts
   var CardDefinitions = [
     {
@@ -32651,151 +32652,6 @@
       stat: { moisture: -1, temperature: 1, fertility: -1, elevation: 0 }
     }
   ];
-
-  // js/services/GamePlayService.ts
-  var GamePlayService = class {
-    constructor(configService2, gamePlayModel2) {
-      this.configService = configService2;
-      this.gamePlayModel = gamePlayModel2;
-      this.createDeck();
-    }
-    hand = y([]);
-    unplayedCards = [];
-    /**
-     * When a card is played, this flag is set to true.
-     * It's used to track if the player has played any card during their run through the deck.
-     * This can take multiple turns.
-     * At the start, the value is set to false.
-     * If after all cards have been shown to the player this value is still false,
-     * the player can choose a special card and the deck is discarded and a new deck is created.
-     */
-    cardPlayedFromDeck = false;
-    createDeck() {
-      this.gamePlayModel.clearDeck();
-      for (let i2 = 0; i2 < this.configService.getDeckSize(); i2++) {
-        const card = rng.getItem(CardDefinitions);
-        this.gamePlayModel.addCardToDeck(card);
-      }
-      this.hand.value = this.gamePlayModel.deck.slice(0, this.configService.getHandSize());
-    }
-    playCard(card) {
-      this.gamePlayModel.removeCardFromDeck(card);
-    }
-  };
-
-  // js/models/GamePlayModel.ts
-  var GamePlayModel = class {
-    deck = [];
-    addCardToDeck(card) {
-      this.deck.push(card);
-    }
-    removeCardFromDeck(card) {
-      const index = this.deck.indexOf(card);
-      if (index > -1) {
-        this.deck.splice(index, 1);
-      }
-    }
-    clearDeck() {
-      this.deck.length = 0;
-    }
-  };
-
-  // js/models/ConfigModel.ts
-  var ConfigModel = class {
-    deckSize = 12;
-    handSize = 4;
-  };
-
-  // js/services/ConfigService.ts
-  var ConfigService_exports = {};
-  __export(ConfigService_exports, {
-    ConfigService: () => ConfigService
-  });
-  var ConfigService = class {
-    constructor(configModel2) {
-      this.configModel = configModel2;
-    }
-    getDeckSize() {
-      return this.configModel.deckSize;
-    }
-    getHandSize() {
-      return this.configModel.handSize;
-    }
-  };
-
-  // js/bootstrap-services.ts
-  var Services = {
-    gameFlowService: Symbol("GameFlowService"),
-    uiStateService: Symbol("UiStateService"),
-    gamePlayService: Symbol("GamePlayService"),
-    configService: Symbol("ConfigService"),
-    gamePlayModel: Symbol("GamePlayModel"),
-    configModel: Symbol("ConfigModel"),
-    gameEvents: Symbol("GameEvents")
-  };
-  var gamePlayModel = new GamePlayModel();
-  var configModel = new ConfigModel();
-  var uiStateService = new UiStateService();
-  var configService = new ConfigService(configModel);
-  var gameEvents = new GameEvents();
-  var gameFlowService = new GameFlowService(uiStateService, gameEvents);
-  var gamePlayService = new GamePlayService(configService, gamePlayModel);
-  function registerServices() {
-    serviceLocator.registerSingleton(Services.gameFlowService, gameFlowService);
-    serviceLocator.registerSingleton(Services.uiStateService, uiStateService);
-    serviceLocator.registerSingleton(Services.gamePlayService, gamePlayService);
-    serviceLocator.registerSingleton(Services.gamePlayModel, gamePlayModel);
-    serviceLocator.registerSingleton(Services.configModel, configModel);
-    serviceLocator.registerSingleton(Services.configService, configService);
-    serviceLocator.registerSingleton(Services.gameEvents, gameEvents);
-  }
-
-  // js/components/billboard.ts
-  var billboard_exports = {};
-  __export(billboard_exports, {
-    BillboardingComponent: () => BillboardingComponent
-  });
-  var tempVec12 = vec3_exports.create();
-  var tempVec23 = vec3_exports.create();
-  var BillboardingComponent = class extends Component3 {
-    /**
-     * When true, only rotate the object around the Y axis so 'up' stays fixed.
-     * Default: `true`.
-     */
-    yAlwaysUp = true;
-    /**
-     * When true, rotate the object 180 degrees around the Y axis after looking
-     * at the camera. Useful when meshes face the opposite direction.
-     * Default: `true`.
-     */
-    flipY = true;
-    update(dt) {
-      const cam = this.engine.scene.activeViews[0].object;
-      cam.getPositionWorld(tempVec12);
-      if (this.yAlwaysUp) {
-        this.object.getPositionWorld(tempVec23);
-        this.object.lookAt([tempVec12[0], tempVec23[1], tempVec12[2]]);
-      } else {
-        this.object.lookAt([tempVec12[0], tempVec12[1], tempVec12[2]]);
-      }
-      if (this.flipY) {
-        this.object.rotateAxisAngleDegObject([0, 1, 0], 180);
-      }
-    }
-  };
-  __publicField(BillboardingComponent, "TypeName", "billboarding-component");
-  __decorateClass([
-    property.bool(true)
-  ], BillboardingComponent.prototype, "yAlwaysUp", 2);
-  __decorateClass([
-    property.bool(true)
-  ], BillboardingComponent.prototype, "flipY", 2);
-
-  // js/components/hex-grid-layout.ts
-  var hex_grid_layout_exports = {};
-  __export(hex_grid_layout_exports, {
-    HexGridLayout: () => HexGridLayout
-  });
 
   // js/hexagonmap/HexGrid.ts
   var HexagonGrid = class {
@@ -33026,19 +32882,6 @@
     }
   };
 
-  // js/components/tile-prefabs.ts
-  var tile_prefabs_exports = {};
-  __export(tile_prefabs_exports, {
-    TilePrefabs: () => TilePrefabs
-  });
-  var TilePrefabs = class extends PrefabsBase {
-    PrefabBinName() {
-      return "Tiles.bin";
-    }
-  };
-  __publicField(TilePrefabs, "TypeName", "tile-prefabs");
-  __publicField(TilePrefabs, "InheritProperties", true);
-
   // js/hexagonmap/TerrainDefinition.ts
   var TerrainDefinitions = {
     ["Grass" /* Grass */]: {
@@ -33148,6 +32991,234 @@
     }
   };
 
+  // js/services/GamePlayService.ts
+  var GamePlayService = class {
+    constructor(configService2, gamePlayModel2) {
+      this.configService = configService2;
+      this.gamePlayModel = gamePlayModel2;
+    }
+    hand = y([]);
+    unplayedCards = [];
+    grid;
+    /**
+     * When a card is played, this flag is set to true.
+     * It's used to track if the player has played any card during their run through the deck.
+     * This can take multiple turns.
+     * At the start, the value is set to false.
+     * If after all cards have been shown to the player this value is still false,
+     * the player can choose a special card and the deck is discarded and a new deck is created.
+     */
+    cardPlayedFromDeck = false;
+    startGame() {
+      this.createDeck();
+      this.createGrid();
+    }
+    getAllTiles() {
+      if (!this.grid) {
+        return [];
+      }
+      return this.grid.getAllTiles();
+    }
+    createGrid() {
+      this.grid = new HexagonGrid();
+      const center = new HexagonTile(0, 0, 0, TerrainDefinitions["Grass" /* Grass */].cellValues);
+      this.grid.addTile(center);
+      const newtiles = this.expand(this.grid, [center]);
+      this.expand(this.grid, newtiles);
+    }
+    createDeck() {
+      this.gamePlayModel.clearDeck();
+      for (let i2 = 0; i2 < this.configService.getDeckSize(); i2++) {
+        const card = rng.getItem(CardDefinitions);
+        this.gamePlayModel.addCardToDeck(card);
+      }
+      this.hand.value = this.gamePlayModel.deck.slice(0, this.configService.getHandSize());
+    }
+    selectCard(card) {
+    }
+    playCard(card) {
+      this.gamePlayModel.removeCardFromDeck(card);
+    }
+    /**
+    * Expands the grid by adding new tiles around the given tiles.
+    * @param tiles - The tiles to expand around.
+    * @returns The newly added tiles.
+    */
+    expand(grid, tiles) {
+      const newTiles = [];
+      tiles.forEach((tile) => {
+        for (const neighborCoords of tile.neighbors()) {
+          if (!grid.getTile(neighborCoords.x, neighborCoords.y, neighborCoords.z)) {
+            const newTile = new HexagonTile(neighborCoords.x, neighborCoords.y, neighborCoords.z, {
+              moisture: 5 + rng.getUniformInt(-2, 2),
+              temperature: 5 + rng.getUniformInt(-2, 2),
+              fertility: 5 + rng.getUniformInt(-2, 2),
+              elevation: 5 + rng.getUniformInt(-2, 2)
+            });
+            grid.addTile(newTile);
+            newTiles.push(newTile);
+          }
+        }
+      });
+      return newTiles;
+    }
+  };
+
+  // js/models/GamePlayModel.ts
+  var GamePlayModel = class {
+    deck = [];
+    addCardToDeck(card) {
+      this.deck.push(card);
+    }
+    removeCardFromDeck(card) {
+      const index = this.deck.indexOf(card);
+      if (index > -1) {
+        this.deck.splice(index, 1);
+      }
+    }
+    clearDeck() {
+      this.deck.length = 0;
+    }
+  };
+
+  // js/models/ConfigModel.ts
+  var ConfigModel = class {
+    deckSize = 12;
+    handSize = 4;
+  };
+
+  // js/services/ConfigService.ts
+  var ConfigService = class {
+    constructor(configModel2) {
+      this.configModel = configModel2;
+    }
+    getDeckSize() {
+      return this.configModel.deckSize;
+    }
+    getHandSize() {
+      return this.configModel.handSize;
+    }
+  };
+
+  // js/services/TileInteractionService.ts
+  var TileInteractionService = class {
+    onTileHover = new EventEmitter();
+    onTileClick = new EventEmitter();
+    onTileUnhover = new EventEmitter();
+    emitTileHover(tileId) {
+      this.onTileHover.emit(tileId);
+    }
+    emitTileClick(tileId) {
+      this.onTileClick.emit(tileId);
+    }
+    emitTileUnhover(tileId) {
+      this.onTileUnhover.emit(tileId);
+    }
+  };
+
+  // js/bootstrap-services.ts
+  var Services = {
+    gameFlowService: Symbol("GameFlowService"),
+    uiStateService: Symbol("UiStateService"),
+    gamePlayService: Symbol("GamePlayService"),
+    configService: Symbol("ConfigService"),
+    tileInteractionService: Symbol("TileInteractionService"),
+    gamePlayModel: Symbol("GamePlayModel"),
+    configModel: Symbol("ConfigModel"),
+    gameEvents: Symbol("GameEvents")
+  };
+  var gamePlayModel = new GamePlayModel();
+  var configModel = new ConfigModel();
+  var uiStateService = new UiStateService();
+  var configService = new ConfigService(configModel);
+  var gameEvents = new GameEvents();
+  var gamePlayService = new GamePlayService(configService, gamePlayModel);
+  var gameFlowService = new GameFlowService(uiStateService, gamePlayService, gameEvents);
+  var tileInteractionService = new TileInteractionService();
+  function registerServices() {
+    serviceLocator.registerSingleton(Services.gameFlowService, gameFlowService);
+    serviceLocator.registerSingleton(Services.uiStateService, uiStateService);
+    serviceLocator.registerSingleton(Services.gamePlayService, gamePlayService);
+    serviceLocator.registerSingleton(Services.gamePlayModel, gamePlayModel);
+    serviceLocator.registerSingleton(Services.configModel, configModel);
+    serviceLocator.registerSingleton(Services.configService, configService);
+    serviceLocator.registerSingleton(Services.tileInteractionService, tileInteractionService);
+    serviceLocator.registerSingleton(Services.gameEvents, gameEvents);
+  }
+
+  // js/components/billboard.ts
+  var billboard_exports = {};
+  __export(billboard_exports, {
+    BillboardingComponent: () => BillboardingComponent
+  });
+  var tempVec12 = vec3_exports.create();
+  var tempVec23 = vec3_exports.create();
+  var BillboardingComponent = class extends Component3 {
+    /**
+     * When true, only rotate the object around the Y axis so 'up' stays fixed.
+     * Default: `true`.
+     */
+    yAlwaysUp = true;
+    /**
+     * When true, rotate the object 180 degrees around the Y axis after looking
+     * at the camera. Useful when meshes face the opposite direction.
+     * Default: `true`.
+     */
+    flipY = true;
+    update(dt) {
+      const cam = this.engine.scene.activeViews[0].object;
+      cam.getPositionWorld(tempVec12);
+      if (this.yAlwaysUp) {
+        this.object.getPositionWorld(tempVec23);
+        this.object.lookAt([tempVec12[0], tempVec23[1], tempVec12[2]]);
+      } else {
+        this.object.lookAt([tempVec12[0], tempVec12[1], tempVec12[2]]);
+      }
+      if (this.flipY) {
+        this.object.rotateAxisAngleDegObject([0, 1, 0], 180);
+      }
+    }
+  };
+  __publicField(BillboardingComponent, "TypeName", "billboarding-component");
+  __decorateClass([
+    property.bool(true)
+  ], BillboardingComponent.prototype, "yAlwaysUp", 2);
+  __decorateClass([
+    property.bool(true)
+  ], BillboardingComponent.prototype, "flipY", 2);
+
+  // js/components/hex-grid-layout.ts
+  var hex_grid_layout_exports = {};
+  __export(hex_grid_layout_exports, {
+    HexGridLayout: () => HexGridLayout
+  });
+
+  // js/components/tile-prefabs.ts
+  var tile_prefabs_exports = {};
+  __export(tile_prefabs_exports, {
+    TilePrefabs: () => TilePrefabs
+  });
+  var TilePrefabs = class extends PrefabsBase {
+    PrefabBinName() {
+      return "Tiles.bin";
+    }
+  };
+  __publicField(TilePrefabs, "TypeName", "tile-prefabs");
+  __publicField(TilePrefabs, "InheritProperties", true);
+
+  // js/components/tile-data.ts
+  var tile_data_exports = {};
+  __export(tile_data_exports, {
+    TileData: () => TileData
+  });
+  var TileData = class extends Component3 {
+    tileId = "";
+  };
+  __publicField(TileData, "TypeName", "tile-data");
+  __decorateClass([
+    property.string()
+  ], TileData.prototype, "tileId", 2);
+
   // js/components/hex-grid-layout.ts
   var TileAssets = {
     ["Grass" /* Grass */]: "GrassTile",
@@ -33159,9 +33230,14 @@
     ["Desert" /* Desert */]: "SandTile"
   };
   var HexGridLayout = class extends Component3 {
+    static onRegister(engine) {
+      engine.registerComponent(TileData);
+    }
     cursorObject;
     highlight;
-    grid;
+    get gamePlayService() {
+      return serviceLocator.get(Services.gamePlayService);
+    }
     tileModels = /* @__PURE__ */ new Map();
     init() {
       this.tilePrefabs = this.tilePrefabsObject.getComponent(TilePrefabs);
@@ -33178,94 +33254,65 @@
      * Activates the component and adds event listeners.
      */
     onActivate() {
+      serviceLocator.get(Services.gameEvents).gameStarted.add(this._onGameLoaded);
     }
     /**
      * Deactivates the component and removes event listeners.
      */
     onDeactivate() {
+      serviceLocator.get(Services.gameEvents).gameStarted.remove(this._onGameLoaded);
     }
     _onGameLoaded = () => {
       this._createGrid();
     };
     update(dt) {
-      if (this.grid == null && this.tilePrefabs.isLoaded) {
-        this._createGrid();
-      }
     }
     /**
      * Creates the hexagonal grid and populates it with tiles.
      */
     _createGrid() {
-      this.grid = new HexagonGrid();
-      const center = new HexagonTile(0, 0, 0, {
-        moisture: 5,
-        temperature: 5,
-        fertility: 5,
-        elevation: 5
-      });
-      this.grid.addTile(center);
-      const newtiles = this._expand(this.grid, [center]);
-      this._expand(this.grid, newtiles);
-      const tiles = this.grid.getAllTiles();
+      const tiles = this.gamePlayService.getAllTiles();
       for (const tile of tiles) {
         const pos = tile.to2D();
         let hex = null;
         const type = this.determineTileType(tile.cellValues);
         hex = this.tilePrefabs.spawn(TileAssets[type]);
+        hex.addComponent(TileData, { tileId: tile.id });
         hex.parent = this.object;
         this.tileModels.set(tile.id, hex);
         hex.setPositionLocal([pos.x, 0, pos.y]);
         wlUtils.setActive(hex, true);
       }
     }
-    /**
-     * Expands the grid by adding new tiles around the given tiles.
-     * @param tiles - The tiles to expand around.
-     * @returns The newly added tiles.
-     */
-    _expand(grid, tiles) {
-      const newTiles = [];
-      tiles.forEach((tile) => {
-        for (const neighborCoords of tile.neighbors()) {
-          if (!grid.getTile(neighborCoords.x, neighborCoords.y, neighborCoords.z)) {
-            const newTile = new HexagonTile(neighborCoords.x, neighborCoords.y, neighborCoords.z, {
-              moisture: 5 + rng.getUniformInt(-5, 5),
-              temperature: 5 + rng.getUniformInt(-5, 5),
-              fertility: 5 + rng.getUniformInt(-5, 5),
-              elevation: 5 + rng.getUniformInt(-5, 5)
-            });
-            grid.addTile(newTile);
-            newTiles.push(newTile);
-          }
-        }
-      });
-      return newTiles;
-    }
-    /**
-     * Handles tile click events.
-     */
-    _onTileClick = (tilePos) => {
-      if (!this.grid) {
-        return;
-      }
-      const tile = this.grid.getTile(tilePos.x, tilePos.y, tilePos.z);
-    };
-    /**
-     * Handles tile hover events.
-     */
-    _onTileHover = (tilePos) => {
-      if (!this.grid) {
-        return;
-      }
-      const tile = this.grid.getTile(tilePos.x, tilePos.y, tilePos.z);
-      if (tile) {
-        const pos = vec3_exports.create();
-        this.highlight.setScalingLocal([1, 1, 1]);
-        this.highlight.setPositionWorld(pos);
-      } else {
-        this.highlight.setScalingLocal([0, 0, 0]);
-      }
-    };
+    // /**
+    //  * Handles tile click events.
+    //  */
+    // private _onTileClick = (tilePos: {x: number; y: number; z: number}): void => {
+    //     if (!this.grid) {
+    //         return;
+    //     }
+    //     const tile = this.grid.getTile(tilePos.x, tilePos.y, tilePos.z);
+    // };
+    // /**
+    //  * Handles tile hover events.
+    //  */
+    // private _onTileHover = (tilePos: {x: number; y: number; z: number}): void => {
+    //     if (!this.grid) {
+    //         return;
+    //     }
+    //     const tile = this.grid.getTile(tilePos.x, tilePos.y, tilePos.z);
+    //     if (tile) {
+    //         //this.engine.canvas.style.cursor = 'none';
+    //         this.hoveringTile = tile;
+    //         const pos = vec3.create();
+    //         this.tileModels.get(tile.id)?.getPositionWorld(pos);
+    //         this.highlight.setScalingLocal([1, 1, 1]);
+    //         this.highlight.setPositionWorld(pos);
+    //     } else {
+    //         this.highlight.setScalingLocal([0, 0, 0]);
+    //         //    this.engine.canvas.style.cursor = 'auto';
+    //     }
+    // };
     determineTileType(cellValues) {
       let closestType = "Grass" /* Grass */;
       let closestDistance = Infinity;
@@ -33308,11 +33355,117 @@
   };
   __publicField(SwitchCursor, "TypeName", "switch-cursor");
 
-  // js/index.ts
-  var js_exports = {};
-  __export(js_exports, {
-    default: () => js_default
+  // js/components/tile-highlight.ts
+  var tile_highlight_exports = {};
+  __export(tile_highlight_exports, {
+    TileHighlight: () => TileHighlight
   });
+  var TileHighlight = class extends Component3 {
+    get tileInteractionService() {
+      return serviceLocator.get(Services.tileInteractionService);
+    }
+    onActivate() {
+      this.tileInteractionService.onTileHover.add(this.onTileHover);
+    }
+    onDeactivate() {
+      this.tileInteractionService.onTileHover.remove(this.onTileHover);
+    }
+    onTileHover = (tileId) => {
+      console.log("Tile hovered:", tileId);
+    };
+  };
+  __publicField(TileHighlight, "TypeName", "tile-highlight");
+
+  // js/components/tile-interaction.ts
+  var tile_interaction_exports = {};
+  __export(tile_interaction_exports, {
+    TileInteraction: () => TileInteraction
+  });
+  var TileInteraction = class extends Component3 {
+    cursorTarget;
+    get tileInteractionService() {
+      return serviceLocator.get(Services.tileInteractionService);
+    }
+    start() {
+      this.cursorTarget = this.object.getComponent(CursorTarget);
+      if (!this.cursorTarget) {
+        console.error("TileInteraction component requires a CursorTarget component on the same object.");
+        return;
+      }
+    }
+    onActivate() {
+      if (!this.cursorTarget) {
+        return;
+      }
+      this.cursorTarget.onHover.add(this.onHover);
+      this.cursorTarget.onUnhover.add(this.onUnhover);
+      this.cursorTarget.onClick.add(this.onClick);
+    }
+    onDeactivate() {
+      if (!this.cursorTarget) {
+        return;
+      }
+      this.cursorTarget.onHover.remove(this.onHover);
+      this.cursorTarget.onUnhover.remove(this.onUnhover);
+      this.cursorTarget.onClick.remove(this.onClick);
+    }
+    onHover = (cursor) => {
+      const tileData = this.object.getComponent(TileData);
+      if (!tileData) {
+        console.error("TileInteraction component requires a TileData component on the same object.");
+        return;
+      }
+      this.tileInteractionService.emitTileHover(tileData.tileId);
+    };
+    onUnhover = (cursor) => {
+      const tileData = this.object.getComponent(TileData);
+      if (!tileData) {
+        console.error("TileInteraction component requires a TileData component on the same object.");
+        return;
+      }
+      this.tileInteractionService.emitTileUnhover(tileData.tileId);
+    };
+    onClick = (cursor) => {
+      const tileData = this.object.getComponent(TileData);
+      if (!tileData) {
+        console.error("TileInteraction component requires a TileData component on the same object.");
+        return;
+      }
+      this.tileInteractionService.emitTileClick(tileData.tileId);
+    };
+  };
+  __publicField(TileInteraction, "TypeName", "tile-interaction");
+
+  // js/ui/GameServicesProvider.tsx
+  var GameServicesProvider_exports = {};
+  __export(GameServicesProvider_exports, {
+    GameServicesProvider: () => GameServicesProvider,
+    useGameFlowService: () => useGameFlowService,
+    useGamePlayService: () => useGamePlayService,
+    useGameServices: () => useGameServices,
+    useUiStateService: () => useUiStateService
+  });
+  var import_react = __toESM(require_react(), 1);
+  var GameServicesContext = (0, import_react.createContext)(null);
+  function GameServicesProvider(props) {
+    return /* @__PURE__ */ import_react.default.createElement(GameServicesContext.Provider, { value: props.services }, props.children);
+  }
+  function useGameServices() {
+    const services = (0, import_react.useContext)(GameServicesContext);
+    if (!services) {
+      throw new Error("useGameServices must be used inside GameServicesProvider");
+    }
+    return services;
+  }
+  function useGameFlowService() {
+    return useGameServices().gameFlowService;
+  }
+  function useUiStateService() {
+    return useGameServices().uiStateService;
+  }
+  function useGamePlayService() {
+    return useGameServices().gamePlayService;
+  }
 
   // js/ui/root-ui.tsx
   var root_ui_exports = {};
@@ -36633,43 +36786,43 @@
   }
 
   // js/ui/root-ui.tsx
-  var import_react19 = __toESM(require_react(), 1);
+  var import_react22 = __toESM(require_react(), 1);
 
   // node_modules/@wonderlandengine/react-ui/dist/components/Button.js
   var import_jsx_runtime = __toESM(require_jsx_runtime(), 1);
-  var import_react3 = __toESM(require_react(), 1);
+  var import_react4 = __toESM(require_react(), 1);
 
   // node_modules/@wonderlandengine/react-ui/dist/components/Panel.js
-  var import_react2 = __toESM(require_react(), 1);
+  var import_react3 = __toESM(require_react(), 1);
 
   // node_modules/@wonderlandengine/react-ui/dist/components/component-types.js
-  var import_react = __toESM(require_react(), 1);
-  var MaterialContext = (0, import_react.createContext)({});
-  var ThemeContext = (0, import_react.createContext)({});
+  var import_react2 = __toESM(require_react(), 1);
+  var MaterialContext = (0, import_react2.createContext)({});
+  var ThemeContext = (0, import_react2.createContext)({});
 
   // node_modules/@wonderlandengine/react-ui/dist/components/Panel.js
   var tempColor = new Float32Array(4);
-  var Panel = (0, import_react2.forwardRef)((props, ref) => {
+  var Panel = (0, import_react3.forwardRef)((props, ref) => {
     var _a12, _b, _c, _d;
-    const context = (0, import_react2.useContext)(MaterialContext);
-    const mat = (0, import_react2.useMemo)(() => {
+    const context = (0, import_react3.useContext)(MaterialContext);
+    const mat = (0, import_react3.useMemo)(() => {
       var _a13;
       return (_a13 = context.panelMaterial) === null || _a13 === void 0 ? void 0 : _a13.clone();
     }, []);
     mat && mat.setColor(parseColor((_a12 = props.backgroundColor) !== null && _a12 !== void 0 ? _a12 : "fff", tempColor));
-    const bmat = (0, import_react2.useMemo)(() => {
+    const bmat = (0, import_react3.useMemo)(() => {
       var _a13;
       return (_a13 = context.panelMaterial) === null || _a13 === void 0 ? void 0 : _a13.clone();
     }, []);
     bmat && bmat.setColor(parseColor((_b = props.borderColor) !== null && _b !== void 0 ? _b : "fff", tempColor));
-    return import_react2.default.createElement("roundedRectangle", Object.assign(Object.assign({}, props), { material: (_c = props.material) !== null && _c !== void 0 ? _c : mat, borderMaterial: (_d = props.borderMaterial) !== null && _d !== void 0 ? _d : bmat, ref }), props.children);
+    return import_react3.default.createElement("roundedRectangle", Object.assign(Object.assign({}, props), { material: (_c = props.material) !== null && _c !== void 0 ? _c : mat, borderMaterial: (_d = props.borderMaterial) !== null && _d !== void 0 ? _d : bmat, ref }), props.children);
   });
   Panel.displayName = "Panel";
 
   // node_modules/@wonderlandengine/react-ui/dist/components/Button.js
-  var Button = (0, import_react3.forwardRef)((props, ref) => {
-    const [hovered, setHovered] = (0, import_react3.useState)(false);
-    const [active, setActive2] = (0, import_react3.useState)(false);
+  var Button = (0, import_react4.forwardRef)((props, ref) => {
+    const [hovered, setHovered] = (0, import_react4.useState)(false);
+    const [active, setActive2] = (0, import_react4.useState)(false);
     let propsMerged = Object.assign(Object.assign(Object.assign({}, props), hovered ? props.hovered : void 0), active ? props.active : void 0);
     return (0, import_jsx_runtime.jsx)(Panel, Object.assign({}, propsMerged, { onHover: () => setHovered(true), onUnhover: () => setHovered(false), onDown: () => setActive2(true), onUp: () => setActive2(false), ref, children: props.children }));
   });
@@ -36677,74 +36830,74 @@
 
   // node_modules/@wonderlandengine/react-ui/dist/components/Column.js
   var import_jsx_runtime2 = __toESM(require_jsx_runtime(), 1);
-  var import_react5 = __toESM(require_react(), 1);
+  var import_react6 = __toESM(require_react(), 1);
 
   // node_modules/@wonderlandengine/react-ui/dist/components/Container.js
-  var import_react4 = __toESM(require_react(), 1);
-  var Container = (0, import_react4.forwardRef)((props, ref) => {
-    return import_react4.default.createElement("container", Object.assign(Object.assign({}, props), { ref }), props.children);
+  var import_react5 = __toESM(require_react(), 1);
+  var Container = (0, import_react5.forwardRef)((props, ref) => {
+    return import_react5.default.createElement("container", Object.assign(Object.assign({}, props), { ref }), props.children);
   });
   Container.displayName = "Container";
 
   // node_modules/@wonderlandengine/react-ui/dist/components/Column.js
-  var Column = (0, import_react5.forwardRef)((props, ref) => {
+  var Column = (0, import_react6.forwardRef)((props, ref) => {
     return (0, import_jsx_runtime2.jsx)(Container, Object.assign({ flexDirection: FlexDirection.Column }, props, { ref, children: props.children }));
   });
   Column.displayName = "Column";
 
   // node_modules/@wonderlandengine/react-ui/dist/components/Image.js
   var import_jsx_runtime3 = __toESM(require_jsx_runtime(), 1);
-  var import_react6 = __toESM(require_react(), 1);
-  var Image2 = (0, import_react6.forwardRef)((props, ref) => {
+  var import_react7 = __toESM(require_react(), 1);
+  var Image2 = (0, import_react7.forwardRef)((props, ref) => {
     var _a12;
-    const context = (0, import_react6.useContext)(MaterialContext);
-    const mat = (_a12 = props.material) !== null && _a12 !== void 0 ? _a12 : (0, import_react6.useMemo)(() => {
+    const context = (0, import_react7.useContext)(MaterialContext);
+    const mat = (_a12 = props.material) !== null && _a12 !== void 0 ? _a12 : (0, import_react7.useMemo)(() => {
       var _a13;
       return (_a13 = context.panelMaterialTextured) === null || _a13 === void 0 ? void 0 : _a13.clone();
     }, []);
-    const texture = typeof props.src === "string" ? (0, import_react6.useMemo)(() => mat.engine.textures.load(props.src), [props.src]) : Promise.resolve(props.src);
+    const texture = typeof props.src === "string" ? (0, import_react7.useMemo)(() => mat.engine.textures.load(props.src), [props.src]) : Promise.resolve(props.src);
     texture.then((t2) => mat.flatTexture = t2);
     return (0, import_jsx_runtime3.jsx)(Panel, Object.assign({}, props, { material: mat, ref, children: props.children }));
   });
   Image2.displayName = "Image";
 
   // node_modules/@wonderlandengine/react-ui/dist/components/Panel9Slice.js
-  var import_react7 = __toESM(require_react(), 1);
-  var Panel9Slice = (0, import_react7.forwardRef)((props, ref) => {
+  var import_react8 = __toESM(require_react(), 1);
+  var Panel9Slice = (0, import_react8.forwardRef)((props, ref) => {
     var _a12;
-    const context = (0, import_react7.useContext)(MaterialContext);
-    const mat = (0, import_react7.useMemo)(() => {
+    const context = (0, import_react8.useContext)(MaterialContext);
+    const mat = (0, import_react8.useMemo)(() => {
       var _a13;
       return (_a13 = context.panelMaterialTextured) === null || _a13 === void 0 ? void 0 : _a13.clone();
     }, []);
     if (mat && props.texture)
       mat.flatTexture = props.texture;
-    return import_react7.default.createElement("nineSlice", Object.assign(Object.assign({}, props), { material: (_a12 = props.material) !== null && _a12 !== void 0 ? _a12 : mat, ref }), props.children);
+    return import_react8.default.createElement("nineSlice", Object.assign(Object.assign({}, props), { material: (_a12 = props.material) !== null && _a12 !== void 0 ? _a12 : mat, ref }), props.children);
   });
   Panel9Slice.displayName = "Panel9Slice";
 
   // node_modules/@wonderlandengine/react-ui/dist/components/Plane.js
-  var import_react8 = __toESM(require_react(), 1);
-  var Plane = (0, import_react8.forwardRef)((props, ref) => {
-    return import_react8.default.createElement("mesh", Object.assign(Object.assign({}, props), { ref }), props.children);
+  var import_react9 = __toESM(require_react(), 1);
+  var Plane = (0, import_react9.forwardRef)((props, ref) => {
+    return import_react9.default.createElement("mesh", Object.assign(Object.assign({}, props), { ref }), props.children);
   });
 
   // node_modules/@wonderlandengine/react-ui/dist/components/Row.js
   var import_jsx_runtime4 = __toESM(require_jsx_runtime(), 1);
-  var import_react9 = __toESM(require_react(), 1);
-  var Row = (0, import_react9.forwardRef)((props, ref) => {
+  var import_react10 = __toESM(require_react(), 1);
+  var Row = (0, import_react10.forwardRef)((props, ref) => {
     return (0, import_jsx_runtime4.jsx)(Container, Object.assign({ flexDirection: FlexDirection.Row }, props, { ref, children: props.children }));
   });
   Row.displayName = "Row";
 
   // node_modules/@wonderlandengine/react-ui/dist/components/Text.js
-  var import_react10 = __toESM(require_react(), 1);
+  var import_react11 = __toESM(require_react(), 1);
   var tempColor2 = new Float32Array(4);
-  var Text = (0, import_react10.forwardRef)((props, ref) => {
+  var Text = (0, import_react11.forwardRef)((props, ref) => {
     var _a12, _b, _c, _d, _e, _f, _g;
-    const context = (0, import_react10.useContext)(MaterialContext);
-    const theme = (0, import_react10.useContext)(ThemeContext);
-    const mat = (_a12 = props.material) !== null && _a12 !== void 0 ? _a12 : (0, import_react10.useMemo)(() => {
+    const context = (0, import_react11.useContext)(MaterialContext);
+    const theme = (0, import_react11.useContext)(ThemeContext);
+    const mat = (_a12 = props.material) !== null && _a12 !== void 0 ? _a12 : (0, import_react11.useMemo)(() => {
       var _a13;
       return (_a13 = context.textMaterial) === null || _a13 === void 0 ? void 0 : _a13.clone();
     }, []);
@@ -36754,14 +36907,14 @@
         mat.setEffectColor(parseColor(props.textEffectColor, tempColor2));
       }
     }
-    return import_react10.default.createElement("text3d", Object.assign(Object.assign({}, props), { material: mat, text: (_g = (_f = props.children) === null || _f === void 0 ? void 0 : _f.toString()) !== null && _g !== void 0 ? _g : props.text, ref }));
+    return import_react11.default.createElement("text3d", Object.assign(Object.assign({}, props), { material: mat, text: (_g = (_f = props.children) === null || _f === void 0 ? void 0 : _f.toString()) !== null && _g !== void 0 ? _g : props.text, ref }));
   });
   Text.displayName = "Text";
 
   // node_modules/@wonderlandengine/react-ui/dist/components/ProgressBar.js
   var import_jsx_runtime5 = __toESM(require_jsx_runtime(), 1);
-  var import_react11 = __toESM(require_react(), 1);
-  var ProgressBar = (0, import_react11.forwardRef)((props, ref) => {
+  var import_react12 = __toESM(require_react(), 1);
+  var ProgressBar = (0, import_react12.forwardRef)((props, ref) => {
     var _a12, _b, _c, _d, _e;
     const rounding = (_a12 = props.rounding) !== null && _a12 !== void 0 ? _a12 : 30;
     const value = Math.max(Math.min(1, props.value), 0);
@@ -36770,9 +36923,9 @@
   ProgressBar.displayName = "ProgressBar";
 
   // js/ui/utils/menu-theme-context.ts
-  var import_react12 = __toESM(require_react(), 1);
   var import_react13 = __toESM(require_react(), 1);
-  var MenuThemeContext = (0, import_react13.createContext)(
+  var import_react14 = __toESM(require_react(), 1);
+  var MenuThemeContext = (0, import_react14.createContext)(
     null
   );
 
@@ -36789,51 +36942,19 @@
   };
 
   // js/ui/hooks/useSignalValue.ts
-  var import_react14 = __toESM(require_react(), 1);
+  var import_react15 = __toESM(require_react(), 1);
   function useSignalValue(signal) {
-    const [value, setValue] = (0, import_react14.useState)(signal.value);
-    (0, import_react14.useEffect)(() => {
+    const [value, setValue] = (0, import_react15.useState)(signal.value);
+    (0, import_react15.useEffect)(() => {
       return signal.subscribe(setValue);
     }, [signal]);
     return value;
   }
 
-  // js/ui/GameServicesProvider.tsx
-  var GameServicesProvider_exports = {};
-  __export(GameServicesProvider_exports, {
-    GameServicesProvider: () => GameServicesProvider,
-    useGameFlowService: () => useGameFlowService,
-    useGamePlayService: () => useGamePlayService,
-    useGameServices: () => useGameServices,
-    useUiStateService: () => useUiStateService
-  });
-  var import_react15 = __toESM(require_react(), 1);
-  var GameServicesContext = (0, import_react15.createContext)(null);
-  function GameServicesProvider(props) {
-    return /* @__PURE__ */ import_react15.default.createElement(GameServicesContext.Provider, { value: props.services }, props.children);
-  }
-  function useGameServices() {
-    const services = (0, import_react15.useContext)(GameServicesContext);
-    if (!services) {
-      throw new Error("useGameServices must be used inside GameServicesProvider");
-    }
-    return services;
-  }
-  function useGameFlowService() {
-    return useGameServices().gameFlowService;
-  }
-  function useUiStateService() {
-    return useGameServices().uiStateService;
-  }
-  function useGamePlayService() {
-    return useGameServices().gamePlayService;
-  }
+  // js/ui/components/ingame/ingame.tsx
+  var import_react19 = __toESM(require_react(), 1);
 
   // js/ui/components/hand/hand.tsx
-  var hand_exports = {};
-  __export(hand_exports, {
-    Hand: () => Hand
-  });
   var import_react18 = __toESM(require_react(), 1);
 
   // js/ui/components/card/card.tsx
@@ -36948,15 +37069,11 @@
         alignItems: Align.Center,
         justifyContent: Justify.Center
       },
-      /* @__PURE__ */ import_react17.default.createElement(Text, { width: "100%", textAlign: "center", fontSize: 20 }, props.title)
+      /* @__PURE__ */ import_react17.default.createElement(Text, { width: "100%", textAlign: "center", fontSize: 12 }, props.title)
     ));
   };
 
   // js/ui/components/hand/useHandViewModel.ts
-  var useHandViewModel_exports = {};
-  __export(useHandViewModel_exports, {
-    useCardViewModel: () => useCardViewModel2
-  });
   function useCardViewModel2() {
     const gamePlayService2 = useGamePlayService();
     return {
@@ -36968,6 +37085,32 @@
   var Hand = () => {
     const vm = useCardViewModel2();
     return /* @__PURE__ */ import_react18.default.createElement(Row, { gap: 10, height: 100, justifyContent: Justify.Center }, vm.cards.map((card, index) => /* @__PURE__ */ import_react18.default.createElement(Card2, { key: index, title: card.title })));
+  };
+
+  // js/ui/components/ingame/ingame.tsx
+  var Ingame = () => {
+    return /* @__PURE__ */ import_react19.default.createElement(Row, { gap: 10, width: 1e3, height: 200, justifyContent: Justify.Center, alignItems: Align.Center }, /* @__PURE__ */ import_react19.default.createElement(Hand, null), /* @__PURE__ */ import_react19.default.createElement(Panel, { marginLeft: 90, height: 100, width: 100, rounding: 1, backgroundColor: colorSwatch.MainButton }, /* @__PURE__ */ import_react19.default.createElement(Text, { fontSize: 16 }, "Next Turn")));
+  };
+
+  // js/ui/components/menu/menu.tsx
+  var import_react21 = __toESM(require_react(), 1);
+
+  // js/ui/components/menu/useMenuViewModel.ts
+  var import_react20 = __toESM(require_react(), 1);
+  function useMenuViewModel() {
+    const gameFlowService2 = useGameFlowService();
+    const startGame = (0, import_react20.useCallback)(() => {
+      gameFlowService2.startGame();
+    }, [gameFlowService2]);
+    return {
+      play: startGame
+    };
+  }
+
+  // js/ui/components/menu/menu.tsx
+  var Menu = () => {
+    const vm = useMenuViewModel();
+    return /* @__PURE__ */ import_react21.default.createElement(Row, { gap: 10, width: 1e3, height: 200, justifyContent: Justify.Center, alignItems: Align.Center }, /* @__PURE__ */ import_react21.default.createElement(Panel, { onClick: vm.play, marginLeft: 90, height: 100, width: 100, rounding: 1, backgroundColor: colorSwatch.MainButton }, /* @__PURE__ */ import_react21.default.createElement(Text, { fontSize: 16 }, "Play")));
   };
 
   // js/ui/root-ui.tsx
@@ -36991,24 +37134,14 @@
       }
     };
     const comp = props.comp;
-    return /* @__PURE__ */ import_react19.default.createElement(MaterialContext.Provider, { value: comp }, /* @__PURE__ */ import_react19.default.createElement(MenuThemeContext.Provider, { value: DefaultTheme }, /* @__PURE__ */ import_react19.default.createElement(Row, { gap: 10, width: 1e3, height: 200, justifyContent: Justify.Center, alignItems: Align.Center }, /* @__PURE__ */ import_react19.default.createElement(Hand, null), /* @__PURE__ */ import_react19.default.createElement(
-      Panel,
-      {
-        marginLeft: 90,
-        height: 100,
-        width: 100,
-        rounding: 1,
-        backgroundColor: colorSwatch.MainButton
-      },
-      /* @__PURE__ */ import_react19.default.createElement(Text, { fontSize: 16 }, "Next Turn")
-    ))));
+    return /* @__PURE__ */ import_react22.default.createElement(MaterialContext.Provider, { value: comp }, /* @__PURE__ */ import_react22.default.createElement(MenuThemeContext.Provider, { value: DefaultTheme }, /* @__PURE__ */ import_react22.default.createElement(Container, { width: "100%", height: "100%", justifyContent: Justify.Center, alignItems: Align.Center }, gameState === "menu" /* Menu */ && /* @__PURE__ */ import_react22.default.createElement(Menu, null), gameState === "playing" /* Playing */ && /* @__PURE__ */ import_react22.default.createElement(Ingame, null))));
   };
   var RootUI = class extends ReactUiBase {
     update(dt) {
       super.update();
     }
     render() {
-      return /* @__PURE__ */ import_react19.default.createElement(
+      return /* @__PURE__ */ import_react22.default.createElement(
         GameServicesProvider,
         {
           services: {
@@ -37017,29 +37150,12 @@
             gamePlayService
           }
         },
-        /* @__PURE__ */ import_react19.default.createElement(App, { comp: this })
+        /* @__PURE__ */ import_react22.default.createElement(App, { comp: this })
       );
     }
   };
   __publicField(RootUI, "TypeName", "root-ui");
   __publicField(RootUI, "InheritProperties", true);
-
-  // js/index.ts
-  function js_default(engine) {
-    registerServices();
-    engine.registerComponent(AudioListener);
-    engine.registerComponent(Cursor);
-    engine.registerComponent(CursorTarget);
-    engine.registerComponent(FingerCursor);
-    engine.registerComponent(HandTracking);
-    engine.registerComponent(MouseLookComponent);
-    engine.registerComponent(PlayerHeight);
-    engine.registerComponent(VrModeActiveSwitch);
-    engine.registerComponent(WasdControlsComponent);
-    engine.registerComponent(HexGridLayout);
-    engine.registerComponent(TilePrefabs);
-    engine.registerComponent(RootUI);
-  }
 
   // cache/elemental-echoes/js/_editor_index.js
   _registerEditor(dist_exports);
@@ -37049,13 +37165,11 @@
   _registerEditor(billboard_exports);
   _registerEditor(hex_grid_layout_exports);
   _registerEditor(switch_cursor_exports);
+  _registerEditor(tile_data_exports);
+  _registerEditor(tile_highlight_exports);
+  _registerEditor(tile_interaction_exports);
   _registerEditor(tile_prefabs_exports);
-  _registerEditor(js_exports);
-  _registerEditor(ConfigService_exports);
-  _registerEditor(GamePlayService_exports);
   _registerEditor(GameServicesProvider_exports);
-  _registerEditor(hand_exports);
-  _registerEditor(useHandViewModel_exports);
   _registerEditor(root_ui_exports);
 })();
 /*! Bundled license information:

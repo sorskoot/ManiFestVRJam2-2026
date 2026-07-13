@@ -19,6 +19,7 @@ import {PlayerHeight} from '@wonderlandengine/components';
 import {VrModeActiveSwitch} from '@wonderlandengine/components';
 import {WasdControlsComponent} from '@wonderlandengine/components';
 import {HexGridLayout} from './components/hex-grid-layout.js';
+import {TileInteraction} from './components/tile-interaction.js';
 import {TilePrefabs} from './components/tile-prefabs.js';
 import {RootUI} from './ui/root-ui.tsx';
 /* wle:auto-imports:end */
@@ -38,6 +39,7 @@ engine.registerComponent(PlayerHeight);
 engine.registerComponent(VrModeActiveSwitch);
 engine.registerComponent(WasdControlsComponent);
 engine.registerComponent(HexGridLayout);
+engine.registerComponent(TileInteraction);
 engine.registerComponent(TilePrefabs);
 engine.registerComponent(RootUI);
 /* wle:auto-register:end */

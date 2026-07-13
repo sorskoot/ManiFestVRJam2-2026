@@ -513,6 +513,9 @@
                 },
                 {
                     "type": "cursor-target"
+                },
+                {
+                    "type": "tile-interaction"
                 }
             ]
         },
@@ -757,6 +760,9 @@
                 },
                 {
                     "type": "cursor-target"
+                },
+                {
+                    "type": "tile-interaction"
                 }
             ],
             "translation": [
@@ -793,6 +799,9 @@
                 },
                 {
                     "type": "cursor-target"
+                },
+                {
+                    "type": "tile-interaction"
                 }
             ]
         },
@@ -820,6 +829,9 @@
                 },
                 {
                     "type": "cursor-target"
+                },
+                {
+                    "type": "tile-interaction"
                 }
             ],
             "translation": [
@@ -852,6 +864,9 @@
                 },
                 {
                     "type": "cursor-target"
+                },
+                {
+                    "type": "tile-interaction"
                 }
             ],
             "translation": [
@@ -884,6 +899,9 @@
                 },
                 {
                     "type": "cursor-target"
+                },
+                {
+                    "type": "tile-interaction"
                 }
             ],
             "translation": [
@@ -916,6 +934,9 @@
                 },
                 {
                     "type": "cursor-target"
+                },
+                {
+                    "type": "tile-interaction"
                 }
             ],
             "translation": [

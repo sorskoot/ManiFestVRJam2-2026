@@ -3,7 +3,7 @@
     ✓ Very first version of creating a hex grid @done(26-07-08 12:46)
 
 2. Hidden simulation values (Moisture, Temperature, Fertility, Elevation):
-    ☐ When tiles are created, give them a set of starter values.
+    ✔ When tiles are created, give them a set of starter values. @done(26-07-11 10:29)
 
 3. Terrain evolution rules:
     ☐ Service to run through the tiles and apply the influences to its neighbors. Each tile is influenced equally.
@@ -24,13 +24,27 @@
 
 ---
 UI:
-    ☐ Add the root UI element. For now, it will be a 3D UI panel floating in front of the table.
+    ✔ Add the root UI element. For now, it will be a 3D UI panel floating in front of the table. @done(26-07-11 10:32)
     ☐ Add a button to end the turn, so an update of the world can be triggered.
-    ☐ Add a few POC cards to the UI
+    ✔ Add a few POC cards to the UI @done(26-07-11 10:32)
     ☐ Make the card work. See 5.
 
+General:
+    ☐ Refactor tile data away from render component and let that only deal with the rendering
+    
+System to show hovering over a tile:
+    ☐ Component that handles interaction with a tile, should be on the tile
+    ☐ Component that handles placing an indicator when hovering over a tile, is in root.
+    Tile interaction service:
+         that is called from these components that manages interaction
+        ☐ methods for hovering, unhovering and clicking a tile
+        ☐ events that are fired when hovering, unhovering and clicking a tile
+            Events contain needed information, tile and position of the tile in world space.
+        
 ---
 
 # Short Thoughts
 
 - When a tile is created, it has a set of starter values. Based on these the Manhatten distance is calculated to the nearest tile type. If the distance is less then a threshold, the tile becomes that type. If it is a specific type, it will start to influence its neighbors and might generate resources. By playing cards, the player can nudge tile values and cause them to evolve.
+
+- Maybe the UI should move to the side of the table you're closest. So that if you move around the table, it's always somewhat in front of you.

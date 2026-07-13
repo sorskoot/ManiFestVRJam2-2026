@@ -1660,21 +1660,24 @@
                 }
             ],
             "translation": [
-                -0.5000001,
-                1.0999999,
-                0.4499998
+                -0.4999997,
+                1.4999997,
+                0.1
+            ],
+            "scaling": [
+                0.1,
+                0.0999998,
+                0.0999998
             ],
             "rotation": [
                 -0.3826833,
                 0.0,
                 0.0,
                 0.9238795
-            ],
-            "scaling": [
-                0.1,
-                0.1,
-                0.1
             ]
+        },
+        "238": {
+            "name": "TileHighlight"
         }
     },
     "meshes": {
@@ -2340,7 +2343,8 @@
                     "js/",
                     "js/components",
                     "js/ui"
-                ]
+                ],
+                "entryPoint": "js/index.ts"
             },
             "application": {
                 "output": "Elemental-Echoes.app.js",
@@ -2374,6 +2378,9 @@
             "files": [
                 "Tiles.wlp"
             ]
+        },
+        "editor": {
+            "serverPort": 5144
         }
     },
     "animations": {},
