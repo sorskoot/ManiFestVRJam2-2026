@@ -5,8 +5,9 @@ export interface CardState {
     hovered: ReadonlySignal<boolean>;
     pressed: ReadonlySignal<boolean>;
     disabled: ReadonlySignal<boolean>;
+    selected: ReadonlySignal<boolean>;
     label: ReadonlySignal<string>;
-
+    id: ReadonlySignal<number>;
     backgroundColor: ReadonlySignal<string>;
     textColor: ReadonlySignal<string>;
 
@@ -19,13 +20,14 @@ export interface CardState {
     click: () => void;
 }
 
-export const CardModel = createModel<CardState, [string, boolean | undefined, ((label: string) => void)?]>(
-    (label: string = 'Button', isDisabled: boolean = false, onActivate?: (label: string) => void) => {
+export const CardModel = createModel<CardState, [number, string, boolean | undefined, ((label: string) => void)?]>(
+    (cardId:number, label: string = 'Button', isDisabled: boolean = false, onActivate?: (label: string) => void) => {
         const hovered = signal(false);
         const pressed = signal(false);
         const disabled = signal(isDisabled);
         const labelSignal = signal(label);
-
+        const selected = signal(false);
+        const id = signal(-1);
         const backgroundColor = computed(() => {
             const isDisabled = disabled.value;
             return isDisabled
@@ -41,9 +43,11 @@ export const CardModel = createModel<CardState, [string, boolean | undefined, ((
         });
 
         return {
+            id,
             hovered,
             pressed,
             disabled,
+            selected,
             label: labelSignal,
             backgroundColor,
             textColor,

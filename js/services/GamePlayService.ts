@@ -10,13 +10,22 @@ import {TileType} from '../hexagonmap/TileType.ts';
 
 export interface IGamePlayService {
     hand: ReadonlySignal<Card[]>;
+    /**
+     * The index of the currently selected card in the hand.
+     * If no card is selected, the value is null.
+     * 
+     * TK: Make sure this gets reset when the hand changes.
+     */
+    currentSelectedCard: ReadonlySignal<number | null>;
     getAllTiles(): HexagonTile[];
     startGame(): void;
     getTileById(tileId: string): HexagonTile | undefined;
+    selectCard(cardIndex: number): void
 }
 
 export class GamePlayService implements IGamePlayService {
     public hand = signal<Card[]>([]);
+    public currentSelectedCard = signal<number | null>(null);
 
     private unplayedCards: Card[] = [];
 
@@ -31,7 +40,7 @@ export class GamePlayService implements IGamePlayService {
      * the player can choose a special card and the deck is discarded and a new deck is created.
      */
     private cardPlayedFromDeck = false;
-
+    
     constructor(
         private configService: IConfigService,
         private gamePlayModel: IGamePlayModel
@@ -72,9 +81,12 @@ export class GamePlayService implements IGamePlayService {
         }
 
         this.hand.value = this.gamePlayModel.deck.slice(0, this.configService.getHandSize());
+        this.currentSelectedCard.value = null;
     }
 
-    selectCard(card: Card): void {}
+    selectCard(cardIndex: number): void {
+        this.currentSelectedCard.value = cardIndex;
+    }
 
     playCard(card: Card): void {
         this.gamePlayModel.removeCardFromDeck(card);

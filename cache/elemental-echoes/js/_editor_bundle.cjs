@@ -1590,7 +1590,7 @@
             }
             return dispatcher.useContext(Context2);
           }
-          function useState4(initialState) {
+          function useState5(initialState) {
             var dispatcher = resolveDispatcher();
             return dispatcher.useState(initialState);
           }
@@ -2392,7 +2392,7 @@
           exports.useMemo = useMemo5;
           exports.useReducer = useReducer;
           exports.useRef = useRef;
-          exports.useState = useState4;
+          exports.useState = useState5;
           exports.useSyncExternalStore = useSyncExternalStore;
           exports.useTransition = useTransition;
           exports.version = ReactVersion;
@@ -32621,6 +32621,17 @@
   });
 
   // js/types/Card.ts
+  var Card_exports = {};
+  __export(Card_exports, {
+    CardDefinitions: () => CardDefinitions,
+    CardType: () => CardType
+  });
+  var CardType = /* @__PURE__ */ ((CardType2) => {
+    CardType2["manipulation"] = "manipulation";
+    CardType2["expansion"] = "expansion";
+    CardType2["event"] = "event";
+    return CardType2;
+  })(CardType || {});
   var CardDefinitions = [
     {
       type: "manipulation" /* manipulation */,
@@ -33010,6 +33021,7 @@
       this.gamePlayModel = gamePlayModel2;
     }
     hand = y([]);
+    currentSelectedCard = y(null);
     unplayedCards = [];
     grid;
     /**
@@ -33051,8 +33063,10 @@
         this.gamePlayModel.addCardToDeck(card);
       }
       this.hand.value = this.gamePlayModel.deck.slice(0, this.configService.getHandSize());
+      this.currentSelectedCard.value = null;
     }
-    selectCard(card) {
+    selectCard(cardIndex) {
+      this.currentSelectedCard.value = cardIndex;
     }
     playCard(card) {
       this.gamePlayModel.removeCardFromDeck(card);
@@ -33482,6 +33496,89 @@
   function useGamePlayService() {
     return useGameServices().gamePlayService;
   }
+
+  // js/ui/components/card/CardModel.ts
+  var CardModel_exports = {};
+  __export(CardModel_exports, {
+    CardModel: () => CardModel
+  });
+
+  // js/ui/utils/colorSwatch.ts
+  var colorSwatch = {
+    Text: "#f7e476",
+    TextHover: "#ffffff",
+    PanelBackground: "#393457",
+    MainButton: "#5bb361",
+    MainButtonHover: "#1e8875",
+    MainButtonPressed: "#1e8875",
+    DisabledButton: "#606c81",
+    DisabledText: "#393457"
+  };
+
+  // js/ui/components/card/CardModel.ts
+  var CardModel = T(
+    (cardId, label = "Button", isDisabled = false, onActivate) => {
+      const hovered = y(false);
+      const pressed = y(false);
+      const disabled = y(isDisabled);
+      const labelSignal = y(label);
+      const selected = y(false);
+      const id = y(-1);
+      const backgroundColor = g(() => {
+        const isDisabled2 = disabled.value;
+        return isDisabled2 ? colorSwatch.DisabledButton : hovered.value ? colorSwatch.MainButtonHover : colorSwatch.MainButton;
+      });
+      const textColor = g(() => {
+        const isDisabled2 = disabled.value;
+        return isDisabled2 ? colorSwatch.DisabledText : hovered.value ? colorSwatch.TextHover : colorSwatch.Text;
+      });
+      return {
+        id,
+        hovered,
+        pressed,
+        disabled,
+        selected,
+        label: labelSignal,
+        backgroundColor,
+        textColor,
+        hover: () => {
+          if (!disabled.value) {
+            hovered.value = true;
+          }
+        },
+        unhover: () => {
+          if (!disabled.value) {
+            hovered.value = false;
+          }
+        },
+        press: () => {
+          if (!disabled.value) {
+            pressed.value = true;
+          }
+        },
+        release: () => {
+          if (!disabled.value) {
+            pressed.value = false;
+          }
+        },
+        disable: () => {
+          disabled.value = true;
+          hovered.value = false;
+          pressed.value = false;
+        },
+        enable: () => {
+          disabled.value = false;
+        },
+        click: () => {
+          if (!disabled.value) {
+            if (onActivate) {
+              onActivate(labelSignal.value);
+            }
+          }
+        }
+      };
+    }
+  );
 
   // js/ui/components/card/card.tsx
   var card_exports = {};
@@ -35036,11 +35133,11 @@
     Overflow2[Overflow2["Scroll"] = 2] = "Scroll";
     return Overflow2;
   }({});
-  var PositionType = /* @__PURE__ */ function(PositionType3) {
-    PositionType3[PositionType3["Static"] = 0] = "Static";
-    PositionType3[PositionType3["Relative"] = 1] = "Relative";
-    PositionType3[PositionType3["Absolute"] = 2] = "Absolute";
-    return PositionType3;
+  var PositionType = /* @__PURE__ */ function(PositionType2) {
+    PositionType2[PositionType2["Static"] = 0] = "Static";
+    PositionType2[PositionType2["Relative"] = 1] = "Relative";
+    PositionType2[PositionType2["Absolute"] = 2] = "Absolute";
+    return PositionType2;
   }({});
   var Unit = /* @__PURE__ */ function(Unit2) {
     Unit2[Unit2["Undefined"] = 0] = "Undefined";
@@ -36936,78 +37033,11 @@
   });
   ProgressBar.displayName = "ProgressBar";
 
-  // js/ui/utils/colorSwatch.ts
-  var colorSwatch = {
-    Text: "#f7e476",
-    TextHover: "#ffffff",
-    PanelBackground: "#393457",
-    MainButton: "#5bb361",
-    MainButtonHover: "#1e8875",
-    MainButtonPressed: "#1e8875",
-    DisabledButton: "#606c81",
-    DisabledText: "#393457"
-  };
-
-  // js/ui/components/card/CardModel.ts
-  var CardModel = T(
-    (label = "Button", isDisabled = false, onActivate) => {
-      const hovered = y(false);
-      const pressed = y(false);
-      const disabled = y(isDisabled);
-      const labelSignal = y(label);
-      const backgroundColor = g(() => {
-        const isDisabled2 = disabled.value;
-        return isDisabled2 ? colorSwatch.DisabledButton : hovered.value ? colorSwatch.MainButtonHover : colorSwatch.MainButton;
-      });
-      const textColor = g(() => {
-        const isDisabled2 = disabled.value;
-        return isDisabled2 ? colorSwatch.DisabledText : hovered.value ? colorSwatch.TextHover : colorSwatch.Text;
-      });
-      return {
-        hovered,
-        pressed,
-        disabled,
-        label: labelSignal,
-        backgroundColor,
-        textColor,
-        hover: () => {
-          if (!disabled.value) {
-            hovered.value = true;
-          }
-        },
-        unhover: () => {
-          if (!disabled.value) {
-            hovered.value = false;
-          }
-        },
-        press: () => {
-          if (!disabled.value) {
-            pressed.value = true;
-          }
-        },
-        release: () => {
-          if (!disabled.value) {
-            pressed.value = false;
-          }
-        },
-        disable: () => {
-          disabled.value = true;
-          hovered.value = false;
-          pressed.value = false;
-        },
-        enable: () => {
-          disabled.value = false;
-        },
-        click: () => {
-          if (!disabled.value) {
-            if (onActivate) {
-              onActivate(labelSignal.value);
-            }
-          }
-        }
-      };
-    }
-  );
+  // js/ui/components/card/useCardViewModel.ts
+  var useCardViewModel_exports = {};
+  __export(useCardViewModel_exports, {
+    useCardViewModel: () => useCardViewModel
+  });
 
   // js/ui/hooks/useSignalValue.ts
   var import_react13 = __toESM(require_react(), 1);
@@ -37029,12 +37059,22 @@
     const onDisable = (0, import_react14.useCallback)(() => model.disable(), [model]);
     const onEnable = (0, import_react14.useCallback)(() => model.enable(), [model]);
     const onClick = (0, import_react14.useCallback)(() => model.click(), [model]);
+    const gamePlayService2 = useGamePlayService();
+    const [isSelected, setIsSelected] = (0, import_react14.useState)(false);
+    (0, import_react14.useEffect)(() => {
+      const unsubscribe = gamePlayService2.currentSelectedCard.subscribe((value) => {
+        setIsSelected(value === model.id.value);
+      });
+      return () => unsubscribe();
+    }, []);
     return {
       backgroundColor: useSignalValue(model.backgroundColor),
       textColor: useSignalValue(model.textColor),
       hovered: useSignalValue(model.hovered),
       pressed: useSignalValue(model.pressed),
+      selected: useSignalValue(model.selected),
       // label: useSignalValue(model.label),
+      isSelected,
       onHover,
       onUnhover,
       onPress,
@@ -37047,7 +37087,7 @@
 
   // js/ui/components/card/card.tsx
   var Card2 = (props) => {
-    const [model] = (0, import_react15.useState)(() => new CardModel(props.title, false, props.onAction));
+    const [model] = (0, import_react15.useState)(() => new CardModel(props.id, props.title, false, props.onAction));
     const vm = useCardViewModel(model);
     return /* @__PURE__ */ import_react15.default.createElement(Container, { height: 110, width: 100 }, /* @__PURE__ */ import_react15.default.createElement(
       Panel,
@@ -37056,6 +37096,7 @@
         width: 100,
         rounding: 1,
         backgroundColor: vm.backgroundColor,
+        borderSize: vm.isSelected ? 4 : 0,
         onClick: vm.onClick,
         onHover: vm.onHover,
         onUnhover: vm.onUnhover,
@@ -37066,6 +37107,35 @@
     ));
   };
 
+  // js/ui/components/hand/hand.tsx
+  var hand_exports = {};
+  __export(hand_exports, {
+    Hand: () => Hand
+  });
+  var import_react16 = __toESM(require_react(), 1);
+
+  // js/ui/components/hand/useHandViewModel.ts
+  var useHandViewModel_exports = {};
+  __export(useHandViewModel_exports, {
+    useHandViewModel: () => useHandViewModel
+  });
+  function useHandViewModel() {
+    const gamePlayService2 = useGamePlayService();
+    const selectCard = (cardIndex) => {
+      gamePlayService2.selectCard(cardIndex);
+    };
+    return {
+      cards: useSignalValue(gamePlayService2.hand),
+      selectCard
+    };
+  }
+
+  // js/ui/components/hand/hand.tsx
+  var Hand = () => {
+    const vm = useHandViewModel();
+    return /* @__PURE__ */ import_react16.default.createElement(Row, { gap: 10, height: 100, justifyContent: Justify.Center }, vm.cards.map((card, index) => /* @__PURE__ */ import_react16.default.createElement(Card2, { onAction: () => vm.selectCard(index), id: index, key: index, title: card.title })));
+  };
+
   // js/ui/root-ui.tsx
   var root_ui_exports = {};
   __export(root_ui_exports, {
@@ -37074,33 +37144,14 @@
   var import_react22 = __toESM(require_react(), 1);
 
   // js/ui/utils/menu-theme-context.ts
-  var import_react16 = __toESM(require_react(), 1);
   var import_react17 = __toESM(require_react(), 1);
-  var MenuThemeContext = (0, import_react17.createContext)(
+  var import_react18 = __toESM(require_react(), 1);
+  var MenuThemeContext = (0, import_react18.createContext)(
     null
   );
 
   // js/ui/components/ingame/ingame.tsx
   var import_react19 = __toESM(require_react(), 1);
-
-  // js/ui/components/hand/hand.tsx
-  var import_react18 = __toESM(require_react(), 1);
-
-  // js/ui/components/hand/useHandViewModel.ts
-  function useCardViewModel2() {
-    const gamePlayService2 = useGamePlayService();
-    return {
-      cards: useSignalValue(gamePlayService2.hand)
-    };
-  }
-
-  // js/ui/components/hand/hand.tsx
-  var Hand = () => {
-    const vm = useCardViewModel2();
-    return /* @__PURE__ */ import_react18.default.createElement(Row, { gap: 10, height: 100, justifyContent: Justify.Center }, vm.cards.map((card, index) => /* @__PURE__ */ import_react18.default.createElement(Card2, { key: index, title: card.title })));
-  };
-
-  // js/ui/components/ingame/ingame.tsx
   var Ingame = () => {
     return /* @__PURE__ */ import_react19.default.createElement(Row, { gap: 10, width: 1e3, height: 200, justifyContent: Justify.Center, alignItems: Align.Center }, /* @__PURE__ */ import_react19.default.createElement(Hand, null), /* @__PURE__ */ import_react19.default.createElement(Panel, { marginLeft: 90, height: 100, width: 100, rounding: 1, backgroundColor: colorSwatch.MainButton }, /* @__PURE__ */ import_react19.default.createElement(Text, { fontSize: 16 }, "Next Turn")));
   };
@@ -37185,8 +37236,13 @@
   _registerEditor(HexagonTile_exports);
   _registerEditor(GamePlayService_exports);
   _registerEditor(TileInteractionService_exports);
+  _registerEditor(Card_exports);
   _registerEditor(GameServicesProvider_exports);
+  _registerEditor(CardModel_exports);
   _registerEditor(card_exports);
+  _registerEditor(useCardViewModel_exports);
+  _registerEditor(hand_exports);
+  _registerEditor(useHandViewModel_exports);
   _registerEditor(root_ui_exports);
 })();
 /*! Bundled license information:
