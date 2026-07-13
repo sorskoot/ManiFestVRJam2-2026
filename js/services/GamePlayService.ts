@@ -3,15 +3,16 @@ import {IGamePlayModel} from '../models/GamePlayModel.ts';
 import {Card, CardDefinitions} from '../types/Card.ts';
 import {IConfigService} from './ConfigService.ts';
 import {ReadonlySignal, signal} from '@preact/signals-core';
-import { HexagonGrid } from '../hexagonmap/HexGrid.ts';
-import { HexagonTile } from '../hexagonmap/HexagonTile.ts';
-import { TerrainDefinitions } from '../hexagonmap/TerrainDefinition.ts';
-import { TileType } from '../hexagonmap/TileType.ts';
+import {HexagonGrid} from '../hexagonmap/HexGrid.ts';
+import {HexagonTile} from '../hexagonmap/HexagonTile.ts';
+import {TerrainDefinitions} from '../hexagonmap/TerrainDefinition.ts';
+import {TileType} from '../hexagonmap/TileType.ts';
 
 export interface IGamePlayService {
     hand: ReadonlySignal<Card[]>;
     getAllTiles(): HexagonTile[];
     startGame(): void;
+    getTileById(tileId: string): HexagonTile | undefined;
 }
 
 export class GamePlayService implements IGamePlayService {
@@ -34,15 +35,20 @@ export class GamePlayService implements IGamePlayService {
     constructor(
         private configService: IConfigService,
         private gamePlayModel: IGamePlayModel
-    ) {
-       
+    ) {}
+
+    getTileById(tileId: string): HexagonTile | undefined {
+        if (!this.grid) {
+            return undefined;
+        }
+        return this.grid.getTileById(tileId);
     }
 
     startGame(): void {
         this.createDeck();
         this.createGrid();
-    };
-    
+    }
+
     getAllTiles(): HexagonTile[] {
         if (!this.grid) {
             return [];
@@ -50,7 +56,7 @@ export class GamePlayService implements IGamePlayService {
         return this.grid.getAllTiles();
     }
 
-    createGrid(): void{
+    createGrid(): void {
         this.grid = new HexagonGrid();
         const center = new HexagonTile(0, 0, 0, TerrainDefinitions[TileType.Grass].cellValues);
         this.grid.addTile(center);
@@ -68,15 +74,13 @@ export class GamePlayService implements IGamePlayService {
         this.hand.value = this.gamePlayModel.deck.slice(0, this.configService.getHandSize());
     }
 
-    selectCard(card: Card): void {
-
-    }
+    selectCard(card: Card): void {}
 
     playCard(card: Card): void {
         this.gamePlayModel.removeCardFromDeck(card);
     }
 
-        /**
+    /**
      * Expands the grid by adding new tiles around the given tiles.
      * @param tiles - The tiles to expand around.
      * @returns The newly added tiles.

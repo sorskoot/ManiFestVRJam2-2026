@@ -20,7 +20,15 @@ import * as _C__dev_ManiFestVRJam2_2026_js_components_tile_interaction_ts from '
 _registerEditor(_C__dev_ManiFestVRJam2_2026_js_components_tile_interaction_ts);
 import * as _C__dev_ManiFestVRJam2_2026_js_components_tile_prefabs_ts from 'C:/dev/ManiFestVRJam2-2026/js/components/tile-prefabs.ts';
 _registerEditor(_C__dev_ManiFestVRJam2_2026_js_components_tile_prefabs_ts);
+import * as _C__dev_ManiFestVRJam2_2026_js_hexagonmap_HexagonTile_ts from 'C:/dev/ManiFestVRJam2-2026/js/hexagonmap/HexagonTile.ts';
+_registerEditor(_C__dev_ManiFestVRJam2_2026_js_hexagonmap_HexagonTile_ts);
+import * as _C__dev_ManiFestVRJam2_2026_js_services_GamePlayService_ts from 'C:/dev/ManiFestVRJam2-2026/js/services/GamePlayService.ts';
+_registerEditor(_C__dev_ManiFestVRJam2_2026_js_services_GamePlayService_ts);
+import * as _C__dev_ManiFestVRJam2_2026_js_services_TileInteractionService_ts from 'C:/dev/ManiFestVRJam2-2026/js/services/TileInteractionService.ts';
+_registerEditor(_C__dev_ManiFestVRJam2_2026_js_services_TileInteractionService_ts);
 import * as _C__dev_ManiFestVRJam2_2026_js_ui_GameServicesProvider_tsx from 'C:/dev/ManiFestVRJam2-2026/js/ui/GameServicesProvider.tsx';
 _registerEditor(_C__dev_ManiFestVRJam2_2026_js_ui_GameServicesProvider_tsx);
+import * as _C__dev_ManiFestVRJam2_2026_js_ui_components_card_card_tsx from 'C:/dev/ManiFestVRJam2-2026/js/ui/components/card/card.tsx';
+_registerEditor(_C__dev_ManiFestVRJam2_2026_js_ui_components_card_card_tsx);
 import * as _C__dev_ManiFestVRJam2_2026_js_ui_root_ui_tsx from 'C:/dev/ManiFestVRJam2-2026/js/ui/root-ui.tsx';
 _registerEditor(_C__dev_ManiFestVRJam2_2026_js_ui_root_ui_tsx);

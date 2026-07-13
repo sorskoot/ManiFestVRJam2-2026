@@ -10,14 +10,8 @@ export const Card = (props: {title: string; onAction?: (label: string) => void})
     const [model] = useState(() => new CardModel(props.title, false, props.onAction));
     const vm = useCardViewModel(model);
 
-    const [hoverMargin, setHoverMargin] = useState(0);
-    useEffect(() => {
-        setHoverMargin(vm.hovered ? 10 : 0);
-        console.log('hovered', vm.hovered);
-    }, [vm.hovered]);
-
     return (
-        <Container paddingTop={hoverMargin} height={110} width={100}>
+        <Container height={110} width={100}>
             <Panel
                 height={100}
                 width={100}

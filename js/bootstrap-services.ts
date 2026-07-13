@@ -27,7 +27,7 @@ const configService = new ConfigService(configModel);
 const gameEvents = new GameEvents();
 const gamePlayService = new GamePlayService(configService, gamePlayModel);
 const gameFlowService = new GameFlowService(uiStateService, gamePlayService, gameEvents);
-const tileInteractionService = new TileInteractionService();
+const tileInteractionService = new TileInteractionService(gamePlayService);
 
 export function registerServices(): void {
     serviceLocator.registerSingleton(Services.gameFlowService, gameFlowService);

@@ -40,7 +40,7 @@ const App = (props: {comp: RootUI}) => {
     return (
         <MaterialContext.Provider value={comp}>
             <MenuThemeContext.Provider value={DefaultTheme}>
-                <Container width="100%" height="100%" justifyContent={Justify.Center} alignItems={Align.Center}>
+                <Container width={1000} height={200} justifyContent={Justify.Center} alignItems={Align.Center}>
                    {gameState === GameState.Menu && <Menu />}
                    {gameState === GameState.Playing && <Ingame />}
                 </Container>

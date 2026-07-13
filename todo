@@ -31,6 +31,8 @@ UI:
 
 General:
     ☐ Refactor tile data away from render component and let that only deal with the rendering
+    ✔ Unhover @done(26-07-13 14:33)
+    ✔ Somehow make the hover on tiles work AND make the menu work... Maybe 2 cursor components? Each with a different mask? @done(26-07-13 14:51)
     
 System to show hovering over a tile:
     ☐ Component that handles interaction with a tile, should be on the tile
