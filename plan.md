@@ -1,5 +1,15 @@
 # Elemental Echoes - Validation & Implementation Plan
 
+## Current Execution Status (2026-07-14)
+
+- Simulation file (`js/hexagonmap/simulation.ts`) recently updated.
+- Compiler and diagnostics checks are passing.
+- Simulation boundary/safety hardening is in progress:
+	- deterministic tick behavior
+	- safer value propagation limits
+- Remaining technical debt:
+	- cleanup/reuse of previously spawned world objects (essence/visuals) during updates and resets
+
 ## Current Project Validation
 
 ### Already Implemented
@@ -312,6 +322,24 @@ Add:
 - particles
 - sounds
 - objective rewards
+
+---
+
+## Cross-Cutting Technical Requirements
+
+### Simulation Safety
+
+- Use stable tick order and avoid read/write conflicts within the same tick.
+- Clamp moisture, temperature, and fertility to defined ranges.
+- Limit per-tick stat deltas to prevent runaway simulation values.
+- Keep elevation immutable unless changed by explicit effects (e.g. Raise Land card).
+
+### Spawn Lifecycle & Cleanup
+
+- Despawn or recycle essence objects after collection.
+- Reconcile spawned visuals when terrain changes.
+- Clear or recycle all runtime-spawned objects on reset/restart.
+- Prefer object pooling for high-frequency spawned prefabs.
 
 ---
 

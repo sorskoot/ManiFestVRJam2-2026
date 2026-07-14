@@ -1699,7 +1699,7 @@
                     "type": "mesh",
                     "mesh": {
                         "mesh": "10",
-                        "material": "22"
+                        "material": "211"
                     }
                 }
             ],
@@ -1711,12 +1711,12 @@
             ],
             "translation": [
                 0.0,
-                0.5,
+                2.0,
                 0.0
             ],
             "scaling": [
                 0.5,
-                0.5,
+                2.0,
                 0.5
             ]
         },
@@ -1962,6 +1962,12 @@
                 "name": "base_color_texture",
                 "file": "assets\\models\\models.fbx"
             }
+        },
+        "91": {
+            "link": {
+                "name": "gradient.png",
+                "file": "assets\\textures\\gradient.png"
+            }
         }
     },
     "images": {
@@ -2009,6 +2015,12 @@
             "link": {
                 "name": "colormap.png",
                 "file": "assets\\textures\\colormap.png"
+            }
+        },
+        "87": {
+            "link": {
+                "name": "gradient.png",
+                "file": "assets\\textures\\gradient.png"
             }
         }
     },
@@ -2274,6 +2286,19 @@
         "210": {
             "name": "UI Panel Texture Material",
             "pipeline": "35"
+        },
+        "211": {
+            "name": "Highlight",
+            "pipeline": "252",
+            "Flat": {
+                "flatTexture": "91",
+                "color": [
+                    0.1647057,
+                    0.0,
+                    1.0,
+                    1.0
+                ]
+            }
         }
     },
     "shaders": {
@@ -2648,6 +2673,14 @@
                 "name": "AtmosphericSky",
                 "file": "default"
             }
+        },
+        "252": {
+            "link": {
+                "name": "Flat Opaque Textured",
+                "file": "default"
+            },
+            "name": "Flat Alpha Textured",
+            "blending": true
         }
     },
     "files": {
@@ -2701,6 +2734,10 @@
         },
         "258": {
             "fileName": "assets/models/models.fbx",
+            "importerName": ""
+        },
+        "259": {
+            "fileName": "assets/textures/gradient.png",
             "importerName": ""
         }
     },

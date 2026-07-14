@@ -1,4 +1,3 @@
-import {Card} from '../types/Card.ts';
 import {EventEmitter} from '../utils/Events.ts';
 import {GamePlayService} from './GamePlayService.ts';
 import {ITileInteractionService} from './TileInteractionService.ts';
@@ -24,7 +23,9 @@ export class PlayCardService implements IPlayCardService {
             return;
         }
 
-        this.gamePlayService.playSelectedCardOnTile(selectedCardIndex, tileId);
-        this.cardPlayed.emit(selectedCardIndex);
+        const result = this.gamePlayService.playSelectedCardOnTile(selectedCardIndex, tileId);
+        if (result.success) {
+            this.cardPlayed.emit(selectedCardIndex);
+        }
     };
 }

@@ -1,15 +1,17 @@
 import React from 'react';
 import {Panel, Row, Text} from '@wonderlandengine/react-ui/components';
 import {Hand} from '../hand/hand.tsx';
-import {Align, Justify} from '@wonderlandengine/react-ui';
+import {Align, Justify, YogaNodeProps} from '@wonderlandengine/react-ui';
 import {colorSwatch} from '../../utils/colorSwatch.ts';
 import {useGamePlayService} from '../../GameServicesProvider.tsx';
+import {Resources} from '../resources/resources.tsx';
 
-export const Ingame = () => {
+export const Ingame = (props: YogaNodeProps) => {
     const gamePlayService = useGamePlayService();
     return (
-        <Row gap={10} width={1000} height={200} justifyContent={Justify.Center} alignItems={Align.Center}>
-            <Hand />
+        <Row {...props} gap={10} width={1000} height={200} justifyContent={Justify.Center} alignItems={Align.Center}>
+            <Resources />
+            <Hand flexGrow={1} />
             <Panel
                 onClick={() => gamePlayService.endTurn()}
                 marginLeft={90}

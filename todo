@@ -3,46 +3,57 @@
     ✓ Very first version of creating a hex grid @done(26-07-08 12:46)
 
 2. Hidden simulation values (Moisture, Temperature, Fertility, Elevation):
-    ✔ When tiles are created, give them a set of starter values. @done(26-07-11 10:29)
+    ✓ When tiles are created, give them a set of starter values. @done(26-07-11 10:29)
 
 3. Terrain evolution rules:
     ☐ Service to run through the tiles and apply the influences to its neighbors. Each tile is influenced equally.
 
 4. Element harvesting:
+    ☐ show spheres in different colors above the tiles
 
 5. Card system:
-     ☐ Click the card
-     ☐ select the tile to apply it to
-     ☐ add the values to the cell values of the tile.
-     ☐ If the change causes the tile to become a different type, this should happen now.
+    ✓ Click the card @done(26-07-14 11:39)
+    ✓ select the tile to apply it to @done(26-07-14 11:39)
+    ✓ add the values to the cell values of the tile. @done(26-07-14 11:39)
+    ☐ If the change causes the tile to become a different type, this should happen now.
+    ☐ Required resources should be shown on the card
+
 
 6. Objectives:
 
 7. Expansion cards:
+    ☐ Add a new tile to the grid when played.
+    ☐ Show possible locations for the new tile.
 
 8. Visual polish and additional content:
+    Animations:
+        ☐ particles on tile when cards played
+        ☐ animate card when played.
+        ☐ resource generated
+        ☐ resource harversted
+
 
 ---
 UI:
-    ✔ Add the root UI element. For now, it will be a 3D UI panel floating in front of the table. @done(26-07-11 10:32)
+    ✓ Add the root UI element. For now, it will be a 3D UI panel floating in front of the table. @done(26-07-11 10:32)
     ☐ Add a button to end the turn, so an update of the world can be triggered.
-    ✔ Add a few POC cards to the UI @done(26-07-11 10:32)
+    ✓ Add a few POC cards to the UI @done(26-07-11 10:32)
     ☐ Make the card work. See 5.
     ☐ Add default menu button
     ☐ Add actual title screen -> Title screen could be in non-XR. Entering XR starts the game.
 
 General:
     ☐ Refactor tile data away from render component and let that only deal with the rendering
-    ✔ Unhover @done(26-07-13 14:33)
-    ✔ Somehow make the hover on tiles work AND make the menu work... Maybe 2 cursor components? Each with a different mask? @done(26-07-13 14:51)
+    ✓ Unhover @done(26-07-13 14:33)
+    ✓ Somehow make the hover on tiles work AND make the menu work... Maybe 2 cursor components? Each with a different mask? @done(26-07-13 14:51)
     
 System to show hovering over a tile:
-    ✔ Component that handles interaction with a tile, should be on the tile @done(26-07-13 14:57)
-    ✔ Component that handles placing an indicator when hovering over a tile, is in root. @done(26-07-13 14:57)
+    ✓ Component that handles interaction with a tile, should be on the tile @done(26-07-13 14:57)
+    ✓ Component that handles placing an indicator when hovering over a tile, is in root. @done(26-07-13 14:57)
     Tile interaction service:
          that is called from these components that manages interaction
-        ✔ methods for hovering, unhovering and clicking a tile @done(26-07-13 14:57)
-        ✔ events that are fired when hovering, unhovering and clicking a tile @done(26-07-13 14:57)
+        ✓ methods for hovering, unhovering and clicking a tile @done(26-07-13 14:57)
+        ✓ events that are fired when hovering, unhovering and clicking a tile @done(26-07-13 14:57)
             Events contain needed information, tile and position of the tile in world space.
         
 ---

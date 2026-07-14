@@ -1590,7 +1590,7 @@
             }
             return dispatcher.useContext(Context2);
           }
-          function useState6(initialState) {
+          function useState5(initialState) {
             var dispatcher = resolveDispatcher();
             return dispatcher.useState(initialState);
           }
@@ -1602,7 +1602,7 @@
             var dispatcher = resolveDispatcher();
             return dispatcher.useRef(initialValue);
           }
-          function useEffect4(create8, deps) {
+          function useEffect3(create8, deps) {
             var dispatcher = resolveDispatcher();
             return dispatcher.useEffect(create8, deps);
           }
@@ -2384,7 +2384,7 @@
           exports.useContext = useContext7;
           exports.useDebugValue = useDebugValue;
           exports.useDeferredValue = useDeferredValue;
-          exports.useEffect = useEffect4;
+          exports.useEffect = useEffect3;
           exports.useId = useId;
           exports.useImperativeHandle = useImperativeHandle;
           exports.useInsertionEffect = useInsertionEffect;
@@ -2392,7 +2392,7 @@
           exports.useMemo = useMemo5;
           exports.useReducer = useReducer;
           exports.useRef = useRef;
-          exports.useState = useState6;
+          exports.useState = useState5;
           exports.useSyncExternalStore = useSyncExternalStore;
           exports.useTransition = useTransition;
           exports.version = ReactVersion;
@@ -2423,7 +2423,7 @@
       if (true) {
         (function() {
           "use strict";
-          var React13 = require_react();
+          var React14 = require_react();
           var REACT_ELEMENT_TYPE = Symbol.for("react.element");
           var REACT_PORTAL_TYPE = Symbol.for("react.portal");
           var REACT_FRAGMENT_TYPE = Symbol.for("react.fragment");
@@ -2449,7 +2449,7 @@
             }
             return null;
           }
-          var ReactSharedInternals = React13.__SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED;
+          var ReactSharedInternals = React14.__SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED;
           function error(format) {
             {
               {
@@ -3791,9 +3791,9 @@
         module.exports = function $$$reconciler($$$hostConfig) {
           var exports2 = {};
           "use strict";
-          var React13 = require_react();
+          var React14 = require_react();
           var Scheduler = require_scheduler();
-          var ReactSharedInternals = React13.__SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED;
+          var ReactSharedInternals = React14.__SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED;
           var suppressWarning = false;
           function setSuppressWarning(newSuppressWarning) {
             {
@@ -7591,7 +7591,7 @@
             }
           }
           var fakeInternalInstance = {};
-          var emptyRefsObject = new React13.Component().refs;
+          var emptyRefsObject = new React14.Component().refs;
           var didWarnAboutStateAssignmentForComponent;
           var didWarnAboutUninitializedState;
           var didWarnAboutGetSnapshotBeforeUpdateWithoutDidUpdate;
@@ -24227,7 +24227,7 @@
     }
     update(dt) {
       let origin = vec3_exports.fromValues(0, 0, 0);
-      let distance3 = vec3_exports.fromValues(0, 0, 0);
+      let distance4 = vec3_exports.fromValues(0, 0, 0);
       for (let i2 = 0; i2 < Math.min(this.count, __privateGet(this, _objects).length); ++i2) {
         quat2_exports.getTranslation(origin, __privateGet(this, _objects)[i2].getTransformWorld());
         const vel = __privateGet(this, _velocities)[i2];
@@ -24245,8 +24245,8 @@
         }
       }
       for (let i2 = 0; i2 < Math.min(this.count, __privateGet(this, _objects).length); ++i2) {
-        vec3_exports.scale(distance3, __privateGet(this, _velocities)[i2], dt);
-        __privateGet(this, _objects)[i2].translateWorld(distance3);
+        vec3_exports.scale(distance4, __privateGet(this, _velocities)[i2], dt);
+        __privateGet(this, _objects)[i2].translateWorld(distance4);
       }
     }
     /** Spawn a particle */
@@ -32622,42 +32622,71 @@
   });
 
   // js/types/Card.ts
+  var Card_exports = {};
+  __export(Card_exports, {
+    CardDefinitions: () => CardDefinitions,
+    CardType: () => CardType
+  });
+  var CardType = /* @__PURE__ */ ((CardType2) => {
+    CardType2["manipulation"] = "manipulation";
+    CardType2["expansion"] = "expansion";
+    CardType2["event"] = "event";
+    return CardType2;
+  })(CardType || {});
   var CardDefinitions = [
     {
       type: "manipulation" /* manipulation */,
       title: "Rain",
       requirements: { Water: 1 },
-      stat: { moisture: 1, temperature: 0, fertility: 0, elevation: 0 }
+      stat: { moisture: 4, temperature: 0, fertility: 0, elevation: 0 }
     },
     {
       type: "manipulation" /* manipulation */,
-      title: "Burn",
+      title: "Drought",
+      requirements: { Water: 1 },
+      stat: { moisture: -4, temperature: 0, fertility: 0, elevation: 0 }
+    },
+    {
+      type: "manipulation" /* manipulation */,
+      title: "Sun",
       requirements: { Fire: 1 },
-      stat: { moisture: 0, temperature: 1, fertility: 0, elevation: 0 }
+      stat: { moisture: 0, temperature: 4, fertility: 0, elevation: 0 }
     },
     {
       type: "manipulation" /* manipulation */,
-      title: "Spring",
+      title: "Moon",
+      requirements: { Fire: 1 },
+      stat: { moisture: 0, temperature: -4, fertility: 0, elevation: 0 }
+    },
+    {
+      type: "manipulation" /* manipulation */,
+      title: "Growth",
       requirements: { Air: 1 },
-      stat: { moisture: 0, temperature: 0, fertility: 1, elevation: 0 }
+      stat: { moisture: 0, temperature: 0, fertility: 4, elevation: 0 }
+    },
+    {
+      type: "manipulation" /* manipulation */,
+      title: "Decay",
+      requirements: { Air: 1 },
+      stat: { moisture: 0, temperature: 0, fertility: -4, elevation: 0 }
     },
     {
       type: "manipulation" /* manipulation */,
       title: "Earthquake",
       requirements: { Earth: 1 },
-      stat: { moisture: 0, temperature: 0, fertility: 0, elevation: 1 }
+      stat: { moisture: 0, temperature: 0, fertility: 0, elevation: 4 }
     },
     {
-      type: "expansion" /* expansion */,
-      title: "New Land",
-      requirements: { Water: 1, Fire: 1, Air: 1, Earth: 1 }
-    },
-    {
-      type: "event" /* event */,
-      title: "Drought",
-      requirements: { Air: 1 },
-      stat: { moisture: -1, temperature: 1, fertility: -1, elevation: 0 }
+      type: "manipulation" /* manipulation */,
+      title: "Sinkhole",
+      requirements: { Earth: 1 },
+      stat: { moisture: 0, temperature: 0, fertility: 0, elevation: -4 }
     }
+    // {
+    //     type: CardType.expansion,
+    //     title: 'New Land',
+    //     requirements: {Water: 1, Fire: 1, Air: 1, Earth: 1},
+    // },
   ];
 
   // js/hexagonmap/HexGrid.ts
@@ -32717,6 +32746,35 @@
       return Array.from(this._tiles.values());
     }
   };
+
+  // js/hexagonmap/Element.ts
+  var Element = /* @__PURE__ */ ((Element2) => {
+    Element2["Water"] = "Water";
+    Element2["Fire"] = "Fire";
+    Element2["Earth"] = "Earth";
+    Element2["Air"] = "Air";
+    return Element2;
+  })(Element || {});
+  function createEmptyElementValues() {
+    return {
+      ["Water" /* Water */]: 0,
+      ["Fire" /* Fire */]: 0,
+      ["Earth" /* Earth */]: 0,
+      ["Air" /* Air */]: 0
+    };
+  }
+
+  // js/hexagonmap/TileType.ts
+  var TileType = /* @__PURE__ */ ((TileType2) => {
+    TileType2["Grass"] = "Grass";
+    TileType2["Forest"] = "Forest";
+    TileType2["Hill"] = "Hill";
+    TileType2["Mountain"] = "Mountain";
+    TileType2["Lake"] = "Lake";
+    TileType2["Volcano"] = "Volcano";
+    TileType2["Desert"] = "Desert";
+    return TileType2;
+  })(TileType || {});
 
   // js/hexagonmap/Tags.ts
   var _Tags2 = class {
@@ -32785,23 +32843,19 @@
      * @param y - The y-coordinate in cube coordinates.
      * @param z - The z-coordinate in cube coordinates.
      */
-    constructor(x2, y2, z, startValues) {
+    constructor(x2, y2, z, startValues, terrain = "Grass" /* Grass */) {
       this.x = x2;
       this.y = y2;
       this.z = z;
       this._id = `${x2},${y2},${z}`;
-      this.cellValues = startValues;
+      this.cellValues = { ...startValues };
+      this.terrain = terrain;
     }
     _id;
     get id() {
       return this._id;
     }
-    cellValues = {
-      moisture: 0,
-      temperature: 0,
-      fertility: 0,
-      elevation: 0
-    };
+    cellValues;
     influence = {
       moisture: 0,
       temperature: 0,
@@ -32813,6 +32867,13 @@
     // Threshold for manhatten distance
     stability = 2;
     age = 0;
+    terrain;
+    pendingEssence = {
+      ["Water" /* Water */]: 0,
+      ["Fire" /* Fire */]: 0,
+      ["Earth" /* Earth */]: 0,
+      ["Air" /* Air */]: 0
+    };
     /**
      * Calculates the neighboring tiles in cube coordinates.
      * @returns An array of neighboring tiles' cube coordinates.
@@ -32890,6 +32951,10 @@
   };
 
   // js/hexagonmap/TerrainDefinition.ts
+  var TerrainDefinition_exports = {};
+  __export(TerrainDefinition_exports, {
+    TerrainDefinitions: () => TerrainDefinitions
+  });
   var TerrainDefinitions = {
     ["Grass" /* Grass */]: {
       id: "Grass" /* Grass */,
@@ -32904,7 +32969,8 @@
         temperature: 0,
         fertility: 0,
         elevation: 0
-      }
+      },
+      producedElement: "Air" /* Air */
     },
     ["Forest" /* Forest */]: {
       id: "Forest" /* Forest */,
@@ -32919,7 +32985,8 @@
         temperature: 0,
         fertility: 0,
         elevation: 0
-      }
+      },
+      producedElement: "Air" /* Air */
     },
     ["Hill" /* Hill */]: {
       id: "Hill" /* Hill */,
@@ -32934,12 +33001,13 @@
         temperature: 0,
         fertility: 0,
         elevation: 0
-      }
+      },
+      producedElement: "Earth" /* Earth */
     },
     ["Lake" /* Lake */]: {
       id: "Lake" /* Lake */,
       cellValues: {
-        moisture: 10,
+        moisture: 6,
         temperature: 4,
         fertility: 1,
         elevation: 0
@@ -32949,7 +33017,8 @@
         temperature: 0,
         fertility: 0,
         elevation: 0
-      }
+      },
+      producedElement: "Water" /* Water */
     },
     ["Mountain" /* Mountain */]: {
       id: "Mountain" /* Mountain */,
@@ -32964,7 +33033,8 @@
         temperature: 0,
         fertility: 0,
         elevation: 0
-      }
+      },
+      producedElement: "Earth" /* Earth */
     },
     ["Volcano" /* Volcano */]: {
       id: "Volcano" /* Volcano */,
@@ -32979,7 +33049,8 @@
         temperature: 0,
         fertility: 0,
         elevation: 0
-      }
+      },
+      producedElement: "Fire" /* Fire */
     },
     ["Desert" /* Desert */]: {
       id: "Desert" /* Desert */,
@@ -32994,7 +33065,8 @@
         temperature: 0,
         fertility: 0,
         elevation: 0
-      }
+      },
+      producedElement: "Fire" /* Fire */
     }
   };
 
@@ -33008,11 +33080,88 @@
     cellValuesA.temperature += cellValuesB.temperature;
     cellValuesA.fertility += cellValuesB.fertility;
     cellValuesA.elevation += cellValuesB.elevation;
+    cellValuesA.moisture = Mathf.clamp(cellValuesA.moisture, 0, 10);
+    cellValuesA.temperature = Mathf.clamp(cellValuesA.temperature, 0, 10);
+    cellValuesA.fertility = Mathf.clamp(cellValuesA.fertility, 0, 10);
+    cellValuesA.elevation = Mathf.clamp(cellValuesA.elevation, 0, 10);
     return cellValuesA;
   }
   var EeUtils = {
     addCellValues
   };
+
+  // js/hexagonmap/simulation.ts
+  var simulation_exports = {};
+  __export(simulation_exports, {
+    resolveTerrain: () => resolveTerrain,
+    runSimulation: () => runSimulation
+  });
+  function runSimulation(grid) {
+    const changedTileIds = /* @__PURE__ */ new Set();
+    applyTerrainInfluences(grid, changedTileIds);
+    incrementTileAges(grid, changedTileIds);
+    resolveTerrains(grid, changedTileIds);
+    return {
+      changedTileIds: [...changedTileIds],
+      generatedEssence: generateEssence(grid, changedTileIds),
+      objectiveChanges: evaluateObjectives()
+    };
+  }
+  function applyTerrainInfluences(grid, changedTileIds) {
+    for (const tile of grid.getAllTiles()) {
+      const influence = TerrainDefinitions[tile.terrain].influences;
+      if (isEmpty(influence)) {
+        continue;
+      }
+      EeUtils.addCellValues(tile.cellValues, influence);
+      changedTileIds.add(tile.id);
+    }
+  }
+  function isEmpty(values) {
+    return values.moisture === 0 && values.temperature === 0 && values.fertility === 0 && values.elevation === 0;
+  }
+  function incrementTileAges(grid, changedTileIds) {
+    for (const tile of grid.getAllTiles()) {
+      tile.age += 1;
+      changedTileIds.add(tile.id);
+    }
+  }
+  function resolveTerrains(grid, changedTileIds) {
+    for (const tile of grid.getAllTiles()) {
+      const terrain = resolveTerrain(tile.cellValues);
+      if (terrain === tile.terrain) {
+        continue;
+      }
+      tile.terrain = terrain;
+      changedTileIds.add(tile.id);
+    }
+  }
+  function resolveTerrain(values) {
+    return Object.values(TileType).reduce((closest, terrain) => {
+      const candidate = TerrainDefinitions[terrain];
+      const current = TerrainDefinitions[closest];
+      return distance3(values, candidate.cellValues) < distance3(values, current.cellValues) ? terrain : closest;
+    }, "Grass" /* Grass */);
+  }
+  function distance3(left, right) {
+    return Math.abs(left.moisture - right.moisture) + Math.abs(left.temperature - right.temperature) + Math.abs(left.fertility - right.fertility) + Math.abs(left.elevation - right.elevation);
+  }
+  function generateEssence(grid, changedTileIds) {
+    const generatedEssence = createEmptyElementValues();
+    for (const tile of grid.getAllTiles()) {
+      const element = TerrainDefinitions[tile.terrain].producedElement;
+      if (!element) {
+        continue;
+      }
+      tile.pendingEssence[element] = (tile.pendingEssence[element] ?? 0) + 1;
+      generatedEssence[element] += 1;
+      changedTileIds.add(tile.id);
+    }
+    return generatedEssence;
+  }
+  function evaluateObjectives() {
+    return [];
+  }
 
   // js/services/GamePlayService.ts
   var GamePlayService = class {
@@ -33022,9 +33171,13 @@
     }
     hand = y([]);
     currentSelectedCard = y(null);
+    resources = y(createEmptyElementValues());
+    turnNumber = y(0);
     onEndTurn = new EventEmitter();
-    unplayedCards = [];
+    onTurnResolved = new EventEmitter();
+    onWorldChanged = new EventEmitter();
     grid;
+    discardPile = [];
     /**
      * When a card is played, this flag is set to true.
      * It's used to track if the player has played any card during their run through the deck.
@@ -33035,25 +33188,52 @@
      */
     cardPlayedFromDeck = false;
     playSelectedCardOnTile(cardIndex, tileId) {
+      const result = this.resolveCardPlay(cardIndex, tileId);
+      this.onTurnResolved.emit(result);
+      if (result.success) {
+        this.onWorldChanged.emit(result.changedTileIds);
+      }
+      return result;
+    }
+    resolveCardPlay(cardIndex, tileId) {
+      if (!this.grid) {
+        return { success: false, reason: "no-active-game" };
+      }
       const card = this.hand.value[cardIndex];
       if (!card) {
-        console.warn(`No card found at index ${cardIndex}`);
-        return;
+        return { success: false, reason: "invalid-card" };
       }
       const tile = this.getTileById(tileId);
       if (!tile) {
-        console.warn(`No tile found with id ${tileId}`);
-        return;
+        return { success: false, reason: "invalid-target" };
       }
-      switch (card.type) {
-        case "manipulation" /* manipulation */:
-          EeUtils.addCellValues(tile.cellValues, card.stat);
-          break;
+      if (card.type === "expansion" /* expansion */) {
+        return { success: false, reason: "unsupported-card" };
       }
-      console.log(tile.cellValues);
+      if (!this.canAfford(card.requirements)) {
+        return { success: false, reason: "insufficient-resources" };
+      }
+      EeUtils.addCellValues(tile.cellValues, card.stat);
+      const simulation = runSimulation(this.grid);
+      const resourceChanges = this.payRequirements(card.requirements);
       this.cardPlayedFromDeck = true;
-      this.gamePlayModel.removeCardFromDeck(card);
+      this.hand.value = this.hand.value.filter((_2, index) => index !== cardIndex);
+      this.discardPile.push(card);
       this.currentSelectedCard.value = null;
+      this.turnNumber.value += 1;
+      if (this.hand.value.length === 0) {
+        this.drawHand();
+      }
+      return {
+        success: true,
+        card,
+        targetTileId: tileId,
+        changedTileIds: [.../* @__PURE__ */ new Set([tileId, ...simulation.changedTileIds])],
+        resourceChanges,
+        generatedEssence: simulation.generatedEssence,
+        objectiveChanges: simulation.objectiveChanges,
+        turnNumber: this.turnNumber.value
+      };
     }
     getTileById(tileId) {
       if (!this.grid) {
@@ -33064,6 +33244,9 @@
     startGame() {
       this.createDeck();
       this.createGrid();
+      this.resources.value = this.toElementReserves(this.configService.getStartingResources());
+      this.discardPile = [];
+      this.turnNumber.value = 0;
     }
     getAllTiles() {
       if (!this.grid) {
@@ -33076,7 +33259,6 @@
       const center = new HexagonTile(0, 0, 0, TerrainDefinitions["Grass" /* Grass */].cellValues);
       this.grid.addTile(center);
       const newtiles = this.expand(this.grid, [center]);
-      this.expand(this.grid, newtiles);
     }
     createDeck() {
       this.gamePlayModel.clearDeck();
@@ -33084,42 +33266,73 @@
         const card = rng.getItem(CardDefinitions);
         this.gamePlayModel.addCardToDeck(card);
       }
-      this.hand.value = this.gamePlayModel.deck.slice(0, this.configService.getHandSize());
+      this.drawHand();
       this.currentSelectedCard.value = null;
     }
     selectCard(cardIndex) {
       this.currentSelectedCard.value = cardIndex;
     }
-    playCard(card) {
-      this.gamePlayModel.removeCardFromDeck(card);
-    }
     endTurn() {
-      this.hand.value = this.gamePlayModel.deck.slice(0, this.configService.getHandSize());
+      this.gamePlayModel.returnCardsToDeck(this.hand.value);
+      this.hand.value = [];
+      this.drawHand();
       this.currentSelectedCard.value = null;
       this.onEndTurn.emit();
     }
-    /**
-     * Expands the grid by adding new tiles around the given tiles.
-     * @param tiles - The tiles to expand around.
-     * @returns The newly added tiles.
-     */
     expand(grid, tiles) {
       const newTiles = [];
       tiles.forEach((tile) => {
         for (const neighborCoords of tile.neighbors()) {
           if (!grid.getTile(neighborCoords.x, neighborCoords.y, neighborCoords.z)) {
-            const newTile = new HexagonTile(neighborCoords.x, neighborCoords.y, neighborCoords.z, {
+            const cellValues = {
               moisture: 5 + rng.getUniformInt(-2, 2),
               temperature: 5 + rng.getUniformInt(-2, 2),
               fertility: 5 + rng.getUniformInt(-2, 2),
               elevation: 5 + rng.getUniformInt(-2, 2)
-            });
+            };
+            const newTile = new HexagonTile(
+              neighborCoords.x,
+              neighborCoords.y,
+              neighborCoords.z,
+              cellValues,
+              resolveTerrain(cellValues)
+            );
             grid.addTile(newTile);
             newTiles.push(newTile);
           }
         }
       });
       return newTiles;
+    }
+    canAfford(requirements) {
+      return Object.values(Element).every((element) => (requirements[element] ?? 0) <= this.resources.value[element]);
+    }
+    payRequirements(requirements) {
+      const resourceChanges = createEmptyElementValues();
+      const updatedResources = { ...this.resources.value };
+      for (const element of Object.values(Element)) {
+        const cost = requirements[element] ?? 0;
+        updatedResources[element] -= cost;
+        resourceChanges[element] = -cost;
+      }
+      this.resources.value = updatedResources;
+      return resourceChanges;
+    }
+    toElementReserves(values) {
+      const reserves = createEmptyElementValues();
+      for (const element of Object.values(Element))
+        reserves[element] = values[element] ?? 0;
+      return reserves;
+    }
+    addResources(values) {
+      const updatedResources = { ...this.resources.value };
+      for (const element of Object.values(Element)) {
+        updatedResources[element] += values[element] ?? 0;
+      }
+      this.resources.value = updatedResources;
+    }
+    drawHand() {
+      this.hand.value = this.gamePlayModel.drawCards(this.configService.getHandSize());
     }
   };
 
@@ -33129,11 +33342,11 @@
     addCardToDeck(card) {
       this.deck.push(card);
     }
-    removeCardFromDeck(card) {
-      const index = this.deck.indexOf(card);
-      if (index > -1) {
-        this.deck.splice(index, 1);
-      }
+    drawCards(cardCount) {
+      return this.deck.splice(0, cardCount);
+    }
+    returnCardsToDeck(cards) {
+      this.deck.push(...cards);
     }
     clearDeck() {
       this.deck.length = 0;
@@ -33141,9 +33354,14 @@
   };
 
   // js/models/ConfigModel.ts
+  var ConfigModel_exports = {};
+  __export(ConfigModel_exports, {
+    ConfigModel: () => ConfigModel
+  });
   var ConfigModel = class {
-    deckSize = 12;
+    deckSize = 120;
     handSize = 4;
+    startingResources = { Water: 20, Fire: 20, Earth: 20, Air: 20 };
   };
 
   // js/services/ConfigService.ts
@@ -33156,6 +33374,9 @@
     }
     getHandSize() {
       return this.configModel.handSize;
+    }
+    getStartingResources() {
+      return { ...this.configModel.startingResources };
     }
   };
 
@@ -33187,10 +33408,6 @@
   };
 
   // js/services/PlayCardService.ts
-  var PlayCardService_exports = {};
-  __export(PlayCardService_exports, {
-    PlayCardService: () => PlayCardService
-  });
   var PlayCardService = class {
     constructor(gamePlayService2, tileInteractionService2) {
       this.gamePlayService = gamePlayService2;
@@ -33203,8 +33420,10 @@
       if (selectedCardIndex === null || selectedCardIndex < 0) {
         return;
       }
-      this.gamePlayService.playSelectedCardOnTile(selectedCardIndex, tileId);
-      this.cardPlayed.emit(selectedCardIndex);
+      const result = this.gamePlayService.playSelectedCardOnTile(selectedCardIndex, tileId);
+      if (result.success) {
+        this.cardPlayed.emit(selectedCardIndex);
+      }
     };
   };
 
@@ -33334,6 +33553,7 @@
       return serviceLocator.get(Services.gamePlayService);
     }
     tileModels = /* @__PURE__ */ new Map();
+    tileTypes = /* @__PURE__ */ new Map();
     init() {
       this.tilePrefabs = this.tilePrefabsObject.getComponent(TilePrefabs);
     }
@@ -33349,16 +33569,28 @@
      * Activates the component and adds event listeners.
      */
     onActivate() {
-      serviceLocator.get(Services.gameEvents).gameStarted.add(this._onGameLoaded);
+      const gameEvents2 = serviceLocator.get(Services.gameEvents);
+      gameEvents2.gameStarted.add(this.onGameLoaded);
+      this.gamePlayService.onWorldChanged.add(this.onWorldChanged);
     }
     /**
      * Deactivates the component and removes event listeners.
      */
     onDeactivate() {
-      serviceLocator.get(Services.gameEvents).gameStarted.remove(this._onGameLoaded);
+      const gameEvents2 = serviceLocator.get(Services.gameEvents);
+      gameEvents2.gameStarted.remove(this.onGameLoaded);
+      this.gamePlayService.onWorldChanged.remove(this.onWorldChanged);
     }
-    _onGameLoaded = () => {
+    onGameLoaded = () => {
+      this.clearGrid();
       this._createGrid();
+    };
+    onWorldChanged = (tileIds) => {
+      for (const tileId of tileIds) {
+        const tile = this.gamePlayService.getTileById(tileId);
+        if (tile)
+          this.syncTile(tile);
+      }
     };
     /**
      * Creates the hexagonal grid and populates it with tiles.
@@ -33366,31 +33598,31 @@
     _createGrid() {
       const tiles = this.gamePlayService.getAllTiles();
       for (const tile of tiles) {
-        const pos = tile.to2D();
-        let hex = null;
-        const type = this.determineTileType(tile.cellValues);
-        hex = this.tilePrefabs.spawn(TileAssets[type]);
-        hex.addComponent(TileData, { tileId: tile.id });
-        hex.parent = this.object;
-        this.tileModels.set(tile.id, hex);
-        hex.setPositionLocal([pos.x, 0, pos.y]);
-        wlUtils.setActive(hex, true);
+        this.syncTile(tile);
       }
     }
-    determineTileType(cellValues) {
-      let closestType = "Grass" /* Grass */;
-      let closestDistance = Infinity;
-      for (const [type, definition] of Object.entries(TerrainDefinitions)) {
-        const distance3 = this.calculateManhattanDistance(cellValues, definition.cellValues);
-        if (distance3 < closestDistance) {
-          closestDistance = distance3;
-          closestType = type;
-        }
+    syncTile(tile) {
+      if (this.tileTypes.get(tile.id) === tile.terrain) {
+        return;
       }
-      return closestType;
+      const previousModel = this.tileModels.get(tile.id);
+      if (previousModel && !previousModel.isDestroyed) {
+        previousModel.destroy();
+      }
+      const hex = this.tilePrefabs.spawn(TileAssets[tile.terrain]);
+      hex.addComponent(TileData, { tileId: tile.id });
+      hex.parent = this.object;
+      const pos = tile.to2D();
+      hex.setPositionLocal([pos.x, 0, pos.y]);
+      wlUtils.setActive(hex, true);
+      this.tileModels.set(tile.id, hex);
+      this.tileTypes.set(tile.id, tile.terrain);
     }
-    calculateManhattanDistance(values1, values2) {
-      return Math.abs(values1.moisture - values2.moisture) + Math.abs(values1.temperature - values2.temperature) + Math.abs(values1.fertility - values2.fertility) + Math.abs(values1.elevation - values2.elevation);
+    clearGrid() {
+      for (const model of this.tileModels.values())
+        wlUtils.setActive(model, false);
+      this.tileModels.clear();
+      this.tileTypes.clear();
     }
   };
   __publicField(HexGridLayout, "TypeName", "hex-grid-layout");
@@ -33549,95 +33781,11 @@
     return useGameServices().playCardService;
   }
 
-  // js/ui/components/card/CardModel.ts
-  var CardModel_exports = {};
-  __export(CardModel_exports, {
-    CardModel: () => CardModel
+  // js/ui/components/hand/hand.tsx
+  var hand_exports = {};
+  __export(hand_exports, {
+    Hand: () => Hand
   });
-
-  // js/ui/utils/colorSwatch.ts
-  var colorSwatch = {
-    Text: "#f7e476",
-    TextHover: "#ffffff",
-    PanelBackground: "#393457",
-    MainButton: "#5bb361",
-    MainButtonHover: "#1e8875",
-    MainButtonPressed: "#1e8875",
-    DisabledButton: "#606c81",
-    DisabledText: "#393457"
-  };
-
-  // js/ui/components/card/CardModel.ts
-  var CardModel = T(
-    (cardId, label = "Button", isDisabled = false, onActivate) => {
-      const hovered = y(false);
-      const pressed = y(false);
-      const disabled = y(isDisabled);
-      const labelSignal = y(label);
-      const selected = y(false);
-      const id = y(cardId);
-      const backgroundColor = g(() => {
-        const isDisabled2 = disabled.value;
-        return isDisabled2 ? colorSwatch.DisabledButton : hovered.value ? colorSwatch.MainButtonHover : colorSwatch.MainButton;
-      });
-      const textColor = g(() => {
-        const isDisabled2 = disabled.value;
-        return isDisabled2 ? colorSwatch.DisabledText : hovered.value ? colorSwatch.TextHover : colorSwatch.Text;
-      });
-      return {
-        id,
-        hovered,
-        pressed,
-        disabled,
-        selected,
-        label: labelSignal,
-        backgroundColor,
-        textColor,
-        hover: () => {
-          if (!disabled.value) {
-            hovered.value = true;
-          }
-        },
-        unhover: () => {
-          if (!disabled.value) {
-            hovered.value = false;
-          }
-        },
-        press: () => {
-          if (!disabled.value) {
-            pressed.value = true;
-          }
-        },
-        release: () => {
-          if (!disabled.value) {
-            pressed.value = false;
-          }
-        },
-        disable: () => {
-          disabled.value = true;
-          hovered.value = false;
-          pressed.value = false;
-        },
-        enable: () => {
-          disabled.value = false;
-        },
-        click: () => {
-          if (!disabled.value) {
-            if (onActivate) {
-              onActivate(labelSignal.value);
-            }
-          }
-        }
-      };
-    }
-  );
-
-  // js/ui/components/card/card.tsx
-  var card_exports = {};
-  __export(card_exports, {
-    Card: () => Card2
-  });
-  var import_react15 = __toESM(require_react(), 1);
 
   // node_modules/@wonderlandengine/react-ui/dist/components/Button.js
   var import_jsx_runtime = __toESM(require_jsx_runtime(), 1);
@@ -37085,6 +37233,93 @@
   });
   ProgressBar.displayName = "ProgressBar";
 
+  // js/ui/components/hand/hand.tsx
+  var import_react16 = __toESM(require_react(), 1);
+
+  // js/ui/components/card/card.tsx
+  var import_react15 = __toESM(require_react(), 1);
+
+  // js/ui/utils/colorSwatch.ts
+  var colorSwatch = {
+    Text: "#f7e476",
+    TextHover: "#ffffff",
+    PanelBackground: "#393457",
+    MainButton: "#5bb361",
+    MainButtonHover: "#1e8875",
+    MainButtonPressed: "#1e8875",
+    DisabledButton: "#606c81",
+    DisabledText: "#393457",
+    ElementFire: "#f99252",
+    ElementWater: "#11adc1",
+    ElementEarth: "#715037",
+    ElementAir: "#bca1ac"
+  };
+
+  // js/ui/components/card/CardModel.ts
+  var CardModel = T(
+    (cardId, label = "Button", isDisabled = false, onActivate) => {
+      const hovered = y(false);
+      const pressed = y(false);
+      const disabled = y(isDisabled);
+      const labelSignal = y(label);
+      const selected = y(false);
+      const id = y(cardId);
+      const backgroundColor = g(() => {
+        const isDisabled2 = disabled.value;
+        return isDisabled2 ? colorSwatch.DisabledButton : hovered.value ? colorSwatch.MainButtonHover : colorSwatch.MainButton;
+      });
+      const textColor = g(() => {
+        const isDisabled2 = disabled.value;
+        return isDisabled2 ? colorSwatch.DisabledText : hovered.value ? colorSwatch.TextHover : colorSwatch.Text;
+      });
+      return {
+        id,
+        hovered,
+        pressed,
+        disabled,
+        selected,
+        label: labelSignal,
+        backgroundColor,
+        textColor,
+        hover: () => {
+          if (!disabled.value) {
+            hovered.value = true;
+          }
+        },
+        unhover: () => {
+          if (!disabled.value) {
+            hovered.value = false;
+          }
+        },
+        press: () => {
+          if (!disabled.value) {
+            pressed.value = true;
+          }
+        },
+        release: () => {
+          if (!disabled.value) {
+            pressed.value = false;
+          }
+        },
+        disable: () => {
+          disabled.value = true;
+          hovered.value = false;
+          pressed.value = false;
+        },
+        enable: () => {
+          disabled.value = false;
+        },
+        click: () => {
+          if (!disabled.value) {
+            if (onActivate) {
+              onActivate(labelSignal.value);
+            }
+          }
+        }
+      };
+    }
+  );
+
   // js/ui/hooks/useSignalValue.ts
   var import_react13 = __toESM(require_react(), 1);
   function useSignalValue(signal) {
@@ -37153,51 +37388,30 @@
     ));
   };
 
-  // js/ui/components/hand/hand.tsx
-  var hand_exports = {};
-  __export(hand_exports, {
-    Hand: () => Hand
-  });
-  var import_react17 = __toESM(require_react(), 1);
-
   // js/ui/components/hand/useHandViewModel.ts
-  var useHandViewModel_exports = {};
-  __export(useHandViewModel_exports, {
-    useHandViewModel: () => useHandViewModel
-  });
-  var import_react16 = __toESM(require_react(), 1);
   function useHandViewModel() {
     const gamePlayService2 = useGamePlayService();
-    const playCardService2 = usePlayCardService();
     const selectCard = (cardIndex) => {
       gamePlayService2.selectCard(cardIndex);
     };
-    const [playedCards, setPlayedCards] = (0, import_react16.useState)([]);
-    (0, import_react16.useEffect)(() => {
-      const onCardPlayed = (cardIndex) => setPlayedCards((prev) => [...prev, cardIndex]);
-      playCardService2.cardPlayed.add(onCardPlayed);
-      return () => playCardService2.cardPlayed.remove(onCardPlayed);
-    }, [playCardService2]);
-    (0, import_react16.useEffect)(() => {
-      const onEndTurn = () => {
-        setPlayedCards([]);
-      };
-      gamePlayService2.onEndTurn.add(onEndTurn);
-      return () => gamePlayService2.onEndTurn.remove(onEndTurn);
-    }, [gamePlayService2]);
     return {
       cards: useSignalValue(gamePlayService2.hand),
-      selectCard,
-      playedCards
+      selectCard
     };
   }
 
   // js/ui/components/hand/hand.tsx
-  var Hand = () => {
+  var Hand = (props) => {
     const vm = useHandViewModel();
-    return /* @__PURE__ */ import_react17.default.createElement(Row, { gap: 10, height: 100, justifyContent: Justify.Center }, vm.cards.map(
-      (card, index) => vm.playedCards.includes(index) ? null : /* @__PURE__ */ import_react17.default.createElement(Card2, { onAction: () => vm.selectCard(index), id: index, key: index, title: card.title })
-    ));
+    return /* @__PURE__ */ import_react16.default.createElement(Row, { ...props, gap: 10, height: 100, justifyContent: Justify.Center }, vm.cards.map((card, index) => /* @__PURE__ */ import_react16.default.createElement(
+      Card2,
+      {
+        onAction: () => vm.selectCard(index),
+        id: index,
+        key: `${card.title}-${index}`,
+        title: card.title
+      }
+    )));
   };
 
   // js/ui/components/ingame/ingame.tsx
@@ -37206,9 +37420,80 @@
     Ingame: () => Ingame
   });
   var import_react18 = __toESM(require_react(), 1);
-  var Ingame = () => {
+
+  // js/ui/components/resources/resources.tsx
+  var resources_exports = {};
+  __export(resources_exports, {
+    Resources: () => Resources
+  });
+  var import_react17 = __toESM(require_react(), 1);
+
+  // js/ui/components/resources/useResourcesViewModel.ts
+  var useResourcesViewModel_exports = {};
+  __export(useResourcesViewModel_exports, {
+    useResourcesViewModel: () => useResourcesViewModel
+  });
+  function useResourcesViewModel() {
     const gamePlayService2 = useGamePlayService();
-    return /* @__PURE__ */ import_react18.default.createElement(Row, { gap: 10, width: 1e3, height: 200, justifyContent: Justify.Center, alignItems: Align.Center }, /* @__PURE__ */ import_react18.default.createElement(Hand, null), /* @__PURE__ */ import_react18.default.createElement(
+    const resources = useSignalValue(gamePlayService2.resources);
+    return {
+      fire: resources.Fire,
+      water: resources.Water,
+      earth: resources.Earth,
+      air: resources.Air
+    };
+  }
+
+  // js/ui/components/resources/resources.tsx
+  var Resources = () => {
+    const vm = useResourcesViewModel();
+    return /* @__PURE__ */ import_react17.default.createElement(Column, { gap: 5, width: 150 }, /* @__PURE__ */ import_react17.default.createElement(
+      Panel,
+      {
+        alignContent: Align.Center,
+        justifyContent: Justify.Center,
+        padding: 5,
+        rounding: 1,
+        backgroundColor: colorSwatch.ElementFire
+      },
+      /* @__PURE__ */ import_react17.default.createElement(Text, { textAlign: "center", fontSize: 16 }, `Fire: ${vm.fire}`)
+    ), /* @__PURE__ */ import_react17.default.createElement(
+      Panel,
+      {
+        alignContent: Align.Center,
+        justifyContent: Justify.Center,
+        padding: 5,
+        rounding: 1,
+        backgroundColor: colorSwatch.ElementWater
+      },
+      /* @__PURE__ */ import_react17.default.createElement(Text, { textAlign: "center", fontSize: 16 }, `Water: ${vm.water}`)
+    ), /* @__PURE__ */ import_react17.default.createElement(
+      Panel,
+      {
+        alignContent: Align.Center,
+        justifyContent: Justify.Center,
+        padding: 5,
+        rounding: 1,
+        backgroundColor: colorSwatch.ElementEarth
+      },
+      /* @__PURE__ */ import_react17.default.createElement(Text, { textAlign: "center", fontSize: 16 }, `Earth: ${vm.earth}`)
+    ), /* @__PURE__ */ import_react17.default.createElement(
+      Panel,
+      {
+        alignContent: Align.Center,
+        justifyContent: Justify.Center,
+        padding: 5,
+        rounding: 1,
+        backgroundColor: colorSwatch.ElementAir
+      },
+      /* @__PURE__ */ import_react17.default.createElement(Text, { textAlign: "center", fontSize: 16 }, `Air: ${vm.air}`)
+    ));
+  };
+
+  // js/ui/components/ingame/ingame.tsx
+  var Ingame = (props) => {
+    const gamePlayService2 = useGamePlayService();
+    return /* @__PURE__ */ import_react18.default.createElement(Row, { ...props, gap: 10, width: 1e3, height: 200, justifyContent: Justify.Center, alignItems: Align.Center }, /* @__PURE__ */ import_react18.default.createElement(Resources, null), /* @__PURE__ */ import_react18.default.createElement(Hand, { flexGrow: 1 }), /* @__PURE__ */ import_react18.default.createElement(
       Panel,
       {
         onClick: () => gamePlayService2.endTurn(),
@@ -37254,7 +37539,18 @@
   // js/ui/components/menu/menu.tsx
   var Menu = () => {
     const vm = useMenuViewModel();
-    return /* @__PURE__ */ import_react22.default.createElement(Row, { gap: 10, width: 1e3, height: 200, justifyContent: Justify.Center, alignItems: Align.Center }, /* @__PURE__ */ import_react22.default.createElement(Panel, { onClick: vm.play, marginLeft: 90, height: 100, width: 100, rounding: 1, backgroundColor: colorSwatch.MainButton }, /* @__PURE__ */ import_react22.default.createElement(Text, { fontSize: 16 }, "Play")));
+    return /* @__PURE__ */ import_react22.default.createElement(Row, { gap: 10, width: 1e3, height: 200, justifyContent: Justify.Center, alignItems: Align.Center }, /* @__PURE__ */ import_react22.default.createElement(
+      Panel,
+      {
+        onClick: vm.play,
+        marginLeft: 90,
+        height: 100,
+        width: 100,
+        rounding: 1,
+        backgroundColor: colorSwatch.MainButton
+      },
+      /* @__PURE__ */ import_react22.default.createElement(Text, { fontSize: 16 }, "Play")
+    ));
   };
 
   // js/ui/root-ui.tsx
@@ -37314,14 +37610,16 @@
   _registerEditor(tile_highlight_exports);
   _registerEditor(tile_interaction_exports);
   _registerEditor(tile_prefabs_exports);
+  _registerEditor(TerrainDefinition_exports);
+  _registerEditor(simulation_exports);
+  _registerEditor(ConfigModel_exports);
   _registerEditor(GamePlayService_exports);
-  _registerEditor(PlayCardService_exports);
+  _registerEditor(Card_exports);
   _registerEditor(GameServicesProvider_exports);
-  _registerEditor(CardModel_exports);
-  _registerEditor(card_exports);
   _registerEditor(hand_exports);
-  _registerEditor(useHandViewModel_exports);
   _registerEditor(ingame_exports);
+  _registerEditor(resources_exports);
+  _registerEditor(useResourcesViewModel_exports);
   _registerEditor(root_ui_exports);
   _registerEditor(EeUtils_exports);
 })();

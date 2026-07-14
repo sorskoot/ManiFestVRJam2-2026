@@ -30,6 +30,10 @@ export enum ColorName {
     MainButtonPressed,
     DisabledButton,
     DisabledText,
+    ElementFire,
+    ElementWater,
+    ElementEarth,
+    ElementAir,
 }
 
 export const colorSwatch: MenuColors = {
@@ -41,6 +45,11 @@ export const colorSwatch: MenuColors = {
     MainButtonPressed: '#1e8875',
     DisabledButton: '#606c81',
     DisabledText: '#393457',
+
+    ElementFire: '#f99252',
+    ElementWater: '#11adc1',
+    ElementEarth: '#715037',
+    ElementAir: '#bca1ac',
 };
 
 type MenuColors = {

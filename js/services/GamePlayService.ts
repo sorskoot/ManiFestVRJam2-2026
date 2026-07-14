@@ -7,37 +7,40 @@ import {HexagonGrid} from '../hexagonmap/HexGrid.ts';
 import {HexagonTile} from '../hexagonmap/HexagonTile.ts';
 import {TerrainDefinitions} from '../hexagonmap/TerrainDefinition.ts';
 import {TileType} from '../hexagonmap/TileType.ts';
-import {ITileInteractionService} from './TileInteractionService.ts';
 import {EeUtils} from '../utils/EeUtils.ts';
 import {EventEmitter} from '../utils/Events.ts';
+import {createEmptyElementValues, Element, ElementReserves, ElementValues} from '../hexagonmap/Element.ts';
+import {resolveTerrain, runSimulation} from '../hexagonmap/simulation.ts';
+import {TurnResult} from './turn-result.ts';
 
 export interface IGamePlayService {
     hand: ReadonlySignal<Card[]>;
-    /**
-     * The index of the currently selected card in the hand.
-     * If no card is selected, the value is null.
-     *
-     * TK: Make sure this gets reset when the hand changes.
-     */
     currentSelectedCard: ReadonlySignal<number | null>;
+    resources: ReadonlySignal<ElementReserves>;
+    turnNumber: ReadonlySignal<number>;
 
     onEndTurn: EventEmitter<[]>;
+    onTurnResolved: EventEmitter<[TurnResult]>;
+    onWorldChanged: EventEmitter<[string[]]>;
     getAllTiles(): HexagonTile[];
     startGame(): void;
     getTileById(tileId: string): HexagonTile | undefined;
     selectCard(cardIndex: number): void;
-    playSelectedCardOnTile(cardIndex: number, tileId: string): void;
+    playSelectedCardOnTile(cardIndex: number, tileId: string): TurnResult;
     endTurn(): void;
 }
 
 export class GamePlayService implements IGamePlayService {
     public hand = signal<Card[]>([]);
     public currentSelectedCard = signal<number | null>(null);
+    public resources = signal<ElementReserves>(createEmptyElementValues());
+    public turnNumber = signal(0);
     public onEndTurn = new EventEmitter<[]>();
-
-    private unplayedCards: Card[] = [];
+    public onTurnResolved = new EventEmitter<[TurnResult]>();
+    public onWorldChanged = new EventEmitter<[string[]]>();
 
     private grid?: HexagonGrid;
+    private discardPile: Card[] = [];
 
     /**
      * When a card is played, this flag is set to true.
@@ -54,26 +57,63 @@ export class GamePlayService implements IGamePlayService {
         private gamePlayModel: IGamePlayModel
     ) {}
 
-    playSelectedCardOnTile(cardIndex: number, tileId: string): void {
+    playSelectedCardOnTile(cardIndex: number, tileId: string): TurnResult {
+        const result = this.resolveCardPlay(cardIndex, tileId);
+        this.onTurnResolved.emit(result);
+        if (result.success) {
+            this.onWorldChanged.emit(result.changedTileIds);
+        }
+        return result;
+    }
+
+    private resolveCardPlay(cardIndex: number, tileId: string): TurnResult {
+        if (!this.grid) {
+            return {success: false, reason: 'no-active-game'};
+        }
         const card = this.hand.value[cardIndex];
         if (!card) {
-            console.warn(`No card found at index ${cardIndex}`);
-            return;
+            return {success: false, reason: 'invalid-card'};
         }
         const tile = this.getTileById(tileId);
         if (!tile) {
-            console.warn(`No tile found with id ${tileId}`);
-            return;
+            return {success: false, reason: 'invalid-target'};
         }
-        switch (card.type) {
-            case CardType.manipulation:
-                EeUtils.addCellValues(tile.cellValues, card.stat);
-                break;
+        if (card.type === CardType.expansion) {
+            return {success: false, reason: 'unsupported-card'};
         }
-        console.log(tile.cellValues);
+        if (!this.canAfford(card.requirements)) {
+            return {success: false, reason: 'insufficient-resources'};
+        }
+
+        EeUtils.addCellValues(tile.cellValues, card.stat);
+        // TK: I'll keep this for now, but simulation should run at the end of a turn
+        const simulation = runSimulation(this.grid);
+        const resourceChanges = this.payRequirements(card.requirements);
+
+        /* TK: Resources need to be collected manually from the world.
+            Playing a card cost resources
+        */
+        // this.addResources(simulation.generatedEssence);
+        //
         this.cardPlayedFromDeck = true;
-        this.gamePlayModel.removeCardFromDeck(card);
+        this.hand.value = this.hand.value.filter((_, index) => index !== cardIndex);
+        this.discardPile.push(card);
         this.currentSelectedCard.value = null;
+        this.turnNumber.value += 1;
+        if (this.hand.value.length === 0) {
+            this.drawHand();
+        }
+
+        return {
+            success: true,
+            card,
+            targetTileId: tileId,
+            changedTileIds: [...new Set([tileId, ...simulation.changedTileIds])],
+            resourceChanges,
+            generatedEssence: simulation.generatedEssence,
+            objectiveChanges: simulation.objectiveChanges,
+            turnNumber: this.turnNumber.value,
+        };
     }
 
     getTileById(tileId: string): HexagonTile | undefined {
@@ -86,6 +126,9 @@ export class GamePlayService implements IGamePlayService {
     startGame(): void {
         this.createDeck();
         this.createGrid();
+        this.resources.value = this.toElementReserves(this.configService.getStartingResources());
+        this.discardPile = [];
+        this.turnNumber.value = 0;
     }
 
     getAllTiles(): HexagonTile[] {
@@ -100,7 +143,7 @@ export class GamePlayService implements IGamePlayService {
         const center = new HexagonTile(0, 0, 0, TerrainDefinitions[TileType.Grass].cellValues);
         this.grid.addTile(center);
         const newtiles = this.expand(this.grid, [center]);
-        this.expand(this.grid, newtiles);
+        // this.expand(this.grid, newtiles);
     }
 
     createDeck(): void {
@@ -110,7 +153,7 @@ export class GamePlayService implements IGamePlayService {
             this.gamePlayModel.addCardToDeck(card);
         }
 
-        this.hand.value = this.gamePlayModel.deck.slice(0, this.configService.getHandSize());
+        this.drawHand();
         this.currentSelectedCard.value = null;
     }
 
@@ -118,32 +161,32 @@ export class GamePlayService implements IGamePlayService {
         this.currentSelectedCard.value = cardIndex;
     }
 
-    playCard(card: Card): void {
-        this.gamePlayModel.removeCardFromDeck(card);
-    }
-
     endTurn(): void {
-        this.hand.value = this.gamePlayModel.deck.slice(0, this.configService.getHandSize());
+        this.gamePlayModel.returnCardsToDeck(this.hand.value);
+        this.hand.value = [];
+        this.drawHand();
         this.currentSelectedCard.value = null;
         this.onEndTurn.emit();
     }
 
-    /**
-     * Expands the grid by adding new tiles around the given tiles.
-     * @param tiles - The tiles to expand around.
-     * @returns The newly added tiles.
-     */
     private expand(grid: HexagonGrid, tiles: HexagonTile[]): HexagonTile[] {
         const newTiles: HexagonTile[] = [];
         tiles.forEach((tile) => {
             for (const neighborCoords of tile.neighbors()) {
                 if (!grid.getTile(neighborCoords.x, neighborCoords.y, neighborCoords.z)) {
-                    const newTile = new HexagonTile(neighborCoords.x, neighborCoords.y, neighborCoords.z, {
+                    const cellValues = {
                         moisture: 5 + rng.getUniformInt(-2, 2),
                         temperature: 5 + rng.getUniformInt(-2, 2),
                         fertility: 5 + rng.getUniformInt(-2, 2),
                         elevation: 5 + rng.getUniformInt(-2, 2),
-                    });
+                    };
+                    const newTile = new HexagonTile(
+                        neighborCoords.x,
+                        neighborCoords.y,
+                        neighborCoords.z,
+                        cellValues,
+                        resolveTerrain(cellValues)
+                    );
 
                     grid.addTile(newTile);
                     newTiles.push(newTile);
@@ -151,5 +194,39 @@ export class GamePlayService implements IGamePlayService {
             }
         });
         return newTiles;
+    }
+
+    private canAfford(requirements: ElementValues): boolean {
+        return Object.values(Element).every((element) => (requirements[element] ?? 0) <= this.resources.value[element]);
+    }
+
+    private payRequirements(requirements: ElementValues): ElementValues {
+        const resourceChanges = createEmptyElementValues();
+        const updatedResources = {...this.resources.value};
+        for (const element of Object.values(Element)) {
+            const cost = requirements[element] ?? 0;
+            updatedResources[element] -= cost;
+            resourceChanges[element] = -cost;
+        }
+        this.resources.value = updatedResources;
+        return resourceChanges;
+    }
+
+    private toElementReserves(values: ElementValues): ElementReserves {
+        const reserves = createEmptyElementValues();
+        for (const element of Object.values(Element)) reserves[element] = values[element] ?? 0;
+        return reserves;
+    }
+
+    private addResources(values: ElementValues): void {
+        const updatedResources = {...this.resources.value};
+        for (const element of Object.values(Element)) {
+            updatedResources[element] += values[element] ?? 0;
+        }
+        this.resources.value = updatedResources;
+    }
+
+    private drawHand(): void {
+        this.hand.value = this.gamePlayModel.drawCards(this.configService.getHandSize());
     }
 }

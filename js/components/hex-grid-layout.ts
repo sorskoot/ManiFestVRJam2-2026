@@ -5,8 +5,6 @@ import {Noise, wlUtils} from '@sorskoot/wonderland-components';
 import {Cursor} from '@wonderlandengine/components';
 import {TileType} from '../hexagonmap/TileType.ts';
 import {TilePrefabs} from './tile-prefabs.ts';
-import {CellValues} from '../hexagonmap/CellValues.ts';
-import {TerrainDefinitions} from '../hexagonmap/TerrainDefinition.ts';
 import {TileData} from './tile-data.ts';
 import {IGamePlayService} from '../services/GamePlayService.ts';
 import {serviceLocator} from '../utils/ServiceLocator.ts';
@@ -48,6 +46,7 @@ export class HexGridLayout extends Component {
     }
 
     private tileModels: Map<string, Object3D> = new Map();
+    private tileTypes: Map<string, TileType> = new Map();
 
     declare private cursor: Cursor;
     declare private hoveringTile?: HexagonTile;
@@ -70,18 +69,30 @@ export class HexGridLayout extends Component {
      * Activates the component and adds event listeners.
      */
     public onActivate(): void {
-        serviceLocator.get<GameEvents>(Services.gameEvents).gameStarted.add(this._onGameLoaded);
+        const gameEvents = serviceLocator.get<GameEvents>(Services.gameEvents);
+        gameEvents.gameStarted.add(this.onGameLoaded);
+        this.gamePlayService.onWorldChanged.add(this.onWorldChanged);
     }
 
     /**
      * Deactivates the component and removes event listeners.
      */
     public onDeactivate(): void {
-        serviceLocator.get<GameEvents>(Services.gameEvents).gameStarted.remove(this._onGameLoaded);
+        const gameEvents = serviceLocator.get<GameEvents>(Services.gameEvents);
+        gameEvents.gameStarted.remove(this.onGameLoaded);
+        this.gamePlayService.onWorldChanged.remove(this.onWorldChanged);
     }
 
-    private _onGameLoaded = () => {
+    private onGameLoaded = () => {
+        this.clearGrid();
         this._createGrid();
+    };
+
+    private onWorldChanged = (tileIds: string[]) => {
+        for (const tileId of tileIds) {
+            const tile = this.gamePlayService.getTileById(tileId);
+            if (tile) this.syncTile(tile);
+        }
     };
 
     /**
@@ -90,42 +101,32 @@ export class HexGridLayout extends Component {
     private _createGrid(): void {
         const tiles = this.gamePlayService.getAllTiles();
         for (const tile of tiles) {
-            const pos = tile.to2D();
-            let hex: Object3D | null = null;
-
-            const type = this.determineTileType(tile.cellValues);
-            hex = this.tilePrefabs.spawn(TileAssets[type])!;
-            hex.addComponent(TileData, {tileId: tile.id});
-            hex.parent = this.object;
-            this.tileModels.set(tile.id, hex);
-
-            hex.setPositionLocal([pos.x, 0, pos.y]);
-            wlUtils.setActive(hex, true);
+            this.syncTile(tile);
         }
     }
 
-    private determineTileType(cellValues: CellValues): TileType {
-        // Run through terrain definitions
-        // keep track of the closest match based on manhattan distance
-        let closestType: TileType = TileType.Grass;
-        let closestDistance = Infinity;
-        for (const [type, definition] of Object.entries(TerrainDefinitions)) {
-            const distance = this.calculateManhattanDistance(cellValues, definition.cellValues);
-            if (distance < closestDistance) {
-                closestDistance = distance;
-                closestType = type as TileType;
-            }
+    private syncTile(tile: HexagonTile): void {
+        if (this.tileTypes.get(tile.id) === tile.terrain) {
+            return;
+        }
+        const previousModel = this.tileModels.get(tile.id);
+        if (previousModel && !previousModel.isDestroyed) {
+            previousModel.destroy();
         }
 
-        return closestType;
+        const hex = this.tilePrefabs.spawn(TileAssets[tile.terrain])!;
+        hex.addComponent(TileData, {tileId: tile.id});
+        hex.parent = this.object;
+        const pos = tile.to2D();
+        hex.setPositionLocal([pos.x, 0, pos.y]);
+        wlUtils.setActive(hex, true);
+        this.tileModels.set(tile.id, hex);
+        this.tileTypes.set(tile.id, tile.terrain);
     }
 
-    private calculateManhattanDistance(values1: CellValues, values2: CellValues): number {
-        return (
-            Math.abs(values1.moisture - values2.moisture) +
-            Math.abs(values1.temperature - values2.temperature) +
-            Math.abs(values1.fertility - values2.fertility) +
-            Math.abs(values1.elevation - values2.elevation)
-        );
+    private clearGrid(): void {
+        for (const model of this.tileModels.values()) wlUtils.setActive(model, false);
+        this.tileModels.clear();
+        this.tileTypes.clear();
     }
 }

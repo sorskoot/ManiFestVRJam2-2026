@@ -3,7 +3,8 @@ import {Card} from '../types/Card.ts';
 export interface IGamePlayModel {
     readonly deck: Card[];
     addCardToDeck(card: Card): void;
-    removeCardFromDeck(card: Card): void;
+    drawCards(cardCount: number): Card[];
+    returnCardsToDeck(cards: Card[]): void;
     clearDeck(): void;
 }
 export class GamePlayModel implements IGamePlayModel {
@@ -13,11 +14,12 @@ export class GamePlayModel implements IGamePlayModel {
         this.deck.push(card);
     }
 
-    removeCardFromDeck(card: Card): void {
-        const index = this.deck.indexOf(card);
-        if (index > -1) {
-            this.deck.splice(index, 1);
-        }
+    drawCards(cardCount: number): Card[] {
+        return this.deck.splice(0, cardCount);
+    }
+
+    returnCardsToDeck(cards: Card[]): void {
+        this.deck.push(...cards);
     }
 
     clearDeck(): void {

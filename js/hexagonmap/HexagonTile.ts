@@ -1,4 +1,4 @@
-import {Element} from './Element.ts';
+import {Element, ElementValues} from './Element.ts';
 import {TileType} from './TileType.ts';
 import {Tags} from './Tags.ts';
 import {TILE_SIZE} from './tile-geometry.ts';
@@ -13,12 +13,7 @@ export class HexagonTile {
         return this._id;
     }
 
-    public readonly cellValues: CellValues = {
-        moisture: 0,
-        temperature: 0,
-        fertility: 0,
-        elevation: 0,
-    };
+    public readonly cellValues: CellValues;
     public readonly influence: CellValues = {
         moisture: 0,
         temperature: 0,
@@ -35,6 +30,15 @@ export class HexagonTile {
 
     public age: number = 0;
 
+    public terrain: TileType;
+
+    public readonly pendingEssence: ElementValues = {
+        [Element.Water]: 0,
+        [Element.Fire]: 0,
+        [Element.Earth]: 0,
+        [Element.Air]: 0,
+    };
+
     /**
      * Creates a new HexagonTile instance.
      * @param x - The x-coordinate in cube coordinates.
@@ -45,10 +49,12 @@ export class HexagonTile {
         public x: number,
         public y: number,
         public z: number,
-        startValues: CellValues
+        startValues: CellValues,
+        terrain: TileType = TileType.Grass
     ) {
         this._id = `${x},${y},${z}`;
-        this.cellValues = startValues;
+        this.cellValues = {...startValues};
+        this.terrain = terrain;
     }
 
     /**

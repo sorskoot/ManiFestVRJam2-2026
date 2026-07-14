@@ -24,6 +24,7 @@ export const TerrainDefinitions: Record<TileType, TerrainDefinition> = {
             fertility: 0,
             elevation: 0,
         },
+        producedElement: Element.Air,
     },
     [TileType.Forest]: {
         id: TileType.Forest,
@@ -39,6 +40,7 @@ export const TerrainDefinitions: Record<TileType, TerrainDefinition> = {
             fertility: 0,
             elevation: 0,
         },
+        producedElement: Element.Air,
     },
     [TileType.Hill]: {
         id: TileType.Hill,
@@ -54,11 +56,12 @@ export const TerrainDefinitions: Record<TileType, TerrainDefinition> = {
             fertility: 0,
             elevation: 0,
         },
+        producedElement: Element.Earth,
     },
     [TileType.Lake]: {
         id: TileType.Lake,
         cellValues: {
-            moisture: 10,
+            moisture: 6,
             temperature: 4,
             fertility: 1,
             elevation: 0,
@@ -69,6 +72,7 @@ export const TerrainDefinitions: Record<TileType, TerrainDefinition> = {
             fertility: 0,
             elevation: 0,
         },
+        producedElement: Element.Water,
     },
     [TileType.Mountain]: {
         id: TileType.Mountain,
@@ -84,6 +88,7 @@ export const TerrainDefinitions: Record<TileType, TerrainDefinition> = {
             fertility: 0,
             elevation: 0,
         },
+        producedElement: Element.Earth,
     },
     [TileType.Volcano]: {
         id: TileType.Volcano,
@@ -99,6 +104,7 @@ export const TerrainDefinitions: Record<TileType, TerrainDefinition> = {
             fertility: 0,
             elevation: 0,
         },
+        producedElement: Element.Fire,
     },
     [TileType.Desert]: {
         id: TileType.Desert,
@@ -114,5 +120,6 @@ export const TerrainDefinitions: Record<TileType, TerrainDefinition> = {
             fertility: 0,
             elevation: 0,
         },
+        producedElement: Element.Fire,
     },
 };
