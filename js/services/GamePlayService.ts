@@ -10,8 +10,8 @@ import {TileType} from '../hexagonmap/TileType.ts';
 import {EeUtils} from '../utils/EeUtils.ts';
 import {EventEmitter} from '../utils/Events.ts';
 import {createEmptyElementValues, Element, ElementReserves, ElementValues} from '../hexagonmap/Element.ts';
-import {resolveTerrain, runSimulation} from '../hexagonmap/simulation.ts';
 import {TurnResult} from './turn-result.ts';
+import {ISimulationService} from './SimulationService.ts';
 
 export interface IGamePlayService {
     hand: ReadonlySignal<Card[]>;
@@ -54,6 +54,7 @@ export class GamePlayService implements IGamePlayService {
 
     constructor(
         private configService: IConfigService,
+        private simulationService: ISimulationService,
         private gamePlayModel: IGamePlayModel
     ) {}
 
@@ -87,7 +88,7 @@ export class GamePlayService implements IGamePlayService {
 
         EeUtils.addCellValues(tile.cellValues, card.stat);
         // TK: I'll keep this for now, but simulation should run at the end of a turn
-        const simulation = runSimulation(this.grid);
+        const simulation = this.simulationService.runSimulation(this.grid);
         const resourceChanges = this.payRequirements(card.requirements);
 
         /* TK: Resources need to be collected manually from the world.
@@ -185,7 +186,7 @@ export class GamePlayService implements IGamePlayService {
                         neighborCoords.y,
                         neighborCoords.z,
                         cellValues,
-                        resolveTerrain(cellValues)
+                        this.simulationService.resolveTerrain(cellValues)
                     );
 
                     grid.addTile(newTile);

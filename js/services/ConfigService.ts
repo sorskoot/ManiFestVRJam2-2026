@@ -5,6 +5,7 @@ export interface IConfigService {
     getDeckSize(): number;
     getHandSize(): number;
     getStartingResources(): ElementValues;
+    getDiffusionRate(): number;
 }
 
 export class ConfigService implements IConfigService {
@@ -20,5 +21,9 @@ export class ConfigService implements IConfigService {
 
     getStartingResources(): ElementValues {
         return {...this.configModel.startingResources};
+    }
+
+    getDiffusionRate(): number {
+        return this.configModel.diffusionRate;
     }
 }

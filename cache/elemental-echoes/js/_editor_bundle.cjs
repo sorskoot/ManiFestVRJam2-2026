@@ -24227,7 +24227,7 @@
     }
     update(dt) {
       let origin = vec3_exports.fromValues(0, 0, 0);
-      let distance4 = vec3_exports.fromValues(0, 0, 0);
+      let distance3 = vec3_exports.fromValues(0, 0, 0);
       for (let i2 = 0; i2 < Math.min(this.count, __privateGet(this, _objects).length); ++i2) {
         quat2_exports.getTranslation(origin, __privateGet(this, _objects)[i2].getTransformWorld());
         const vel = __privateGet(this, _velocities)[i2];
@@ -24245,8 +24245,8 @@
         }
       }
       for (let i2 = 0; i2 < Math.min(this.count, __privateGet(this, _objects).length); ++i2) {
-        vec3_exports.scale(distance4, __privateGet(this, _velocities)[i2], dt);
-        __privateGet(this, _objects)[i2].translateWorld(distance4);
+        vec3_exports.scale(distance3, __privateGet(this, _velocities)[i2], dt);
+        __privateGet(this, _objects)[i2].translateWorld(distance3);
       }
     }
     /** Spawn a particle */
@@ -31977,6 +31977,7 @@
     gamePlayService: () => gamePlayService,
     playCardService: () => playCardService,
     registerServices: () => registerServices,
+    simulationService: () => simulationService,
     tileInteractionService: () => tileInteractionService,
     uiStateService: () => uiStateService
   });
@@ -33090,83 +33091,11 @@
     addCellValues
   };
 
-  // js/hexagonmap/simulation.ts
-  var simulation_exports = {};
-  __export(simulation_exports, {
-    resolveTerrain: () => resolveTerrain,
-    runSimulation: () => runSimulation
-  });
-  function runSimulation(grid) {
-    const changedTileIds = /* @__PURE__ */ new Set();
-    applyTerrainInfluences(grid, changedTileIds);
-    incrementTileAges(grid, changedTileIds);
-    resolveTerrains(grid, changedTileIds);
-    return {
-      changedTileIds: [...changedTileIds],
-      generatedEssence: generateEssence(grid, changedTileIds),
-      objectiveChanges: evaluateObjectives()
-    };
-  }
-  function applyTerrainInfluences(grid, changedTileIds) {
-    for (const tile of grid.getAllTiles()) {
-      const influence = TerrainDefinitions[tile.terrain].influences;
-      if (isEmpty(influence)) {
-        continue;
-      }
-      EeUtils.addCellValues(tile.cellValues, influence);
-      changedTileIds.add(tile.id);
-    }
-  }
-  function isEmpty(values) {
-    return values.moisture === 0 && values.temperature === 0 && values.fertility === 0 && values.elevation === 0;
-  }
-  function incrementTileAges(grid, changedTileIds) {
-    for (const tile of grid.getAllTiles()) {
-      tile.age += 1;
-      changedTileIds.add(tile.id);
-    }
-  }
-  function resolveTerrains(grid, changedTileIds) {
-    for (const tile of grid.getAllTiles()) {
-      const terrain = resolveTerrain(tile.cellValues);
-      if (terrain === tile.terrain) {
-        continue;
-      }
-      tile.terrain = terrain;
-      changedTileIds.add(tile.id);
-    }
-  }
-  function resolveTerrain(values) {
-    return Object.values(TileType).reduce((closest, terrain) => {
-      const candidate = TerrainDefinitions[terrain];
-      const current = TerrainDefinitions[closest];
-      return distance3(values, candidate.cellValues) < distance3(values, current.cellValues) ? terrain : closest;
-    }, "Grass" /* Grass */);
-  }
-  function distance3(left, right) {
-    return Math.abs(left.moisture - right.moisture) + Math.abs(left.temperature - right.temperature) + Math.abs(left.fertility - right.fertility) + Math.abs(left.elevation - right.elevation);
-  }
-  function generateEssence(grid, changedTileIds) {
-    const generatedEssence = createEmptyElementValues();
-    for (const tile of grid.getAllTiles()) {
-      const element = TerrainDefinitions[tile.terrain].producedElement;
-      if (!element) {
-        continue;
-      }
-      tile.pendingEssence[element] = (tile.pendingEssence[element] ?? 0) + 1;
-      generatedEssence[element] += 1;
-      changedTileIds.add(tile.id);
-    }
-    return generatedEssence;
-  }
-  function evaluateObjectives() {
-    return [];
-  }
-
   // js/services/GamePlayService.ts
   var GamePlayService = class {
-    constructor(configService2, gamePlayModel2) {
+    constructor(configService2, simulationService2, gamePlayModel2) {
       this.configService = configService2;
+      this.simulationService = simulationService2;
       this.gamePlayModel = gamePlayModel2;
     }
     hand = y([]);
@@ -33214,7 +33143,7 @@
         return { success: false, reason: "insufficient-resources" };
       }
       EeUtils.addCellValues(tile.cellValues, card.stat);
-      const simulation = runSimulation(this.grid);
+      const simulation = this.simulationService.runSimulation(this.grid);
       const resourceChanges = this.payRequirements(card.requirements);
       this.cardPlayedFromDeck = true;
       this.hand.value = this.hand.value.filter((_2, index) => index !== cardIndex);
@@ -33295,7 +33224,7 @@
               neighborCoords.y,
               neighborCoords.z,
               cellValues,
-              resolveTerrain(cellValues)
+              this.simulationService.resolveTerrain(cellValues)
             );
             grid.addTile(newTile);
             newTiles.push(newTile);
@@ -33361,10 +33290,15 @@
   var ConfigModel = class {
     deckSize = 120;
     handSize = 4;
+    diffusionRate = 0.08;
     startingResources = { Water: 20, Fire: 20, Earth: 20, Air: 20 };
   };
 
   // js/services/ConfigService.ts
+  var ConfigService_exports = {};
+  __export(ConfigService_exports, {
+    ConfigService: () => ConfigService
+  });
   var ConfigService = class {
     constructor(configModel2) {
       this.configModel = configModel2;
@@ -33377,6 +33311,9 @@
     }
     getStartingResources() {
       return { ...this.configModel.startingResources };
+    }
+    getDiffusionRate() {
+      return this.configModel.diffusionRate;
     }
   };
 
@@ -33427,6 +33364,135 @@
     };
   };
 
+  // js/services/SimulationService.ts
+  var SimulationService_exports = {};
+  __export(SimulationService_exports, {
+    SimulationService: () => SimulationService
+  });
+  var SimulationService = class {
+    constructor(configService2) {
+      this.configService = configService2;
+    }
+    runSimulation(grid) {
+      const changedTileIds = /* @__PURE__ */ new Set();
+      this.diffuseCellValues(grid, changedTileIds);
+      this.applyTerrainInfluences(grid, changedTileIds);
+      this.incrementTileAges(grid, changedTileIds);
+      this.resolveTerrains(grid, changedTileIds);
+      return {
+        changedTileIds: [...changedTileIds],
+        generatedEssence: this.generateEssence(grid, changedTileIds),
+        objectiveChanges: this.evaluateObjectives()
+      };
+    }
+    diffuseCellValues(grid, changedTileIds) {
+      const nextValues = /* @__PURE__ */ new Map();
+      for (const tile of grid.getAllTiles()) {
+        const neighbors = this.getNeighbors(grid, tile);
+        if (neighbors.length === 0)
+          continue;
+        nextValues.set(tile.id, this.diffuseValues(tile.cellValues, neighbors));
+      }
+      for (const [tileId, values] of nextValues) {
+        const tile = grid.getTileById(tileId);
+        tile.cellValues.moisture = values.moisture;
+        tile.cellValues.temperature = values.temperature;
+        tile.cellValues.fertility = values.fertility;
+        changedTileIds.add(tileId);
+      }
+    }
+    getNeighbors(grid, tile) {
+      return tile.neighbors().flatMap((coordinates) => {
+        const neighbor = grid.getTile(coordinates.x, coordinates.y, coordinates.z);
+        return neighbor ? [neighbor] : [];
+      });
+    }
+    diffuseValues(values, neighbors) {
+      const average = this.averageValues(neighbors);
+      return {
+        moisture: this.interpolate(values.moisture, average.moisture),
+        temperature: this.interpolate(values.temperature, average.temperature),
+        fertility: this.interpolate(values.fertility, average.fertility),
+        elevation: values.elevation
+      };
+    }
+    averageValues(tiles) {
+      const total = tiles.reduce(
+        (values, tile) => ({
+          moisture: values.moisture + tile.cellValues.moisture,
+          temperature: values.temperature + tile.cellValues.temperature,
+          fertility: values.fertility + tile.cellValues.fertility,
+          elevation: values.elevation + tile.cellValues.elevation
+        }),
+        { moisture: 0, temperature: 0, fertility: 0, elevation: 0 }
+      );
+      return {
+        moisture: total.moisture / tiles.length,
+        temperature: total.temperature / tiles.length,
+        fertility: total.fertility / tiles.length,
+        elevation: total.elevation / tiles.length
+      };
+    }
+    interpolate(value, average) {
+      return value + (average - value) * this.configService.getDiffusionRate();
+    }
+    applyTerrainInfluences(grid, changedTileIds) {
+      for (const tile of grid.getAllTiles()) {
+        const influence = TerrainDefinitions[tile.terrain].influences;
+        if (this.isEmpty(influence)) {
+          continue;
+        }
+        EeUtils.addCellValues(tile.cellValues, influence);
+        changedTileIds.add(tile.id);
+      }
+    }
+    isEmpty(values) {
+      return values.moisture === 0 && values.temperature === 0 && values.fertility === 0 && values.elevation === 0;
+    }
+    incrementTileAges(grid, changedTileIds) {
+      for (const tile of grid.getAllTiles()) {
+        tile.age += 1;
+        changedTileIds.add(tile.id);
+      }
+    }
+    resolveTerrains(grid, changedTileIds) {
+      for (const tile of grid.getAllTiles()) {
+        const terrain = this.resolveTerrain(tile.cellValues);
+        if (terrain === tile.terrain) {
+          continue;
+        }
+        tile.terrain = terrain;
+        changedTileIds.add(tile.id);
+      }
+    }
+    resolveTerrain(values) {
+      return Object.values(TileType).reduce((closest, terrain) => {
+        const candidate = TerrainDefinitions[terrain];
+        const current = TerrainDefinitions[closest];
+        return this.distance(values, candidate.cellValues) < this.distance(values, current.cellValues) ? terrain : closest;
+      }, "Grass" /* Grass */);
+    }
+    distance(left, right) {
+      return Math.abs(left.moisture - right.moisture) + Math.abs(left.temperature - right.temperature) + Math.abs(left.fertility - right.fertility) + Math.abs(left.elevation - right.elevation);
+    }
+    generateEssence(grid, changedTileIds) {
+      const generatedEssence = createEmptyElementValues();
+      for (const tile of grid.getAllTiles()) {
+        const element = TerrainDefinitions[tile.terrain].producedElement;
+        if (!element) {
+          continue;
+        }
+        tile.pendingEssence[element] = (tile.pendingEssence[element] ?? 0) + 1;
+        generatedEssence[element] += 1;
+        changedTileIds.add(tile.id);
+      }
+      return generatedEssence;
+    }
+    evaluateObjectives() {
+      return [];
+    }
+  };
+
   // js/bootstrap-services.ts
   var Services = {
     gameFlowService: Symbol("GameFlowService"),
@@ -33435,6 +33501,7 @@
     configService: Symbol("ConfigService"),
     tileInteractionService: Symbol("TileInteractionService"),
     playCardService: Symbol("PlayCardService"),
+    simulationService: Symbol("SimulationService"),
     gamePlayModel: Symbol("GamePlayModel"),
     configModel: Symbol("ConfigModel"),
     gameEvents: Symbol("GameEvents")
@@ -33444,7 +33511,8 @@
   var uiStateService = new UiStateService();
   var configService = new ConfigService(configModel);
   var gameEvents = new GameEvents();
-  var gamePlayService = new GamePlayService(configService, gamePlayModel);
+  var simulationService = new SimulationService(configService);
+  var gamePlayService = new GamePlayService(configService, simulationService, gamePlayModel);
   var gameFlowService = new GameFlowService(uiStateService, gamePlayService, gameEvents);
   var tileInteractionService = new TileInteractionService(gamePlayService);
   var playCardService = new PlayCardService(gamePlayService, tileInteractionService);
@@ -33458,6 +33526,7 @@
     serviceLocator.registerSingleton(Services.tileInteractionService, tileInteractionService);
     serviceLocator.registerSingleton(Services.playCardService, playCardService);
     serviceLocator.registerSingleton(Services.gameEvents, gameEvents);
+    serviceLocator.registerSingleton(Services.simulationService, simulationService);
   }
 
   // js/components/billboard.ts
@@ -33745,6 +33814,9 @@
     };
   };
   __publicField(TileInteraction, "TypeName", "tile-interaction");
+
+  // js/hexagonmap/CellValues.ts
+  var CellValues_exports = {};
 
   // js/ui/GameServicesProvider.tsx
   var GameServicesProvider_exports = {};
@@ -37610,10 +37682,12 @@
   _registerEditor(tile_highlight_exports);
   _registerEditor(tile_interaction_exports);
   _registerEditor(tile_prefabs_exports);
+  _registerEditor(CellValues_exports);
   _registerEditor(TerrainDefinition_exports);
-  _registerEditor(simulation_exports);
   _registerEditor(ConfigModel_exports);
+  _registerEditor(ConfigService_exports);
   _registerEditor(GamePlayService_exports);
+  _registerEditor(SimulationService_exports);
   _registerEditor(Card_exports);
   _registerEditor(GameServicesProvider_exports);
   _registerEditor(hand_exports);

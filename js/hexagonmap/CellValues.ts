@@ -1,7 +1,6 @@
 export interface CellValues {
-    moisture: number;
-    temperature: number;
-    fertility: number;
-    elevation: number;
+    moisture: number; // water
+    temperature: number; // fire
+    fertility: number; // air
+    elevation: number; // earth
 }
-
