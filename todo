@@ -36,14 +36,14 @@
 ---
 UI:
     ✓ Add the root UI element. For now, it will be a 3D UI panel floating in front of the table. @done(26-07-11 10:32)
-    ☐ Add a button to end the turn, so an update of the world can be triggered.
+    ✓ Add a button to end the turn, so an update of the world can be triggered. @done(26-07-14 23:01)
     ✓ Add a few POC cards to the UI @done(26-07-11 10:32)
-    ☐ Make the card work. See 5.
-    ☐ Add default menu button
+    ✓ Make the card work. See 5. @done(26-07-14 23:01)
+    ✓ Add default menu button @done(26-07-14 23:01)
     ☐ Add actual title screen -> Title screen could be in non-XR. Entering XR starts the game.
 
 General:
-    ☐ Refactor tile data away from render component and let that only deal with the rendering
+    ✓ Refactor tile data away from render component and let that only deal with the rendering @done(26-07-14 23:01)
     ✓ Unhover @done(26-07-13 14:33)
     ✓ Somehow make the hover on tiles work AND make the menu work... Maybe 2 cursor components? Each with a different mask? @done(26-07-13 14:51)
     
