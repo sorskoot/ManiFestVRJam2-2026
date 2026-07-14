@@ -1,7 +1,7 @@
 {
     "github.copilot.chat.commitMessageGeneration.instructions": [
         {
-            "text": "Use conventional, but short commit message. Keep it light. No Emoji. Ignore ALL `_editor_**` files."
+            "text": "Use conventional, but short commit message. Keep it light. No Emoji. Ignore ALL `_editor_**` files. Don't describe the changes in the commit message. Just write a short, conventional commit message. Use present tense. Use imperative mood. Use lowercase letters. Don't use punctuation at the end of the commit message."
         }
     ],
     "chat.byokUtilityModelDefault": "copilot"
