@@ -4,12 +4,14 @@ import type {IGameFlowService} from '../services/GameFlowService.ts';
 import type {IUiStateService} from '../services/UiStateService.ts';
 import {IGamePlayService} from '../services/GamePlayService.ts';
 import {IPlayCardService} from '../services/PlayCardService.ts';
+import {ITileInteractionService} from '../services/TileInteractionService.ts';
 
 export interface GameServices {
     gameFlowService: IGameFlowService;
     gamePlayService: IGamePlayService;
     playCardService: IPlayCardService;
     uiStateService: IUiStateService;
+    tileInteractionService: ITileInteractionService;
 }
 
 const GameServicesContext = createContext<GameServices | null>(null);
@@ -48,4 +50,8 @@ export function useGamePlayService() {
 
 export function usePlayCardService() {
     return useGameServices().playCardService;
+}
+
+export function useTileInteractionService() {
+    return useGameServices().tileInteractionService;
 }

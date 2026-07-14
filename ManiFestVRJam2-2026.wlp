@@ -1642,7 +1642,20 @@
             ]
         },
         "236": {
-            "name": "UI"
+            "name": "UI",
+            "components": [
+                {
+                    "type": "ui-textures-manager",
+                    "ui-textures-manager": {
+                        "FireIcon": "92",
+                        "EndTurn": "93",
+                        "StartIcon": "94",
+                        "AirIcon": "95",
+                        "WaterIcon": "96",
+                        "EarthIcon": "97"
+                    }
+                }
+            ]
         },
         "237": {
             "name": "Main UI",
@@ -1731,6 +1744,58 @@
                 0.15,
                 0.15,
                 0.15
+            ]
+        },
+        "241": {
+            "name": "UI",
+            "parent": "238",
+            "components": [],
+            "translation": [
+                0.0,
+                1.8010116,
+                0.4598582
+            ],
+            "rotation": [
+                -0.0730452,
+                0.0,
+                0.0,
+                0.9973286
+            ],
+            "scaling": [
+                1.0,
+                0.9999973,
+                0.9999973
+            ]
+        },
+        "242": {
+            "name": "ToolTip",
+            "parent": "241",
+            "components": [
+                {
+                    "type": "tile-tooltip-ui",
+                    "tile-tooltip-ui": {
+                        "textMaterial": "DefaultFontMaterial",
+                        "panelMaterialTextured": "210",
+                        "rayCastMode": "collision",
+                        "panelMaterial": "209"
+                    }
+                }
+            ],
+            "translation": [
+                -0.5,
+                0.0,
+                0.0
+            ],
+            "rotation": [
+                0.0,
+                0.0,
+                0.0,
+                1.0
+            ],
+            "scaling": [
+                1.0,
+                1.0,
+                1.0
             ]
         }
     },
@@ -1968,6 +2033,42 @@
                 "name": "gradient.png",
                 "file": "assets\\textures\\gradient.png"
             }
+        },
+        "92": {
+            "link": {
+                "name": "Fire.png",
+                "file": "assets\\textures\\Fire.png"
+            }
+        },
+        "93": {
+            "link": {
+                "name": "EndTurn.png",
+                "file": "assets\\textures\\EndTurn.png"
+            }
+        },
+        "94": {
+            "link": {
+                "name": "Start.png",
+                "file": "assets\\textures\\Start.png"
+            }
+        },
+        "95": {
+            "link": {
+                "name": "Air.png",
+                "file": "assets\\textures\\Air.png"
+            }
+        },
+        "96": {
+            "link": {
+                "name": "Water.png",
+                "file": "assets\\textures\\Water.png"
+            }
+        },
+        "97": {
+            "link": {
+                "name": "Earth.png",
+                "file": "assets\\textures\\Earth.png"
+            }
         }
     },
     "images": {
@@ -2021,6 +2122,42 @@
             "link": {
                 "name": "gradient.png",
                 "file": "assets\\textures\\gradient.png"
+            }
+        },
+        "88": {
+            "link": {
+                "name": "Fire.png",
+                "file": "assets\\textures\\Fire.png"
+            }
+        },
+        "89": {
+            "link": {
+                "name": "EndTurn.png",
+                "file": "assets\\textures\\EndTurn.png"
+            }
+        },
+        "90": {
+            "link": {
+                "name": "Start.png",
+                "file": "assets\\textures\\Start.png"
+            }
+        },
+        "91": {
+            "link": {
+                "name": "Air.png",
+                "file": "assets\\textures\\Air.png"
+            }
+        },
+        "92": {
+            "link": {
+                "name": "Water.png",
+                "file": "assets\\textures\\Water.png"
+            }
+        },
+        "93": {
+            "link": {
+                "name": "Earth.png",
+                "file": "assets\\textures\\Earth.png"
             }
         }
     },
@@ -2293,7 +2430,7 @@
             "Flat": {
                 "flatTexture": "91",
                 "color": [
-                    0.1647057,
+                    0.1647056,
                     0.0,
                     1.0,
                     1.0
@@ -2421,7 +2558,8 @@
                 "sourcePaths": [
                     "js/",
                     "js/components",
-                    "js/ui"
+                    "js/ui",
+                    "js/ui/utils"
                 ],
                 "entryPoint": "js/index.ts"
             },
@@ -2550,7 +2688,8 @@
             "link": {
                 "name": "Flat Opaque Textured",
                 "file": "default"
-            }
+            },
+            "sampleAlphaToCoverage": true
         },
         "36": {
             "link": {
@@ -2738,6 +2877,30 @@
         },
         "259": {
             "fileName": "assets/textures/gradient.png",
+            "importerName": ""
+        },
+        "260": {
+            "fileName": "assets/textures/Fire.png",
+            "importerName": ""
+        },
+        "261": {
+            "fileName": "assets/textures/EndTurn.png",
+            "importerName": ""
+        },
+        "262": {
+            "fileName": "assets/textures/Start.png",
+            "importerName": ""
+        },
+        "263": {
+            "fileName": "assets/textures/Air.png",
+            "importerName": ""
+        },
+        "264": {
+            "fileName": "assets/textures/Water.png",
+            "importerName": ""
+        },
+        "265": {
+            "fileName": "assets/textures/Earth.png",
             "importerName": ""
         }
     },

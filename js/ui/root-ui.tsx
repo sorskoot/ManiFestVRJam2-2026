@@ -1,15 +1,18 @@
 import {Align, Justify, ReactUiBase} from '@wonderlandengine/react-ui';
 import React from 'react';
-import {Column, Container, MaterialContext, Panel, Row, Text} from '@wonderlandengine/react-ui/components';
+import {Container, MaterialContext} from '@wonderlandengine/react-ui/components';
 import {MenuThemeContext, MenuThemeContextValue} from './utils/menu-theme-context.js';
 import {colorSwatch} from './utils/colorSwatch.js';
 import {useSignalValue} from './hooks/useSignalValue.ts';
 import {GameServicesProvider, useGameFlowService} from './GameServicesProvider.tsx';
-import {gameFlowService, uiStateService, gamePlayService, playCardService} from '../bootstrap-services.ts';
+import {
+    gameFlowService,
+    uiStateService,
+    gamePlayService,
+    playCardService,
+    tileInteractionService,
+} from '../bootstrap-services.ts';
 import {GameState} from '../services/GameFlowService.ts';
-import {Card} from './components/card/card.tsx';
-import {serviceLocator} from '../utils/ServiceLocator.ts';
-import {Hand} from './components/hand/hand.tsx';
 import {Ingame} from './components/ingame/ingame.tsx';
 import {Menu} from './components/menu/menu.tsx';
 
@@ -65,6 +68,7 @@ export class RootUI extends ReactUiBase {
                     uiStateService,
                     gamePlayService,
                     playCardService,
+                    tileInteractionService,
                 }}
             >
                 <App comp={this} />

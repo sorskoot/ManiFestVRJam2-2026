@@ -23,6 +23,8 @@ import {TileHighlight} from './components/tile-highlight.js';
 import {TileInteraction} from './components/tile-interaction.js';
 import {TilePrefabs} from './components/tile-prefabs.js';
 import {RootUI} from './ui/root-ui.tsx';
+import {TileToolTipUI} from './ui/tile-tool-tip.tsx';
+import {UiTexturesManager} from './ui/utils/ui-textures-manager.js';
 /* wle:auto-imports:end */
 import {registerServices} from './bootstrap-services.ts';
 import {WonderlandEngine} from '@wonderlandengine/api';
@@ -44,5 +46,7 @@ engine.registerComponent(TileHighlight);
 engine.registerComponent(TileInteraction);
 engine.registerComponent(TilePrefabs);
 engine.registerComponent(RootUI);
+engine.registerComponent(TileToolTipUI);
+engine.registerComponent(UiTexturesManager);
 /* wle:auto-register:end */
 }
