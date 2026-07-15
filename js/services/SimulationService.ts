@@ -16,6 +16,7 @@ export interface SimulationResult {
 export interface ISimulationService {
     runSimulation(grid: HexagonGrid): SimulationResult;
     resolveTerrain(values: CellValues): TileType;
+    resolveTerrains(grid: HexagonGrid, changedTileIds: Set<string>): void;
 }
 
 export class SimulationService implements ISimulationService {

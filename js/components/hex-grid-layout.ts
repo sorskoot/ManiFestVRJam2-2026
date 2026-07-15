@@ -85,20 +85,22 @@ export class HexGridLayout extends Component {
 
     private onGameLoaded = () => {
         this.clearGrid();
-        this._createGrid();
+        this.createGrid();
     };
 
     private onWorldChanged = (tileIds: string[]) => {
         for (const tileId of tileIds) {
             const tile = this.gamePlayService.getTileById(tileId);
-            if (tile) this.syncTile(tile);
+            if (tile) {
+                this.syncTile(tile);
+            }
         }
     };
 
     /**
      * Creates the hexagonal grid and populates it with tiles.
      */
-    private _createGrid(): void {
+    private createGrid(): void {
         const tiles = this.gamePlayService.getAllTiles();
         for (const tile of tiles) {
             this.syncTile(tile);

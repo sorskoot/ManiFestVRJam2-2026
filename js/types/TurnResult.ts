@@ -1,5 +1,5 @@
 import {ElementReserves, ElementValues} from '../hexagonmap/Element.ts';
-import {Card} from '../types/Card.ts';
+import {Card} from './Card.ts';
 
 export type {ElementReserves};
 

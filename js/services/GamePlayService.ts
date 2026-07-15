@@ -1,17 +1,17 @@
 import {rng} from '@sorskoot/wonderland-components';
 import {IGamePlayModel} from '../models/GamePlayModel.ts';
-import {Card, CardDefinitions, CardType} from '../types/Card.ts';
 import {IConfigService} from './ConfigService.ts';
+import {ISimulationService} from './SimulationService.ts';
 import {ReadonlySignal, signal} from '@preact/signals-core';
 import {HexagonGrid} from '../hexagonmap/HexGrid.ts';
 import {HexagonTile} from '../hexagonmap/HexagonTile.ts';
 import {TerrainDefinitions} from '../hexagonmap/TerrainDefinition.ts';
+import {createEmptyElementValues, Element, ElementReserves, ElementValues} from '../hexagonmap/Element.ts';
 import {TileType} from '../hexagonmap/TileType.ts';
+import {Card, CardDefinitions, CardType} from '../types/Card.ts';
+import {TurnResult} from '../types/TurnResult.ts';
 import {EeUtils} from '../utils/EeUtils.ts';
 import {EventEmitter} from '../utils/Events.ts';
-import {createEmptyElementValues, Element, ElementReserves, ElementValues} from '../hexagonmap/Element.ts';
-import {TurnResult} from './turn-result.ts';
-import {ISimulationService} from './SimulationService.ts';
 
 export interface IGamePlayService {
     hand: ReadonlySignal<Card[]>;
@@ -41,16 +41,6 @@ export class GamePlayService implements IGamePlayService {
 
     private grid?: HexagonGrid;
     private discardPile: Card[] = [];
-
-    /**
-     * When a card is played, this flag is set to true.
-     * It's used to track if the player has played any card during their run through the deck.
-     * This can take multiple turns.
-     * At the start, the value is set to false.
-     * If after all cards have been shown to the player this value is still false,
-     * the player can choose a special card and the deck is discarded and a new deck is created.
-     */
-    private cardPlayedFromDeck = false;
 
     constructor(
         private configService: IConfigService,
@@ -87,16 +77,9 @@ export class GamePlayService implements IGamePlayService {
         }
 
         EeUtils.addCellValues(tile.cellValues, card.stat);
-        // TK: I'll keep this for now, but simulation should run at the end of a turn
-        const simulation = this.simulationService.runSimulation(this.grid);
+        this.simulationService.resolveTerrains(this.grid, new Set([tileId]));
         const resourceChanges = this.payRequirements(card.requirements);
 
-        /* TK: Resources need to be collected manually from the world.
-            Playing a card cost resources
-        */
-        // this.addResources(simulation.generatedEssence);
-        //
-        this.cardPlayedFromDeck = true;
         this.hand.value = this.hand.value.filter((_, index) => index !== cardIndex);
         this.discardPile.push(card);
         this.currentSelectedCard.value = null;
@@ -109,10 +92,10 @@ export class GamePlayService implements IGamePlayService {
             success: true,
             card,
             targetTileId: tileId,
-            changedTileIds: [...new Set([tileId, ...simulation.changedTileIds])],
+            changedTileIds: [...new Set([tileId])],
             resourceChanges,
-            generatedEssence: simulation.generatedEssence,
-            objectiveChanges: simulation.objectiveChanges,
+            generatedEssence: {}, //simulation.generatedEssence,
+            objectiveChanges: [], //simulation.objectiveChanges,
             turnNumber: this.turnNumber.value,
         };
     }
@@ -163,6 +146,9 @@ export class GamePlayService implements IGamePlayService {
     }
 
     endTurn(): void {
+        const simulation = this.simulationService.runSimulation(this.grid!);
+        this.addResources(simulation.generatedEssence);
+        this.onWorldChanged.emit(simulation.changedTileIds);
         this.gamePlayModel.returnCardsToDeck(this.hand.value);
         this.hand.value = [];
         this.drawHand();

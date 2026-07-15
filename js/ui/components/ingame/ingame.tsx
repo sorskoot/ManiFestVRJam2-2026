@@ -1,5 +1,5 @@
 import React from 'react';
-import {Panel, Row, Text} from '@wonderlandengine/react-ui/components';
+import {Column, Panel, Row, Text} from '@wonderlandengine/react-ui/components';
 import {Hand} from '../hand/hand.tsx';
 import {Align, Justify, YogaNodeProps} from '@wonderlandengine/react-ui';
 import {colorSwatch} from '../../utils/colorSwatch.ts';
@@ -11,7 +11,9 @@ export const Ingame = (props: YogaNodeProps) => {
     return (
         <Row {...props} gap={10} width={1000} height={200} justifyContent={Justify.Center} alignItems={Align.Center}>
             <Resources />
+
             <Hand flexGrow={1} />
+
             <Panel
                 onClick={() => gamePlayService.endTurn()}
                 marginLeft={90}
